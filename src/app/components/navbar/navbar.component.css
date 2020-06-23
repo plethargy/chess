@@ -1,19 +1,29 @@
-/* :host {
-    border: 0 solid #e1e1e1;
-    border-bottom-width: 1px;
-    height: 49px;
-    padding: 0 16px;
-
+  nav ul {
+    list-style: none;
     display: flex;
-    flex-flow: row;
-    align-items: center;
+    justify-content: start;
   }
 
-  a {
-    color: #c697d8;
-    font-size: 19px;
-    font-weight: 900;
-    line-height: 49px;
-    margin-right: 27px;
+  li a {
+    padding: 0 16px;
+
+    color: black;
+
     text-decoration: none;
-  } */
+    text-transform: uppercase;
+  }
+
+  li a:hover {
+    border: 0 solid #e1e1e1;
+    border-bottom-width: 1px;
+  }
+
+  li a:focus {
+    color: black;
+  }
+
+  .active {
+    font-weight: 400;
+    border: 0 solid #e1e1e1;
+    border-bottom-width: 1.20px;
+  }

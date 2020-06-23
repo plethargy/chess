@@ -1,7 +1,11 @@
 <nav>
     <ul>
-        <li><a [routerLink]="['/home']">HOME</a></li>
-        <li><a href="">Nav 2</a></li>
-        <li><a href="">Nav 3</a></li>
+        <li><a [routerLink]="['/home']" routerLinkActive="active">Home</a></li>
+        <li><a [routerLink]="['/login']" routerLinkActive="active">Nav 2</a></li>
+        <li><a [routerLink]="['/nav3']" routerLinkActive="active">Nav 3</a></li>
+        
+        <!-- <li>
+            <a routerLink="" routerLinkActive="active" routerLinkActiveOptions="{exact:true}">About</a>
+        </li> -->
     </ul>
 </nav>
