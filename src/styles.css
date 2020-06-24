@@ -1,1 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
+/*__________THEME PROPERTIES __________*/
+
+:root {
+    --main-background:  #f9f9f9; /*#191919; #f9f9f9*/
+    --main-primary:     #c0c0c0; /*#00bfff #900c3f #04837b*/
+    --main-accent:      #015051;
+    --main-warning:     #ff5733; /*ff9234*/
+    --main-error:       #c70039; /*d92027*/
+    --main-info:        #00adb5; /*0e9aa7*/
+    --main-success:     #17b978;
+  
+    --main-font:        #000000;
+    --main-font-fade:   #00000078;
+  }
+  
+  [data-theme="dark"] {
+    --main-background:  #191919;
+    --main-primary:     #04837b;
+    --main-accent:      #015051;
+    --main-warning:     #ff5733;
+    --main-error:       #c70039;
+    --main-info:        #00adb5;
+    --main-success:     #17b978;
+  
+    --main-font:        #ffffff;
+    --main-font-fade:   #ffffffc0;
+  }
+  
+  /*_____________________________________*/
+  
