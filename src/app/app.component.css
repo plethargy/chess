@@ -8,6 +8,9 @@
   --main-error:       #c70039; /*d92027*/
   --main-info:        #00adb5; /*0e9aa7*/
   --main-success:     #17b978;
+
+  --main-font:        #000000;
+  --main-font-fade:   #00000078;
 }
 
 [data-theme="dark"] {
@@ -18,6 +21,9 @@
   --main-error:       #c70039;
   --main-info:        #00adb5;
   --main-success:     #17b978;
+
+  --main-font:        #ffffff;
+  --main-font-fade:   #ffffffc0;
 }
 
 /*_____________________________________*/
@@ -32,8 +38,10 @@ body {
   background-color: var(--main-background);
 
 /*font-family: 'Roboto', sans-serif;*/
+  color : var(--main-font);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: lighter;
+
   /*
   https://www.vectorstock.com/royalty-free-vector/chess-horse-ogo-chess-logo-horse-logo-creative-vector-8103454
   https://www.vectorstock.com/royalty-free-vector/chess-logo-geometric-logo-coloe-chess-logo-vector-8103457

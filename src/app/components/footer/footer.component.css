@@ -7,12 +7,12 @@
   } */
 
   a {
-    color: black;
+    color: var(--main-font-fade);
     text-decoration: none;
   }
 
   span {
-    color: black;
+    color: var(--main-font-fade);
     display: flex;
     justify-content: center;
   }

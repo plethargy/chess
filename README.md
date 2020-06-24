@@ -1,4 +1,40 @@
-# chessApp
+# BBD Web Level Up - Chess
+
+The aim of this project, a project for the Web-Dev level up of the BBD Hero's Journey Graduate Program, is to develop a web application using Node and Angular/React, to learn how to use and integrate with third party APIs.
+ 
+## Installation
+
+### Prerequisites
+
+   - [Node.js](https://nodejs.org/en/) (12.18.1)
+   - [Angular](https://angular.io/guide/setup-local) (v9)  
+     > (Read the angular section for assistance on how to start this project)
+
+
+### Clone
+
+Clone this repo to your local machine using:
+
+```
+$ git clone https://github.com/plethargy/chess.git
+```
+---
+## Used APIs | Frame Works 
+
+
+---
+## Authors
+
+- **[Jono Cameron](https://github.com/JonoCam)**
+- **[Chanel Letinić](https://github.com/CLetinic)**
+- **[Ethan Lindeman](https://github.com/plethargy)**
+- **[Marius Ludick](https://github.com/Botterbul)**
+- **[Hannelie Janse van Rensburg](https://github.com/Hannelie)**
+- **[Kenneth Wright](https://github.com/WrightKD)**
+  
+---
+
+# Angular 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.9.
 
