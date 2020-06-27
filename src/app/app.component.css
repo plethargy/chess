@@ -1,4 +1,5 @@
 
+
 * {
   box-sizing: border-box;
 }
@@ -18,6 +19,17 @@ body {
   https://www.vectorstock.com/royalty-free-vector/chess-logo-geometric-logo-coloe-chess-logo-vector-8103457
   https://www.vectorstock.com/royalty-free-vector/chess-logo-geometric-logo-coloe-chess-logo-vector-8103456
   */
+}
+
+a {
+  color: var(--main-font-fade);
+  text-decoration: none;
+}
+
+span {
+  color: var(--main-font-fade);
+  display: flex;
+  justify-content: center;
 }
 
 /*https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Realizing_common_layouts_using_CSS_Grid_Layout*/

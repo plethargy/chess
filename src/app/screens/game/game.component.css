@@ -1,0 +1,25 @@
+h1 {
+    color: var(--main-font-fade);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-weight: lighter;
+}
+
+#banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#banner-image {
+    height: 50vh;
+}
+
+#svg-chess-board-decorative {
+    /*Override the SVG default values*/
+    height: inherit!important;
+}
+
+#svg-chess-board-decorative path{
+    /*Override the SVG default values*/
+    fill: var(--main-primary)!important;
+}

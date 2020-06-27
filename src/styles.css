@@ -1,41 +1,5 @@
 /*__________THEME PROPERTIES __________*/
-
-:root {
-  --main-background: #fafafa;
-
-  /*#191919; #f9f9f9*/
-  --main-primary: #c0c0c0;
-  /*#00bfff #900c3f #04837b*/
-  --main-accent: #015051;
-  --main-warning: #ff5733;
-  /*ff9234*/
-  --main-error: #c70039;
-  /*d92027*/
-  --main-info: #00adb5;
-  /*0e9aa7*/
-  --main-success: #17b978;
-
-  --main-font: rgb(0, 0, 0);
-  --main-font-fade: rgba(0, 0, 0, 0.2); /*#848484*/
-
-  --component-background: #ffffff;
-}
-
-[data-theme="dark"] {
-  --main-background: #303030;
-  --main-primary: #04837b;
-  --main-accent: #015051;
-  --main-warning: #ff5733;
-  --main-error: #c70039;
-  --main-info: #00adb5;
-  --main-success: #17b978;
-
-  --main-font: rgb(255, 255, 255);
-  --main-font-fade: rgba(255, 255, 255, 0.2);
-
-  --component-background: #424242;
-}
-
+/* Must change src\app\services\theme\theme.ts */
 /*_____________________________________*/
 
 
@@ -107,4 +71,8 @@
     background-color: var(--main-font-fade);
     color: white;
     outline: none;
+  }
+  
+  .iconbutton {
+    
   }
