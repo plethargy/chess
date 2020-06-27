@@ -37,7 +37,7 @@ app-navbar {
   grid-area: nav;
 }
 
-[main] {
+main {
   grid-area: content;
   
   overflow: hidden;

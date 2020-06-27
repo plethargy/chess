@@ -1,0 +1,59 @@
+header {
+    width: 100%;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+
+span {
+    padding: 15px;
+}
+
+#lock-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    width: 30%;
+}
+
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+
+    width: 80%;
+    height: 42px;
+
+    background-color: var(--component-background);
+
+    border: 1px solid;
+    border-color: var(--main-font-fade);
+    border-radius: 2px;
+
+    cursor: hand;
+
+    outline: none;    
+}
+
+.google-btn .google-icon-svg {
+    width: 18px;
+    height: 18px;
+}
+.google-btn .btn-text {
+    color: #757575;
+    font-size: 14px;
+    letter-spacing: .2px;
+    font-family: Roboto;
+}
