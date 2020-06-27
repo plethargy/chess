@@ -37,22 +37,22 @@ import { ThemeService } from './services/theme/theme.service';
 
 export class AppComponent {
   constructor (
-    private themeService: ThemeService,
+    public themeService: ThemeService,
   ) {
-    themeService.setDarkTheme();
+    themeService.setLightTheme();
   }
 
   title = 'chessApp';
 
   prepareRoute(outlet: RouterOutlet) {
+    console.log(this.themeService.isDarkTheme());
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
 
   toggleTheme() {
-    if (this.themeService.isDarkTheme()) {
+    if (this.themeService.isDarkTheme())
       this.themeService.setLightTheme();
-    } else {
+    else
       this.themeService.setDarkTheme();
-    }
   }
 }

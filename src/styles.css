@@ -74,5 +74,11 @@
   }
   
   .iconbutton {
-    
+    border: none;
+    background-color: transparent;
+    color: var(--main-font-fade);
+    text-decoration: none;
+    font: 1.2em Helvetica, arial, sans-serif;
+    outline: none;
+    cursor: pointer;
   }

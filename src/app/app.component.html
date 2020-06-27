@@ -7,9 +7,12 @@
 <app-footer>
   Copyright 2020 	
   &nbsp;|	&nbsp; 
-  <!-- <i class="fas fa-sun"></i>
-  <i class="fas fa-moon"></i> -->
-  <!-- <fa-icon [icon]="['far', 'bell']"></fa-icon> -->
+  <button class="iconbutton" *ngIf="this.themeService.isDarkTheme()" (click)="toggleTheme()">
+    <fa-icon [icon]="['fas', 'sun']"></fa-icon>
+  </button>
+  <button class="iconbutton" *ngIf="!this.themeService.isDarkTheme()" (click)="toggleTheme()">
+    <fa-icon [icon]="['fas', 'moon']"></fa-icon>
+  </button>  
   &nbsp;|	&nbsp; 
   <a href="https://github.com/plethargy/chess">Github</a>
 </app-footer>
