@@ -1,6 +1,12 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { trigger, transition, style, query, animate} from '@angular/animations';
+import {
+  trigger,
+  transition,
+  style,
+  query,
+  animate,
+} from '@angular/animations';
 import { ThemeService } from './services/theme/theme.service';
 
 @Component({
@@ -22,37 +28,36 @@ import { ThemeService } from './services/theme/theme.service';
         ]),
         // Animate the new page in
         query(':enter', [
-          animate('600ms ease', style({
-            opacity: 1,
-            transform: 'scale(1) translateY(0)'
-          })),
-        ])
+          animate(
+            '600ms ease',
+            style({
+              opacity: 1,
+              transform: 'scale(1) translateY(0)',
+            })
+          ),
+        ]),
       ]),
-    ])
+    ]),
   ],
   encapsulation: ViewEncapsulation.None,
 })
-
-
-
 export class AppComponent {
-  constructor (
-    public themeService: ThemeService,
-  ) {
+  constructor(public themeService: ThemeService) {
     themeService.setLightTheme();
   }
 
   title = 'chessApp';
 
   prepareRoute(outlet: RouterOutlet) {
-    console.log(this.themeService.isDarkTheme());
-    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
+    return (
+      outlet &&
+      outlet.activatedRouteData &&
+      outlet.activatedRouteData['animation']
+    );
   }
 
   toggleTheme() {
-    if (this.themeService.isDarkTheme())
-      this.themeService.setLightTheme();
-    else
-      this.themeService.setDarkTheme();
+    if (this.themeService.isDarkTheme()) this.themeService.setLightTheme();
+    else this.themeService.setDarkTheme();
   }
 }
