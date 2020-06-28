@@ -30,15 +30,14 @@ export class LoginComponent implements OnInit {
 
     this.isLoading = true;
     if (this.isLoginMode) {
-      // ...
+      // Check if user is valid and then redirect here
+      this.router.navigateByUrl('/game');
     } else {
       this.authService.signup(email, password).subscribe(
         (resData) => {
-          console.log(resData);
           this.isLoading = false;
         },
         (errorMessage) => {
-          console.log(errorMessage);
           this.error = errorMessage;
           this.isLoading = false;
         }

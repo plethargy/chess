@@ -106,14 +106,15 @@
         />
         <span class="btn-text-span"><b>Continue with Google</b></span>
       </button> -->
-      <div>
+      <div class="alignText">
         <form
           #authForm="ngForm"
           (ngSubmit)="onSubmit(authForm)"
           *ngIf="!isLoading"
         >
           <div class="form-group">
-            <label for="email">E-Mail</label>
+            <label class="projectFont" for="email">E-Mail</label>
+            <br />
             <input
               type="email"
               id="email"
@@ -125,7 +126,8 @@
             />
           </div>
           <div class="form-group">
-            <label for="password">Password</label>
+            <label class="projectFont" for="password">Password</label>
+            <br />
             <input
               type="password"
               id="password"
@@ -136,17 +138,20 @@
               minlength="6"
             />
           </div>
+          <br />
+          <div *ngIf="error" class="errorCard projectFont">
+            {{ error }}
+          </div>
           <div>
             <button
-              class="btn btn-primary"
+              class="google-btn projectFont"
               type="submit"
               [disabled]="!authForm.valid"
             >
               {{ isLoginMode ? "Login" : "Sign Up" }}
             </button>
-            |
             <button
-              class="btn btn-primary"
+              class="google-btn projectFont"
               (click)="onSwitchMode()"
               type="button"
             >
@@ -154,13 +159,6 @@
             </button>
           </div>
         </form>
-      </div>
-      <!-- <i class="far fa-envelope"></i> -->
-      <button class="google-btn">
-        <span class="btn-text-span"><b>Login with Email</b></span>
-      </button>
-      <div *ngIf="error" class="errorCard">
-        {{ error }}
       </div>
     </div>
   </div>
