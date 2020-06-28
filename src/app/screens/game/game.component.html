@@ -1,11 +1,36 @@
-<div class="grid-container">
+<!-- <div class="game-body">
+  <div class="card z-depth1">
+    <header>
+    </header>
+    <main>
+      <div class="grid-container">
+        <ng-container *ngFor='let in of counter(64); let i = index' >
+          <div [ngClass]="mod(i) ? this.colour1 : this.colour2"></div>
+        </ng-container>
+      </div>
+
+    </main>
+    <footer>
+    </footer>
+  </div>
+</div> -->
 
 
-  <!-- Should probably use something like this rather -->
 
-  <!-- <ng-container *ngFor='let in of counter(32); let i = index' >
+
+<!-- Should probably use something like this rather -->
+
+<!-- <ng-container *ngFor='let in of counter(32); let i = index' >
     <div [ngClass]="mod(i) ? 'light-section' : 'dark-section'"></div>
-  </ng-container> -->
+  <!-- </ng-container> -->
+
+<!-- <div class="grid-container">
+    <ng-container *ngFor='let in of counter(32); let i = index' >
+      <div [ngClass]="mod(i) ? 'light-section' : 'dark-section'"></div>
+    </ng-container>
+  </div> -->
+
+<div class="grid-container">
 
   <div class="light-section "><img class="rook black"></div>
   <div class="dark-section"><img class="knight black"></div>

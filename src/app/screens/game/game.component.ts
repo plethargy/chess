@@ -13,18 +13,27 @@ export class GameComponent implements OnInit {
   }
 
   color: boolean;
+  colour1 : string = 'light-section';
+  colour2 : string = 'dark-section';
 
   counter(i: number) {
+    console.log(i);
     return new Array(i);
   }
 
-  mod(i: number){
-    if(i%2==0){
+  mod(a: number) {
+
+    if (a % 8 == 0)
+    {
+      // invert colour
+      this.colour1  = this.colour1 == 'light-section' ? 'dark-section' : 'light-section';
+      this.colour2  = this.colour2 == 'dark-section' ? 'light-section' : 'dark-section';
+    }
+
+    if(a % 2 == 0)
       return true;
-    }
-    else{
+    else
       return false;
-    }
   }
 
 }
