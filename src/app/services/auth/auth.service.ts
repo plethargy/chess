@@ -125,6 +125,7 @@ export class AuthService {
       return throwError(errorMessage);
     }
     // Not sure if we should give the user this much information?
+    // Rather change this later on to just generic error message
     switch (errorRes.error.error.message) {
       case 'EMAIL_EXISTS':
         errorMessage = 'This email exists already';
