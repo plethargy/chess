@@ -12,4 +12,19 @@ export class GameComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  color: boolean;
+
+  counter(i: number) {
+    return new Array(i);
+  }
+
+  mod(i: number){
+    if(i%2==0){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
 }
