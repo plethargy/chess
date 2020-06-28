@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
     authObs.subscribe(
       (resData) => {
         this.isLoading = false;
-        this.router.navigate(['/game']);
+        this.router.navigate(['/session-setup']);
       },
       (errorMessage) => {
         this.error = errorMessage;

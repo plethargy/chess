@@ -28,6 +28,8 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { LoadingSpinnerComponent } from './shared/loading-spinner.component';
+import { SessionSetupComponent } from './screens/session-setup/session-setup.component';
+import { LeaderboardComponent } from './screens/leaderboard/leaderboard.component';
 library.add(fas, far, fab);
 
 @NgModule({
@@ -40,6 +42,8 @@ library.add(fas, far, fab);
     LoginComponent,
     GameComponent,
     LoadingSpinnerComponent,
+    SessionSetupComponent,
+    LeaderboardComponent,
   ],
   imports: [
     ThemeModule,

@@ -5,16 +5,36 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './screens/home/home.component';
 import { LoginComponent } from './screens/login/login.component';
 import { GameComponent } from './screens/game/game.component';
+import { AuthGuard } from './services/auth/auth.guard';
+import { SessionSetupComponent } from './screens/session-setup/session-setup.component';
+import { LeaderboardComponent } from './screens/leaderboard/leaderboard.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full'},
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent, data: { animation: 'home' } },
-  { path: 'login', component: LoginComponent, data: { animation: 'login' } },  
-  { path: 'game', component: GameComponent, data: { animation: 'game' } },
+  { path: 'login', component: LoginComponent, data: { animation: 'login' } },
+  {
+    path: 'game',
+    component: GameComponent,
+    data: { animation: 'game' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'session-setup',
+    component: SessionSetupComponent,
+    data: { animation: 'session-setup' },
+    // canActivate: [AuthGuard],
+  },
+  {
+    path: 'leaderboard',
+    component: LeaderboardComponent,
+    data: { animation: 'leaderboard' },
+    // canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

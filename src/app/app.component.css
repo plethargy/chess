@@ -1,5 +1,3 @@
-
-
 * {
   box-sizing: border-box;
 }
@@ -9,9 +7,10 @@ body {
 
   background-color: var(--main-background);
 
-/*font-family: 'Roboto', sans-serif;*/
-  color : var(--main-font);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  /*font-family: 'Roboto', sans-serif;*/
+  color: var(--main-font);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: lighter;
 
   /*
@@ -35,14 +34,14 @@ span {
 /*https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Realizing_common_layouts_using_CSS_Grid_Layout*/
 /*https://medium.com/better-programming/build-a-responsive-modern-dashboard-layout-with-css-grid-and-flexbox-bd343776a97e*/
 
-app-root {        
-    margin: 0 auto;
-    font: 1.2em Helvetica, arial, sans-serif;
+app-root {
+  margin: 0 auto;
+  font: 1.2em Helvetica, arial, sans-serif;
 }
 
 app-root > * {
-    border-radius: 5px;
-    padding: 10px;
+  border-radius: 5px;
+  padding: 10px;
 }
 
 app-navbar {
@@ -51,7 +50,7 @@ app-navbar {
 
 main {
   grid-area: content;
-  
+
   overflow: hidden;
 }
 
@@ -60,11 +59,11 @@ app-footer {
 }
 
 app-root {
-  height:100vh;
+  height: 100vh;
   display: grid;
   grid-gap: 1px;
   grid-template-rows: 60px 1fr 45px;
-  grid-template-areas: 
+  grid-template-areas:
     "nav"
     "content"
     "footer";
@@ -74,7 +73,7 @@ app-root {
   app-root {
     grid-template-columns: 1fr;
     grid-template-rows: 60px 1fr 45px;
-    grid-template-areas: 
+    grid-template-areas:
       "nav"
       "content"
       "footer";
@@ -84,10 +83,113 @@ app-root {
   app-root {
     grid-template-columns: 1fr;
     grid-template-rows: 60px 1fr 45px;
-    grid-template-areas: 
+    grid-template-areas:
       "nav"
       "content"
-      "footer"
-   }
+      "footer";
+  }
 }
 
+h1 {
+  color: var(--main-font-fade);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: lighter;
+}
+
+#banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#banner-image {
+  height: 50vh;
+}
+
+#svg-chess-board-decorative {
+  /*Override the SVG default values*/
+  height: inherit !important;
+}
+
+#svg-chess-board-decorative path {
+  /*Override the SVG default values*/
+  fill: var(--main-primary) !important;
+}
+
+.projectFont {
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  font-family: Roboto;
+}
+
+header {
+  width: 100%;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+}
+
+span {
+  padding: 15px;
+}
+
+#lock-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.login-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 30%;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+
+  width: 100%;
+  height: 42px;
+
+  background-color: var(--component-background);
+
+  border: 1px solid;
+  border-color: var(--main-font-fade);
+  border-radius: 2px;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.google-btn .google-icon-svg {
+  width: 18px;
+  height: 18px;
+}
+
+.google-btn .btn-text {
+  color: #757575;
+}
+
+.alignText {
+  text-align: center;
+}
+
+.errorCard {
+  color: red;
+  background-color: rgb(255, 159, 159);
+  border: solid red 1px;
+  border-radius: 4px;
+  padding: 0.5em;
+  margin: 0.5em;
+}
