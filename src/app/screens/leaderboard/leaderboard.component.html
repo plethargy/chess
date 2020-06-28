@@ -1,1 +1,23 @@
-<p>leaderboard works!</p>
+<div class="login-body">
+  <div class="card z-depth1">
+    <main></main>
+    <div *ngIf="isLoading" class="alignText">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <div *ngIf="!isLoading">
+      <div class="alignText">
+        <h2 class="projectFontFamily">Leaderboard</h2>
+        <!-- <div *ngFor="person; of: leaderboardList" class="darkerCard">
+          {{ person.name }} - {{ person.score }}
+        </div> -->
+        <ul *ngFor="let person of leaderboardList" class="darkerCard">
+          <div>{{ person.position }}.&nbsp;</div>
+          <div class="leaderboardName">{{ person.name }}</div>
+          <div>
+            {{ person.score }}
+          </div>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -23,13 +23,12 @@ const routes: Routes = [
     path: 'session-setup',
     component: SessionSetupComponent,
     data: { animation: 'session-setup' },
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: 'leaderboard',
     component: LeaderboardComponent,
     data: { animation: 'leaderboard' },
-    // canActivate: [AuthGuard],
   },
 ];
 
