@@ -25,6 +25,12 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import { PawnComponent } from './components/pieces/pawn/pawn.component';
+import { KnightComponent } from './components/pieces/knight/knight.component';
+import { RookComponent } from './components/pieces/rook/rook.component';
+import { KingComponent } from './components/pieces/king/king.component';
+import { QueenComponent } from './components/pieces/queen/queen.component';
+import { BishopComponent } from './components/pieces/bishop/bishop.component';
 library.add(fas, far, fab);
 
 @NgModule({
@@ -36,6 +42,12 @@ library.add(fas, far, fab);
     HomeComponent,
     LoginComponent,
     GameComponent,
+    PawnComponent,
+    KnightComponent,
+    RookComponent,
+    KingComponent,
+    QueenComponent,
+    BishopComponent,
   ],
   imports: [
     ThemeModule,

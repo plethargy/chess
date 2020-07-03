@@ -4,6 +4,36 @@
     grid-template-rows: repeat(8, 100px);
 }
 
+app-pawn {
+    height: inherit;
+    width: inherit;
+}
+
+app-bishop {
+    height: inherit;
+    width: inherit;
+}
+
+app-rook {
+    height: inherit;
+    width: inherit;
+}
+
+app-knight {
+    height: inherit;
+    width: inherit;
+}
+
+app-king {
+    height: inherit;
+    width: inherit;
+}
+
+app-queen {
+    height: inherit;
+    width: inherit;
+}
+
 /* .grid-container div:nth-child(-n+8):nth-child(even) 
 {
     background-color:  red;

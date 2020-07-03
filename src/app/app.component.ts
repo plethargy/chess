@@ -1,7 +1,20 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { trigger, transition, style, query, animate} from '@angular/animations';
-import { ThemeService } from './services/theme/theme.service';
+import {
+  Component,
+  ViewEncapsulation
+} from '@angular/core';
+import {
+  RouterOutlet
+} from '@angular/router';
+import {
+  trigger,
+  transition,
+  style,
+  query,
+  animate
+} from '@angular/animations';
+import {
+  ThemeService
+} from './services/theme/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -36,16 +49,13 @@ import { ThemeService } from './services/theme/theme.service';
 
 
 export class AppComponent {
-  constructor (
+  constructor(
     public themeService: ThemeService,
-  ) {
-    themeService.setLightTheme();
-  }
+  ) { themeService.setLightTheme(); }
 
   title = 'chessApp';
 
   prepareRoute(outlet: RouterOutlet) {
-    console.log(this.themeService.isDarkTheme());
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
 
