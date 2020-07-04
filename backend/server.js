@@ -20,7 +20,7 @@ app.get(version.concat(service,"/sessions"), (req, res) => {
 });
 
 
-app.post(version.concat(service,"/session"), function(req, res){
+app.post(version.concat(service,"/createSession"), function(req, res){
 
     let UUID = uuidv4();
 
