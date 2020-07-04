@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 // Modules
 import { AppRoutingModule } from './app-routing.module';
@@ -25,6 +27,9 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import { LoadingSpinnerComponent } from './shared/loading-spinner.component';
+import { SessionSetupComponent } from './screens/session-setup/session-setup.component';
+import { LeaderboardComponent } from './screens/leaderboard/leaderboard.component';
 library.add(fas, far, fab);
 
 @NgModule({
@@ -36,15 +41,21 @@ library.add(fas, far, fab);
     HomeComponent,
     LoginComponent,
     GameComponent,
+    LoadingSpinnerComponent,
+    SessionSetupComponent,
+    LeaderboardComponent,
   ],
   imports: [
     ThemeModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
