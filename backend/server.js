@@ -10,16 +10,17 @@ var error_response = {};
 const WHITE = 'w';
 const BLACK = 'b';
 
-const version = 'v1';
+const version = '/v1';
+const service = '/chess';
 
 app.use(express.json());
 
-app.get(version+"/sessions", (req, res) => {
+app.get(version.concat(service,"/sessions"), (req, res) => {
     res.json(Sessions);
 });
 
 
-app.post(version+"/session", function(req, res){
+app.post(version.concat(service,"/session"), function(req, res){
 
     let UUID = uuidv4();
 
@@ -38,7 +39,7 @@ app.post(version+"/session", function(req, res){
 });
 
 
-app.post(version+"/move", function(req, res){
+app.post(version.concat(service,"/move"), function(req, res){
 
     var session = Sessions[req.body.Id];
     var game = session['State'];
@@ -62,7 +63,7 @@ app.post(version+"/move", function(req, res){
 });
 
 
-app.get(version+"/moves", (req, res) => {
+app.get(version.concat(service,"/moves"), (req, res) => {
 
     let session = Sessions[req.body.Id];
     let game = session['State'];
