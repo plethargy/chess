@@ -4,68 +4,107 @@
     </header>
     <main>
       <div class="grid-container">
+
         <ng-container *ngFor='let in of counter(64); let i = index' >
           <div [ngClass]="mod(i) ? this.colour1 : this.colour2"></div>
         </ng-container>
+        
       </div>
+    </main>
+    <footer>
+    </footer>
+  </div>
+</div> -->
 
+<div class="game-body">
+  <div class="card z-depth1">
+    <header>
+    </header>
+    <main>
+      <div class="grid-container" >
+
+        <!-- <ng-container *ngFor='let row of this.chess.board();'>
+          <div *ngFor='let blocks of row; let i = index' class="dark-section"></div>
+        </ng-container> -->
+        <!-- <ng-container *ngFor='let row of this.chess.board();'>
+          <div *ngFor='let block of row;' class="light-section" (drop)="drop($event, false)" (dragover)="allowDrop($event, false)">
+          </div>
+        </ng-container>
+         -->
+         <ng-container *ngFor='let row of this.chess.board();'>
+          <div *ngFor='let column of row; let i = index' class="light-section" (drop)="drop($event)" (dragover)="allowDrop($event)">
+          
+            <!-- <p *ngIf="column == null"> a </p> -->
+            <app-rook *ngIf="column != null && column.type === 'r'" [pieceColour]="column.color === 'b' ? '#000000' : '#ffffff'" draggable="true" (dragstart)="drag($event)" id="rook_{{i}}"></app-rook>
+            <app-knight *ngIf="column != null && column.type === 'n'" [pieceColour]="column.color === 'b' ? '#000000' : '#ffffff'" draggable="true" (dragstart)="drag($event)" id="knight_{{i}}"></app-knight>
+            <app-bishop *ngIf="column != null && column.type === 'b'" [pieceColour]="column.color === 'b' ? '#000000' : '#ffffff'" draggable="true" (dragstart)="drag($event)" id="bishop_{{i}}"></app-bishop>
+            <app-queen *ngIf="column != null && column.type === 'q'" [pieceColour]="column.color === 'b' ? '#000000' : '#ffffff'" draggable="true" (dragstart)="drag($event)" id="queen_{{i}}"></app-queen>
+            <app-king *ngIf="column != null && column.type === 'k'" [pieceColour]="column.color === 'b' ? '#000000' : '#ffffff'" draggable="true" (dragstart)="drag($event)" id="king_{{i}}"></app-king>
+            <app-pawn *ngIf="column != null && column.type === 'p'"  [pieceColour]="column.color === 'b' ? '#000000' : '#ffffff'" draggable="true" (dragstart)="drag($event)" id="pawn_{{i}}"></app-pawn>
+
+          </div>
+         </ng-container>
+
+      </div>
     </main>
     <footer>
     </footer>
   </div>
 </div>
- -->
 
+
+
+<!--  
 <div class="grid-container">
 
   <div id="a8" class="light-section" (drop)="drop($event, false)" (dragover)="allowDrop($event, false)">
-    <app-rook [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="drag1"></app-rook>
+    <app-rook [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_rook_1"></app-rook>
   </div>
   <div id="b8" class="dark-section">
-    <app-knight [pieceColour]="'#000000'"></app-knight>
+    <app-knight [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_knight_2"></app-knight>
   </div>
   <div id="c8" class="light-section">
-    <app-bishop [pieceColour]="'#000000'"></app-bishop>
+    <app-bishop [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_bishop_1"></app-bishop>
   </div>
   <div id="d8" class="dark-section">
-    <app-queen [pieceColour]="'#000000'"></app-queen>
+    <app-queen [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_queen_1"></app-queen>
   </div>
   <div id="e8" class="light-section">
-    <app-king [pieceColour]="'#000000'"></app-king>
+    <app-king [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_king_1"></app-king>
   </div>
   <div id="f8" class="dark-section">
-    <app-bishop [pieceColour]="'#000000'"></app-bishop>
+    <app-bishop [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_bishop_2"></app-bishop>
   </div>
   <div id="g8" class="light-section">
-    <app-knight [pieceColour]="'#000000'"></app-knight>
+    <app-knight [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_knight_2"></app-knight>
   </div>
   <div id="h8" class="dark-section">
-    <app-rook [pieceColour]="'#000000'"></app-rook>
+    <app-rook [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_rook_2"></app-rook>
   </div>
 
   <div id="a7" class="dark-section ">
-    <app-pawn [pieceColour]="'#000000'"></app-pawn>
+    <app-pawn [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_pawn_1"></app-pawn>
   </div>
   <div id="b7" class="light-section">
-    <app-pawn [pieceColour]="'#000000'"></app-pawn>
+    <app-pawn [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_pawn_2"></app-pawn>
   </div>
   <div id="c7" class="dark-section">
-    <app-pawn [pieceColour]="'#000000'"></app-pawn>
+    <app-pawn [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_pawn_3"></app-pawn>
   </div>
   <div id="d7" class="light-section">
-    <app-pawn [pieceColour]="'#000000'"></app-pawn>
+    <app-pawn [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_pawn_4"></app-pawn>
   </div>
   <div id="e7" class="dark-section">
-    <app-pawn [pieceColour]="'#000000'"></app-pawn>
+    <app-pawn [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_pawn_5"></app-pawn>
   </div>
   <div id="f7" class="light-section">
-    <app-pawn [pieceColour]="'#000000'"></app-pawn>
+    <app-pawn [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_pawn_6"></app-pawn>
   </div>
   <div id="g7" class="dark-section">
-    <app-pawn [pieceColour]="'#000000'"></app-pawn>
+    <app-pawn [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_pawn_7"></app-pawn>
   </div>
   <div id="h7" class="light-section">
-    <app-pawn [pieceColour]="'#000000'"></app-pawn>
+    <app-pawn [pieceColour]="'#000000'" draggable="true" (dragstart)="drag($event)" id="black_pawn_8"></app-pawn>
   </div>
 
   <div id="a6" style="background: red;" class="light-section" (drop)="drop($event)" (dragover)="allowDrop($event)">
@@ -106,53 +145,53 @@
   <div id="h3" class="light-section"></div>
 
   <div id="a2" class="light-section">
-    <app-pawn [pieceColour]="'#ffffff'"></app-pawn>
+    <app-pawn [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_pawn_1"></app-pawn>
   </div>
   <div id="b2" class="dark-section">
-    <app-pawn [pieceColour]="'#ffffff'"></app-pawn>
+    <app-pawn [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_pawn_2"></app-pawn>
   </div>
   <div id="c2" class="light-section">
-    <app-pawn [pieceColour]="'#ffffff'"></app-pawn>
+    <app-pawn [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_pawn_3"></app-pawn>
   </div>
   <div id="d2" class="dark-section">
-    <app-pawn [pieceColour]="'#ffffff'"></app-pawn>
+    <app-pawn [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_pawn_4"></app-pawn>
   </div>
   <div id="e2" class="light-section">
-    <app-pawn [pieceColour]="'#ffffff'"></app-pawn>
+    <app-pawn [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_pawn_5"></app-pawn>
   </div>
   <div id="f2" class="dark-section">
-    <app-pawn [pieceColour]="'#ffffff'"></app-pawn>
+    <app-pawn [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_pawn_6"></app-pawn>
   </div>
   <div id="g2" class="light-section">
-    <app-pawn [pieceColour]="'#ffffff'"></app-pawn>
+    <app-pawn [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_pawn_7"></app-pawn>
   </div>
   <div id="h2" class="dark-section">
-    <app-pawn [pieceColour]="'#ffffff'"></app-pawn>
+    <app-pawn [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_pawn_8"></app-pawn>
   </div>
 
   <div id="a1" class="dark-section">
-    <app-rook [pieceColour]="'#ffffff'"></app-rook>
+    <app-rook [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_rook_1"></app-rook>
   </div>
   <div id="b1" class="light-section">
-    <app-knight [pieceColour]="'#ffffff'"></app-knight>
+    <app-knight [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_knight_1"></app-knight>
   </div>
   <div id="c1" class="dark-section">
-    <app-bishop [pieceColour]="'#ffffff'"></app-bishop>
+    <app-bishop [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_bishop_1"></app-bishop>
   </div>
   <div id="d1" class="light-section">
-    <app-queen [pieceColour]="'#ffffff'"></app-queen>
+    <app-queen [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_queen_1"></app-queen>
   </div>
   <div id="e1" class="dark-section">
-    <app-king [pieceColour]="'#ffffff'"></app-king>
+    <app-king [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_king_1"></app-king>
   </div>
   <div id="f1" class="light-section">
-    <app-bishop [pieceColour]="'#ffffff'"></app-bishop>
+    <app-bishop [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_bishop_2"></app-bishop>
   </div>
   <div id="g1" class="dark-section">
-    <app-knight [pieceColour]="'#ffffff'"></app-knight>
+    <app-knight [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_knight_2"></app-knight>
   </div>
   <div id="h1" class="light-section">
-    <app-rook [pieceColour]="'#ffffff'"></app-rook>
+    <app-rook [pieceColour]="'#ffffff'" draggable="true" (dragstart)="drag($event)" id="white_rook_2"></app-rook>
   </div>
 
-</div>
+</div> -->

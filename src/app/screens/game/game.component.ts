@@ -3,6 +3,7 @@ import {
   OnInit
 } from '@angular/core';
 import { style } from '@angular/animations';
+import * as Chess from 'chess.js';
 
 @Component({
   selector: 'app-game',
@@ -11,13 +12,17 @@ import { style } from '@angular/animations';
 })
 export class GameComponent implements OnInit {
 
-  constructor() {}
-
-  ngOnInit(): void {}
-
+  chess = new Chess()
   color: boolean;
   colour1: string = 'light-section';
   colour2: string = 'dark-section';
+
+  constructor() {}
+
+  ngOnInit(): void {
+    this.chess.board();
+    console.log(this.chess.board());
+  }
 
   counter(i: number) {
     console.log(i);
