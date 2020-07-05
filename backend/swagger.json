@@ -1,0 +1,365 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "REST API documentation for Chess service",
+    "version": "1.0.0",
+    "title": "Chess Service",
+    "contact": {
+      "name": "Chess Grads",
+      "email": "chessgrads@gmail.com"
+    }
+  },
+  "host": "localhost:3000",
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Chess Service",
+      "description": "service calls to chess service"
+    }
+  ],
+  "paths": {
+    "/v1/chess/createSession": {
+      "post": {
+        "tags": [
+          "Chess Service"
+        ],
+        "description": "Create a new session, new chess match, for two players.",
+        "operationId": "CreateSession",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/CreateSessionRequest"
+            },
+            "name": "Request Body",
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/CreateSessionResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/chess/sessions": {
+      "get": {
+        "tags": [
+          "Chess Service"
+        ],
+        "description": "Returns all current sessions.",
+        "operationId": "GetSessions",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetSessionsResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/chess/move": {
+      "post": {
+        "tags": [
+          "Chess Service"
+        ],
+        "description": "Performs a move for the current player (White or Black)",
+        "operationId": "MakeMove",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/MakeMoveRequest"
+            },
+            "name": "Request Body",
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetSessionsResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/chess/moves": {
+      "post": {
+        "tags": [
+          "Chess Service"
+        ],
+        "description": "Returns all legal moves for current player (White or Black)",
+        "operationId": "GetMoves",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/MakeMoveRequest"
+            },
+            "name": "Request Body",
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetSessionsResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ErrorResponse": {
+      "title": "ErrorResponse",
+      "type": "object",
+      "properties": {
+        "userMessage": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "developerMessage": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "string"
+        },
+        "correlationId": {
+          "type": "string"
+        },
+        "moreInfo": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateSessionRequest": {
+      "title": "CreateSessionRequest",
+      "type": "object",
+      "properties": {
+        "White": {
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "rank": {
+              "type": "integer"
+            }
+          }
+        },
+        "Black": {
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "rank": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "CreateSessionResponse": {
+      "title": "CreateSessionResponse",
+      "type": "object",
+      "properties": {
+        "Session Id": {
+          "type": "string"
+        },
+        "result": {
+          "type": "boolean"
+        }
+      }
+    },
+    "GetSessionsResponse": {
+      "title": "GetSessionsResponse",
+      "type": "object",
+      "properties": {
+        "Sessions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "fa31b7c5-f0ae-4e49-9eb9-87c2993c50d0"
+              },
+              "white": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "rank": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "black": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "rank": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "MakeMoveRequest": {
+      "title": "MakeMoveRequest",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "move": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
