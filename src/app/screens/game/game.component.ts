@@ -74,6 +74,10 @@ export class GameComponent implements OnInit {
     this.pieceLastPosition = ev.target.parentNode.id;
     console.log(ev.dataTransfer.setData("text", ev.target.id));
     ev.dataTransfer.setData("text", ev.target.id);
+
+    let moveList = this.chess.moves({ square: this.pieceLastPosition });
+    console.log(moveList[0])
+    //document.getElementById(moveList[0]).style.backgroundColor = "lightblue";
   }
   
   drop(ev) {
@@ -84,7 +88,7 @@ export class GameComponent implements OnInit {
       var data = ev.dataTransfer.getData("text");
       ev.target.appendChild(document.getElementById(data));
       console.log("drop parent " + this.pieceLastPosition);
-      console.log(this.chess.move({ from: this.pieceLastPosition, to: ev.target.id }))
+      //console.log(this.chess.move({ from: this.pieceLastPosition, to: ev.target.id }))
       this.pieceLastPosition = "";
     // }
   }
