@@ -26,7 +26,18 @@ app.post(version.concat(service,"/createSession"), function(req, res){
 
     let White = req.body.White;
     let Black = req.body.Black;
-    let State = new Chess();
+    let Fen = req.body.Fen;
+
+    let State = null;
+
+    if(Fen === null)
+    {
+        State = new Chess();
+    }
+    else
+    {
+        State = new Chess(Fen);
+    }
 
     let CurrentDate = new Date();
 
@@ -41,17 +52,32 @@ app.post(version.concat(service,"/createSession"), function(req, res){
 
 app.post(version.concat(service,"/move"), function(req, res){
 
-    var session = Sessions[req.body.Id];
-    var game = session['State'];
+    let session = Sessions[req.body.Id];
+    let game = session['State'];
 
-    var move = game.move(req.body.move);
+    let move = game.move(req.body.move);
 
-    // console.log(game.ascii());
+    console.log(game.ascii());
 
     if(move === null)
     {
-        error_response["Error"] = "Illegal Move for ".concat(game.turn());
-        res.statusCode = 401;
+
+        let current_player = game.turn();
+
+        if (current_player == WHITE)
+        {
+            current_player = {'White' : session['White']};
+        } 
+        else 
+        {
+            current_player = {'Black' : session['Black']};
+        }
+
+        error_response["Error"] = "Illegal Move";
+        error_response["Move"] = req.body.move;
+        error_response["Player"] = current_player;
+
+        res.statusCode = 408;
         res.json(error_response);
     }
     else
