@@ -13,6 +13,8 @@ import * as Chess from 'chess.js';
 export class GameComponent implements OnInit {
 
   chess = new Chess()
+  chessboard = this.chess.board();
+  pieceLastPosition = "";
   color: boolean;
   colour1: string = 'light-section';
   colour2: string = 'dark-section';
@@ -20,13 +22,30 @@ export class GameComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.chess.board();
-    console.log(this.chess.board());
+    
+    for (let row = 0; row < this.chessboard.length; row++) {
+
+      for (let block = 0; block < this.chessboard[row].length; block++) {
+        
+        if (!this.chessboard[row][block])
+          this.chessboard[row][block] = {type: '',color: ''};
+      }
+      
+    }
+
+    console.log(this.chessboard);
   }
 
   counter(i: number) {
     console.log(i);
     return new Array(i);
+  }
+
+  generateBlockID(row:number, column:number)
+  {
+    let columnLetter = String.fromCharCode(column + 97);
+
+    return (columnLetter + (8 - row));
   }
 
   mod(a: number) {
@@ -43,23 +62,31 @@ export class GameComponent implements OnInit {
       return false;
   }
 
-  allowDrop(ev, canDrop = true) {
-    if (canDrop)
+  allowDrop(ev) {
+    // console.log("alowdrop");
+    // if (canDrop)
+    
       ev.preventDefault();
   }
   
   drag(ev) {
-    //document.body.style.cursor = "grabbing";
+    console.log("drag parent " + ev.target.parentNode.id);
+    this.pieceLastPosition = ev.target.parentNode.id;
+    console.log(ev.dataTransfer.setData("text", ev.target.id));
     ev.dataTransfer.setData("text", ev.target.id);
   }
   
-  drop(ev, canDrop = true) {
-    if (canDrop)
-    {
+  drop(ev) {
+    // console.log("drop");
+    // if (canDrop)
+    // {
       ev.preventDefault();
       var data = ev.dataTransfer.getData("text");
       ev.target.appendChild(document.getElementById(data));
-    }
+      console.log("drop parent " + this.pieceLastPosition);
+      console.log(this.chess.move({ from: this.pieceLastPosition, to: ev.target.id }))
+      this.pieceLastPosition = "";
+    // }
   }
 
 }
