@@ -1,3 +1,5 @@
+// List of FENS to use : https://docs.google.com/spreadsheets/d/1fWA-9QW-C8Dc-8LDrEemSligWcprkpKif6cNDs4V_mg/edit#gid=0
+
 var express = require("express");
 const { Chess } = require('chess.js');
 const { v4: uuidv4 } = require('uuid');
@@ -96,16 +98,25 @@ app.get(version.concat(service,"/moves"), (req, res) => {
 
     let current_player = game.turn();
 
+    let conditions = {
+        "check": game.in_check(),
+        "checkmate": game.in_checkmate(),
+        "draw": game.in_draw(),
+        "stalemate": game.in_stalemate(),
+        "threefold-repetition": game.in_threefold_repetition(),
+        "insufficient-material": game.insufficient_material()
+    } 
+
     if (current_player == WHITE)
     {
-        current_player = {'White' : session['White']};
-    } 
+        current_player = {'white' : session['White']};
+    }
     else 
     {
-        current_player = {'Black' : session['Black']};
-    }
+        current_player = {'black' : session['Black']};
+    };
 
-    let legal_moves = {'Current Player' : current_player, 'Legal Moves': game.moves()};
+    let legal_moves = {'current player' : current_player, 'conditions' : conditions, 'legal moves': game.moves()};
 
     res.json(legal_moves);
 });
