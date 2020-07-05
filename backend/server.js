@@ -132,8 +132,6 @@ app.get(version.concat(service,"/history"), (req, res) => {
 });
 
 
-
-
 app.listen(process.env.PORT || 4000, () => {
-    console.log("Server running on port 3000");
+    console.log("Server running on port 4000");
 });
