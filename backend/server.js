@@ -57,7 +57,7 @@ app.post(version.concat(service,"/move"), function(req, res){
 
     let move = game.move(req.body.move);
 
-    console.log(game.ascii());
+    // console.log(game.ascii());
 
     if(move === null)
     {
@@ -108,6 +108,16 @@ app.get(version.concat(service,"/moves"), (req, res) => {
     let legal_moves = {'Current Player' : current_player, 'Legal Moves': game.moves()};
 
     res.json(legal_moves);
+});
+
+app.get(version.concat(service,"/history"), (req, res) => {
+
+    let session = Sessions[req.body.Id];
+    let game = session['State'];
+
+    let history = game.history({ verbose: true })
+
+    res.json({"move history" : history});
 });
 
 
