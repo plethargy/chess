@@ -12,10 +12,8 @@
   background: var(--component-background);
   border-radius: 2px;
   
-  margin: 1rem;
-
   width: 100%;
-  height: fit-content; 
+  height: 100%; 
 }
 
 .z-depth1 {

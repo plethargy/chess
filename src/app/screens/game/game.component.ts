@@ -28,7 +28,7 @@ export class GameComponent implements OnInit {
       for (let block = 0; block < this.chessboard[row].length; block++) {
         
         if (!this.chessboard[row][block])
-          this.chessboard[row][block] = {type: '',color: ''};
+          this.chessboard[row][block] = {type: '', color: ''};
       }
       
     }
