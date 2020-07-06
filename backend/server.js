@@ -3,6 +3,7 @@
 var express = require("express");
 const { Chess } = require('chess.js');
 const { v4: uuidv4 } = require('uuid');
+const db = require('./db');
 
 var app = express();
 
@@ -21,6 +22,9 @@ app.get(version.concat(service,"/sessions"), (req, res) => {
     res.json(Sessions);
 });
 
+
+let db1 = new db();
+db1.connect();
 
 app.post(version.concat(service,"/createSession"), function(req, res){
 
