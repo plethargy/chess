@@ -1,6 +1,17 @@
+
 .game-body {
   height: calc(100vh - 125px);
+
+  display: flex;
+  align-items: center;
 }
+
+.card {
+    padding: 10px;
+
+    height: fit-content;
+}
+
 
 .grid-content {
     display: grid;
