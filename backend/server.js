@@ -1,6 +1,8 @@
 // List of FENS to use : https://docs.google.com/spreadsheets/d/1fWA-9QW-C8Dc-8LDrEemSligWcprkpKif6cNDs4V_mg/edit#gid=0
 
 var express = require("express");
+var cors = require('cors');
+
 const { Chess } = require('chess.js');
 const { v4: uuidv4 } = require('uuid');
 
@@ -15,7 +17,10 @@ const BLACK = 'b';
 const version = '/v1';
 const service = '/chess';
 
+const PORT = process.env.PORT || 4000;
+
 app.use(express.json());
+app.use(cors())
 
 app.get(version.concat(service,"/sessions"), (req, res) => {
     res.json(Sessions);
@@ -132,6 +137,6 @@ app.get(version.concat(service,"/history"), (req, res) => {
 });
 
 
-app.listen(process.env.PORT || 4000, () => {
-    console.log("Server running on port 4000");
+app.listen(PORT, () => {
+    console.log("Server running on port ".concat(PORT));
 });
