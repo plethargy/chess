@@ -40,7 +40,7 @@
     position: relative;
   }
   
-  .square .content {
+  .square .square-content {
     position: absolute;
     top: 0;
     right: 0;
@@ -58,10 +58,15 @@
   }
   
   .block {
-    padding-top: 100%;
+    /* padding-top: 100%; */
+    padding-top: calc(50% - 2px);
+    padding-bottom: calc(50% - 2px);
+    padding-left: calc(50% - 2px);
+    padding-right: calc(50% - 2px);
     /* padding trick directly on the grid item */
     box-sizing: border-box;
     position: relative;
+    border: solid 2px transparent;
   }
   
   .block .content {
@@ -118,4 +123,12 @@ app-queen {
 
 .dark-section {
     background-color: var(--chessboard-dark);
+}
+
+.avaliableMove {
+  border-color: yellowgreen;
+}
+
+.moveReset {
+  border-color: transparent;
 }

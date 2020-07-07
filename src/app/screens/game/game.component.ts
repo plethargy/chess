@@ -2,7 +2,9 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { style } from '@angular/animations';
+import {
+  style
+} from '@angular/animations';
 import * as Chess from 'chess.js';
 
 @Component({
@@ -25,15 +27,17 @@ export class GameComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    
+
     for (let row = 0; row < this.chessboard.length; row++) {
 
       for (let block = 0; block < this.chessboard[row].length; block++) {
-        
+
         if (!this.chessboard[row][block])
-          this.chessboard[row][block] = {type: '', color: ''};
+          this.chessboard[row][block] = {
+            type: '',
+            color: ''
+          };
       }
-      
     }
 
     console.log(this.chessboard);
@@ -44,8 +48,7 @@ export class GameComponent implements OnInit {
     return new Array(i);
   }
 
-  generateBlockID(row:number, column:number)
-  {
+  generateBlockID(row: number, column: number) {
     let columnLetter = String.fromCharCode(column + 97);
 
     return (columnLetter + (8 - row));
@@ -66,34 +69,74 @@ export class GameComponent implements OnInit {
   }
 
   allowDrop(ev) {
-    // console.log("alowdrop");
+    console.log("alowdrop");
     // if (canDrop)
-    
-      ev.preventDefault();
+
+    ev.preventDefault();
   }
-  
+
   drag(ev) {
-    console.log("drag parent " + ev.target.parentNode.id);
-    this.pieceLastPosition = ev.target.parentNode.id;
-    console.log(ev.dataTransfer.setData("text", ev.target.id));
+    let highlighted = document.getElementsByClassName("avaliableMove");
+
+    while (highlighted.length > 0) {
+      highlighted[0].classList.remove(("avaliableMove"));
+    }
+
+    this.pieceLastPosition = ev.target.closest(".block").id;
+
+    console.log(this.pieceLastPosition);
     ev.dataTransfer.setData("text", ev.target.id);
 
-    let moveList = this.chess.moves({ square: this.pieceLastPosition });
-    console.log(moveList[0])
-    //document.getElementById(moveList[0]).style.backgroundColor = "lightblue";
+    let moveList = this.chess.moves({
+      square: this.pieceLastPosition
+    });
+
+    console.log("moveList");
+    console.log(moveList);
+    for (let index = 0; index < moveList.length; index++) {
+      let block = moveList[index].slice(-2);
+
+      document.getElementById(block).classList.add("avaliableMove");
+
+    }
+
   }
-  
+
   drop(ev) {
-    // console.log("drop");
+    console.log("drop");
     // if (canDrop)
     // {
-      ev.preventDefault();
-      var data = ev.dataTransfer.getData("text");
-      ev.target.appendChild(document.getElementById(data));
-      console.log("drop parent " + this.pieceLastPosition);
-      //console.log(this.chess.move({ from: this.pieceLastPosition, to: ev.target.id }))
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+
+    let block = ev.target.closest(".block");
+    
+    let checkMove = this.chess.move({
+      from: this.pieceLastPosition,
+      to: block.id
+    });
+
+    console.log(checkMove);
+    
+    if (checkMove) {      
+      block.firstChild.childNodes.forEach(element => {
+      
+        let name = element.nodeName.toLowerCase();
+        if (name === "app-pawn" || name === "app-queen" || name === "app-bishop" || name === "app-knight" || name === "app-rook")
+          element.remove();
+        
+      });
+      
       this.pieceLastPosition = "";
-    // }
+
+      block.firstChild.appendChild(document.getElementById(data));
+      
+      let highlighted = document.getElementsByClassName("avaliableMove");
+      while (highlighted.length > 0) {
+        highlighted[0].classList.remove(("avaliableMove"));
+      }
+    }
+
   }
 
 }
