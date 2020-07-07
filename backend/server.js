@@ -61,6 +61,11 @@ io.on("connection", socket => {
     socket.emit("joinGame", joinGame(lobbyID, playerName));
   })
 
+  //get lobbies
+  socket.on("getLobbies", () => {
+    socket.emit("lobbies", Lobbies);
+  })
+
   //move
   socket.on("move", (sessionID, inputMove) => {
     socket.emit("moveResult", move(sessionID, inputMove));

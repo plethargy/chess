@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Lobby } from './lobby'
 import { Router } from '@angular/router'
 import io from "socket.io-client"
+import { SocketService } from '../../services/socket/socket.service'
 
 @Component({
   selector: 'app-lobbies',
@@ -16,14 +17,17 @@ export class LobbiesComponent implements OnInit {
 
   private socket: any;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private socketService: SocketService) {
     this.openLobbies = [],
       this.TEMPNAME = "Player1",
       this.TEMPNAME2 = "Player2"
+    this.socket = socketService.socket;
   }
 
   ngOnInit(): void {
-    this.socket = io("http://localhost:4001");
+    //this.socket = io("http://localhost:4001");
+    this.socket.emit("getLobbies");
+    //console.log(this.socketService);
     this.socket.on("lobbies", data => {
       this.openLobbies = [];
       for (let item of data) {
@@ -31,6 +35,7 @@ export class LobbiesComponent implements OnInit {
       }
     })
 
+    console.log(this.socketService.newGame());
     this.socket.on("newGame", data => {
       console.log(data);
     })
