@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(cors())
 
 app.get(version.concat(service,"/sessions"), (req, res) => {
-    res.json(Sessions);
+    res.json(Object.values(Sessions));
 });
 
 
