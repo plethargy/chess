@@ -21,6 +21,7 @@ var error_response = {};
 
 const WHITE = 'w';
 const BLACK = 'b';
+const defaultFen = "6k1/5p1p/6p1/1P1n4/1K4P1/N6P/8/8 w - - 0 0";
 
 const version = '/v1';
 const service = '/chess';
@@ -43,11 +44,12 @@ io.on("connection", socket => {
     console.log("addLobby called");
 
     //need to do IDs properly
-    let Lobby = { 'ID': Lobbies.length, 'Player1': playerName, 'Player2': null };
-
+    let Lobby = { 'ID': uuidv4(), 'Player1': playerName, 'Player2': null };
     Lobbies.push(Lobby);
     console.log(Lobbies);
     io.emit("lobbies", Lobbies);
+
+    socket.emit("newGame", createNewSession(Lobby.ID, playerName));
   })
 
   //join lobby
@@ -55,10 +57,122 @@ io.on("connection", socket => {
     Lobbies.find(x => x.ID == lobbyID).Player2 = playerName;
     Lobbies = Lobbies.filter(function (lobby) { return lobby.ID != lobbyID });
     io.emit("lobbies", Lobbies);
+
+    socket.emit("joinGame", joinGame(lobbyID, playerName));
+  })
+
+  //move
+  socket.on("move", (sessionID, inputMove) => {
+    socket.emit("moveResult", move(sessionID, inputMove));
+  })
+
+  //get moves
+  socket.on("getMoves", sessionID => {
+    socket.emit("postMoves", getMoves(sessionID));
   })
 
 })
 
+//creates default game
+function createNewSession(sessionID, playerName) {
+  let UUID = sessionID;
+
+  let White = playerName;
+  let Black = null;
+  let Fen = defaultFen;
+
+  let State = null;
+
+  if (Fen === null) {
+    State = new Chess();
+  }
+  else {
+    State = new Chess(Fen);
+  }
+
+  let CurrentDate = new Date();
+
+  let Game = { 'White': White, 'Black': Black, 'Start': CurrentDate.getTime(), 'State': State };
+
+  Sessions[UUID] = Game;
+  console.log(Sessions);
+  return { 'Session': UUID, 'Result': true };
+}
+
+function joinGame(sessionID, playerName) {
+  if (Sessions[sessionID] != undefined) {
+    Sessions[sessionID].Black = playerName
+    return true;
+  }
+  else
+    return false;
+  console.log(Sessions);
+}
+
+function move(sessionID, inputMove) {
+  let session = Sessions[sessionID];
+  let game = session['State'];
+
+  let move = game.move(inputMove);
+
+  // console.log(game.ascii());
+  res = {};
+
+  if (move === null) {
+
+    let current_player = game.turn();
+
+    if (current_player == WHITE) {
+      current_player = { 'White': session['White'] };
+    }
+    else {
+      current_player = { 'Black': session['Black'] };
+    }
+
+    error_response["Error"] = "Illegal Move";
+    error_response["Move"] = inputMove;
+    error_response["Player"] = current_player;
+
+    res.statusCode = 408;
+    res.error_response = error_response;
+    //res.json(error_response);
+  }
+  else {
+    res.statusCode = 200;
+    res.move = move;
+    //res.json(move);
+  }
+  return res;
+}
+
+function getMoves(sessionID) {
+  console.log("ran getMoves with ID:" + sessionID);
+  let session = Sessions[sessionID];
+  let game = session['State'];
+
+  let current_player = game.turn();
+
+  let conditions = {
+    "check": game.in_check(),
+    "checkmate": game.in_checkmate(),
+    "draw": game.in_draw(),
+    "stalemate": game.in_stalemate(),
+    "threefold-repetition": game.in_threefold_repetition(),
+    "insufficient-material": game.insufficient_material()
+  }
+
+  if (current_player == WHITE) {
+    current_player = { 'white': session['White'] };
+  }
+  else {
+    current_player = { 'black': session['Black'] };
+  };
+
+  let legal_moves = { 'current player': current_player, 'conditions': conditions, 'legal moves': game.moves() };
+
+  return legal_moves;
+  //res.json(legal_moves);
+}
 
 app.post(version.concat(service,"/createSession"), function(req, res){
 

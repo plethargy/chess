@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Lobby } from '../lobbies/lobby'
+import { Lobby } from './lobby'
 import { Router } from '@angular/router'
 import io from "socket.io-client"
 
@@ -30,6 +30,10 @@ export class LobbiesComponent implements OnInit {
         this.openLobbies.push({ id: item.ID, player1: item.Player1, player2: item.Player2 })
       }
     })
+
+    this.socket.on("newGame", data => {
+      console.log(data);
+    })
   }
 
   addLobby(playerName: string): void {
@@ -37,9 +41,21 @@ export class LobbiesComponent implements OnInit {
     this.router.navigateByUrl('/game');
   }
 
-  joinLobby(id: number, playerName: string): void {
+  joinLobby(id: string, playerName: string): void {
     this.socket.emit("joinLobby", id, playerName);
+    this.socket.on("joinGame", data => {
+      console.log(data);
+    })
+    this.TESTSOCKETMETHODS(id);
     this.router.navigateByUrl('/game');
   }
+
+  TESTSOCKETMETHODS(sessionID: string) {
+    this.socket.emit("move", sessionID, 'a4');
+    this.socket.on("moveResult", data => {
+      console.log(data);
+    })
+  }
+
 
 }
