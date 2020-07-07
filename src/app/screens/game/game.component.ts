@@ -16,8 +16,11 @@ export class GameComponent implements OnInit {
   chessboard = this.chess.board();
   pieceLastPosition = "";
   color: boolean;
-  colour1: string = 'light-section';
-  colour2: string = 'dark-section';
+
+  pieceDark: string = 'var(--chesspiece-dark)';
+  pieceLight: string = 'var(--chesspiece-light)';
+  blockColour1: string = 'light-section';
+  blockColour2: string = 'dark-section';
 
   constructor() {}
 
@@ -52,8 +55,8 @@ export class GameComponent implements OnInit {
 
     if (a % 8 == 0) {
       // invert colour
-      this.colour1 = this.colour1 == 'light-section' ? 'dark-section' : 'light-section';
-      this.colour2 = this.colour2 == 'dark-section' ? 'light-section' : 'dark-section';
+      this.blockColour1 = this.blockColour1 == 'light-section' ? 'dark-section' : 'light-section';
+      this.blockColour2 = this.blockColour2 == 'dark-section' ? 'light-section' : 'dark-section';
     }
 
     if (a % 2 == 0)

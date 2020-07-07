@@ -34,7 +34,6 @@
   }
   
   .square {
-    background: cadetblue;
     padding-top: 100%;
     /* padding trick directly on the grid item */
     box-sizing: border-box;
@@ -42,6 +41,30 @@
   }
   
   .square .content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+  }
+
+  .block-container {
+    grid-area: game;
+  
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    
+  }
+  
+  .block {
+    padding-top: 100%;
+    /* padding trick directly on the grid item */
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  .block .content {
     position: absolute;
     top: 0;
     right: 0;
@@ -88,11 +111,11 @@ app-queen {
   width: inherit;
 }
 
-/*
+
 .light-section {
-    background-color:  rgb(240, 217, 181);
+    background-color:  var(--chessboard-light);
 }
 
 .dark-section {
-    background-color: rgb(181, 136, 99);
-} */
+    background-color: var(--chessboard-dark);
+}
