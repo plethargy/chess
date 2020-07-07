@@ -1,11 +1,24 @@
 <nav>
   <ul style="width: 75%;">
     <li><a [routerLink]="['/home']" routerLinkActive="active">Home</a></li>
-    <li><a [routerLink]="['/login']" routerLinkActive="active">Login</a></li>
-    <li><a [routerLink]="['/game']" routerLinkActive="active">Game</a></li>
+    <li>
+      <a *ngIf="!loggedIn" [routerLink]="['/login']" routerLinkActive="active"
+        >Login</a
+      >
+    </li>
+    <li>
+      <a *ngIf="loggedIn" [routerLink]="['/game']" routerLinkActive="active"
+        >Game</a
+      >
+    </li>
     <li>
       <a [routerLink]="['/leaderboard']" routerLinkActive="active"
-        >leaderboard</a
+        >Leaderboard</a
+      >
+    </li>
+    <li>
+      <a *ngIf="loggedIn" (click)="logout()" routerLinkActive="active"
+        >Logout</a
       >
     </li>
 
