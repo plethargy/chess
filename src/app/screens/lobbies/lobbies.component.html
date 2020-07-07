@@ -1,0 +1,9 @@
+<ul>
+  <li *ngFor="let lobby of openLobbies" (click)="joinLobby(lobby.id,TEMPNAME2)">
+    <a>
+      <span>{{lobby.id}}</span> {{lobby.player1}} {{lobby.player2}}
+    </a>
+  </li>
+</ul>
+
+<button (click)="addLobby(TEMPNAME)">New game </button>

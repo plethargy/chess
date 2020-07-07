@@ -8,6 +8,7 @@ import { GameComponent } from './screens/game/game.component';
 import { AuthGuard } from './services/auth/auth.guard';
 import { SessionSetupComponent } from './screens/session-setup/session-setup.component';
 import { LeaderboardComponent } from './screens/leaderboard/leaderboard.component';
+import { LobbiesComponent } from './screens/lobbies/lobbies.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -16,8 +17,8 @@ const routes: Routes = [
   {
     path: 'game',
     component: GameComponent,
-    data: { animation: 'game' },
-    canActivate: [AuthGuard],
+    //data: { animation: 'game' },
+    //canActivate: [AuthGuard],
   },
   {
     path: 'session-setup',
@@ -29,6 +30,10 @@ const routes: Routes = [
     path: 'leaderboard',
     component: LeaderboardComponent,
     data: { animation: 'leaderboard' },
+  },
+  {
+    path: 'lobbies',
+    component: LobbiesComponent,
   },
 ];
 

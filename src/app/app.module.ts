@@ -30,6 +30,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { LoadingSpinnerComponent } from './shared/loading-spinner.component';
 import { SessionSetupComponent } from './screens/session-setup/session-setup.component';
 import { LeaderboardComponent } from './screens/leaderboard/leaderboard.component';
+import { LobbiesComponent } from './screens/lobbies/lobbies.component';
 library.add(fas, far, fab);
 
 @NgModule({
@@ -44,6 +45,7 @@ library.add(fas, far, fab);
     LoadingSpinnerComponent,
     SessionSetupComponent,
     LeaderboardComponent,
+    LobbiesComponent,
   ],
   imports: [
     ThemeModule,

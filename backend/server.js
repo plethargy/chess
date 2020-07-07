@@ -6,6 +6,16 @@ const { v4: uuidv4 } = require('uuid');
 
 var app = express();
 
+var Http = require("http").Server(express);
+var io = require('socket.io')(Http);
+
+Http.listen(4001, () => {
+  console.log("Listening at :3000...");
+});
+
+var Lobbies = [];
+
+
 var Sessions = {};
 var error_response = {};
 
@@ -20,6 +30,34 @@ app.use(express.json());
 app.get(version.concat(service,"/sessions"), (req, res) => {
     res.json(Sessions);
 });
+
+io.on("connection", socket => {
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+  console.log("user connected");
+  socket.emit("lobbies", Lobbies);
+
+  //add lobby
+  socket.on("addLobby", playerName => {
+    console.log("addLobby called");
+
+    //need to do IDs properly
+    let Lobby = { 'ID': Lobbies.length, 'Player1': playerName, 'Player2': null };
+
+    Lobbies.push(Lobby);
+    console.log(Lobbies);
+    io.emit("lobbies", Lobbies);
+  })
+
+  //join lobby
+  socket.on("joinLobby", (lobbyID, playerName) => {
+    Lobbies.find(x => x.ID == lobbyID).Player2 = playerName;
+    Lobbies = Lobbies.filter(function (lobby) { return lobby.ID != lobbyID });
+    io.emit("lobbies", Lobbies);
+  })
+
+})
 
 
 app.post(version.concat(service,"/createSession"), function(req, res){
