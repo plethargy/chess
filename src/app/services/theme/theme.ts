@@ -7,7 +7,7 @@ export interface Theme {
     name: "light",
     properties: {
       "--main-background": "#fafafa",
-      "--main-primary": "#c0c0c0",
+      "--main-primary": "#b5b5b5",
       "--main-accent": "#015051",
       "--main-warning": "#ff5733",
       "--main-error": "#c70039",
