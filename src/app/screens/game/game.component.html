@@ -1,38 +1,3 @@
-<!-- <div class="game-body">
-  <div class="card z-depth1">
-    <header>
-    </header>
-    <main>
-      <div class="game-container" >
-         <ng-container *ngFor='let row of this.chessboard; let rowIndex = index'>
-            <ng-container *ngFor='let column of row; let columnIndex = index' >
-                <div [ngClass]="mod(columnIndex) ? this.blockColour2 : this.blockColour1" id="{{generateBlockID(rowIndex, columnIndex)}}" (drop)="drop($event)" (dragover)="allowDrop($event)">
-                  <app-rook *ngIf="column.type === 'r'" [pieceColour]="column.color === 'b' ? pieceDark : pieceLight" id="{{column.color}}_rook_{{columnIndex}}" draggable="true" (dragstart)="drag($event)"></app-rook>
-                  <app-knight *ngIf="column.type === 'n'" [pieceColour]="column.color === 'b' ? pieceDark : pieceLight" id="{{column.color}}_knight_{{columnIndex}}" draggable="true" (dragstart)="drag($event)"></app-knight>
-                  <app-bishop *ngIf="column.type === 'b'" [pieceColour]="column.color === 'b' ? pieceDark : pieceLight" id="{{column.color}}_bishop_{{columnIndex}}" draggable="true" (dragstart)="drag($event)"></app-bishop>
-                  <app-queen *ngIf="column.type === 'q'" [pieceColour]="column.color === 'b' ? pieceDark : pieceLight" id="{{column.color}}_queen_{{columnIndex}}" draggable="true" (dragstart)="drag($event)"></app-queen>
-                  <app-king *ngIf="column.type === 'k'" [pieceColour]="column.color === 'b' ? pieceDark : pieceLight" id="{{column.color}}_king_{{columnIndex}}" draggable="true" (dragstart)="drag($event)"></app-king>
-                  <app-pawn *ngIf="column.type === 'p'"  [pieceColour]="column.color === 'b' ? pieceDark : pieceLight" id="{{column.color}}_pawn_{{columnIndex}}" draggable="true" (dragstart)="drag($event)"></app-pawn>
-                </div>
-            </ng-container>
-         </ng-container>
-      </div>
-
-      <div>
-        <div id="game_info">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-    </main>
-    <footer>
-    </footer>
-  </div>
-</div> -->
-
 <div class="game-body">
   <div class="card z-depth1">
     <header>
@@ -109,4 +74,6 @@
     <footer>
     </footer>
   </div>
+
+  
 </div>

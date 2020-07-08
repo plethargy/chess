@@ -1,0 +1,35 @@
+.snackbar-wrap {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform-origin: center center;
+  transform: translate(-50%, 0%); 
+}
+
+.card {
+  padding: 10px;
+  min-width: 20%;
+
+  text-align: center;
+  
+  margin: 0;
+}
+
+.info {
+  background: var(--main-info);
+  color: white;
+}
+.warning {
+  background: var(--main-warning);
+  color: white;
+}
+.success {
+  background: var(--main-success);
+  color: white;
+}
+
+.error {
+  background: var(--main-error);
+  color: white;
+}
+

@@ -1,10 +1,6 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
-import {
-  style
-} from '@angular/animations';
+import { Component, OnInit} from '@angular/core';
+// import { style } from '@angular/animations';
+import { SnackbarService } from '../../services/snackbar/snackbar.service';
 import * as Chess from 'chess.js';
 
 @Component({
@@ -24,9 +20,13 @@ export class GameComponent implements OnInit {
   blockColour1: string = 'light-section';
   blockColour2: string = 'dark-section';
 
-  constructor() {}
+  constructor(
+    private snackbarService: SnackbarService
+  ) { }
 
   ngOnInit(): void {
+    this.snackbarService.show('This is test', '', 3000);
+
 
     for (let row = 0; row < this.chessboard.length; row++) {
 
@@ -126,7 +126,7 @@ export class GameComponent implements OnInit {
           element.remove();
         
       });
-      
+
       this.pieceLastPosition = "";
 
       block.firstChild.appendChild(document.getElementById(data));

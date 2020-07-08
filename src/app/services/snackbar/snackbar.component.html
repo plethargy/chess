@@ -1,0 +1,13 @@
+<div *ngIf="show"
+@state
+[ngClass]="['snackbar-wrap']">
+<div class="card z-depth1" [ngClass]="[type]">
+  <header>
+  </header>
+  <main class="snackbar-text">
+    {{message}}
+  </main>
+  <footer>
+  </footer>
+</div>
+</div>
