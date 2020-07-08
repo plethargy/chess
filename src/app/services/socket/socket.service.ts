@@ -7,8 +7,15 @@ const url = "http://localhost:4001";
 })
 export class SocketService {
   socket: any;
+  sessionID: any;
 
   constructor() {
     this.socket = io(url);
+    this.socket.on("newGame", data => {
+      this.sessionID = data.SessionID;
+    })
+    this.socket.on("joinGame", data => {
+      this.sessionID = data.SessionID;
+    })
   }
 }
