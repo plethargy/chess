@@ -14,12 +14,15 @@ export interface Theme {
       "--main-info": "#00adb5",
       "--main-success": "#17b978",
       "--main-font": "rgb(0, 0, 0)",
-      "--main-font-fade": "rgba(0, 0, 0, 0.2)",
+
+      "--main-fade-light": "rgba(0, 0, 0, 0.2)",
+      "--main-fade-dark": "rgba(0, 0, 0, 0.4)",
+
       "--component-background": "#ffffff",
 
       "--chessboard-light": "transparent",
       "--chessboard-dark": "#b5b5b5",
-      "--chesspiece-light": "#e6e6e6",
+      "--chesspiece-light": "#dcdcdc",
       "--chesspiece-dark": "#000000"
 
     }
@@ -36,7 +39,10 @@ export interface Theme {
       "--main-info": "#00adb5",
       "--main-success": "#17b978",    
       "--main-font": "rgb(255, 255, 255)",
-      "--main-font-fade": "rgba(255, 255, 255, 0.2)",    
+
+      "--main-fade-light": "rgba(255, 255, 255, 0.2)",
+      "--main-fade-dark": "rgba(255, 255, 255, 0.4)",   
+
       "--component-background": "#424242",
 
       "--chessboard-light": "#c0c0c0",

@@ -39,7 +39,7 @@ span {
     background-color: var(--component-background);
 
     border: 1px solid;
-    border-color: var(--main-font-fade);
+    border-color: var(--main-fade-light);
     border-radius: 2px;
 
     cursor: hand;

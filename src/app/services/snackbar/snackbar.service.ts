@@ -19,5 +19,14 @@ export class SnackbarService {
       timer
     });
   }
+
+  promote(piecePromotion: boolean, piecePromotionColour?: string, type?: string) {
+    this.snackbarSubject.next({
+      piecePromotion: true,
+      piecePromotionColour,
+      show: true,
+      type,
+    });
+  }
 }
 

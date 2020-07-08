@@ -1,5 +1,5 @@
 h1 {
-    color: var(--main-font-fade);
+    color: var(--main-fade-light);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-weight: lighter;
 }

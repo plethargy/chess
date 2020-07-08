@@ -31,9 +31,17 @@ import { trigger, transition, animate, style } from '@angular/animations';
 
 export class SnackbarComponent implements OnInit, OnDestroy {
 
+  // CHESS PROMOTION
+  piecePromotion = false;
+  piecePromotionColour: string = 'b'; // b || w
+  pieceDark: string = 'var(--chesspiece-dark)';
+  pieceLight: string = 'var(--chesspiece-light)';
+
+  // GENERAL ALERTS
   show = false;
-  message: string = 'This is snackbar';
+  message: string = '';
   type: string = '';
+  cardType: string = '';
   timer: number = 0;
   snackbarSubscription: Subscription;
 
@@ -43,16 +51,26 @@ export class SnackbarComponent implements OnInit, OnDestroy {
     this.snackbarSubscription = this.snackbarService.snackbarState
     .subscribe(
       (state) => {
-        if (state.type)
-          this.type = state.type;
+        this.piecePromotion = state.piecePromotion;
+        if (this.piecePromotion) {
+          state.piecePromotionColour = this.piecePromotionColour;
 
-        this.message = state.message;
-        this.show = state.show;
-        this.timer = state.timer;
-        if (this.timer > 0) {
-          setTimeout(() => {
-            this.show = false;
-          }, this.timer);
+          this.cardType = 'promotion-card';
+          this.show = state.show;
+          
+        }
+        else {
+          this.type = state.type;
+          this.message = state.message;
+
+          this.show = state.show;
+
+          this.timer = state.timer;
+          if (this.timer > 0) {
+            setTimeout(() => {
+              this.show = false;
+            }, this.timer);
+          }
         }        
       });
   }

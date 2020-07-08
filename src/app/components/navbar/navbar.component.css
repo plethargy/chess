@@ -5,7 +5,7 @@
   }
 
   li a {
-    color: var(--main-font-fade);
+    color: var(--main-fade-light);
     padding: 0 16px;
 
     text-decoration: none;

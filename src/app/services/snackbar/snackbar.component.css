@@ -15,6 +15,12 @@
   margin: 0;
 }
 
+/* CARDTYPE */
+.promotion-card {
+  width: 30vh;
+}
+
+/* TYPE */
 .info {
   background: var(--main-info);
   color: white;
@@ -33,3 +39,56 @@
   color: white;
 }
 
+/* PIECEPROMOTION - Grid */
+.square-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+}
+
+.square {
+  padding-top: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.square .square-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+/* PIECEPROMOTION - Piece Colours */
+/* .pieceLight {
+  background-color: var(--chesspiece-light);
+}
+
+.pieceDark {
+  background-color: var(--chesspiece-dark);
+} */
+
+/* PIECEPROMOTION - Grid Buttons */
+button {
+  border: none;
+  background: none;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--main-fade-light);
+}
+
+button:active {
+  outline: none;
+  background: var(--main-fade-light);
+}
+
+button:focus {
+  outline: none;
+  background: var(--main-fade-dark);
+}
