@@ -20,15 +20,17 @@ export class GameComponent implements OnInit {
   blockColour1: string = 'light-section';
   blockColour2: string = 'dark-section';
 
+  showPrmotion: boolean = false;
+  selectedPromotion:string;
+
   constructor(
     private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
-    //this.snackbarService.show('test','success', 3000);
-    let ret = this.snackbarService.promote(true);
 
-    console.log(ret);
+    //this.snackbarService.show('test','success', 3000);
+    //let ret = this.snackbarService.promote(true);
 
     for (let row = 0; row < this.chessboard.length; row++) {
 
@@ -78,11 +80,9 @@ export class GameComponent implements OnInit {
   }
 
   drag(ev) {
-    let highlighted = document.getElementsByClassName("avaliableMove");
+    this.showPrmotion = false;
 
-    while (highlighted.length > 0) {
-      highlighted[0].classList.remove(("avaliableMove"));
-    }
+    this.removeBlockHighlighting();
 
     this.pieceLastPosition = ev.target.closest(".block").id;
 
@@ -96,18 +96,31 @@ export class GameComponent implements OnInit {
     console.log("moveList");
     console.log(moveList);
     for (let index = 0; index < moveList.length; index++) {
+      // chess notation
+      //[Piece][Position] // Standard move
+      //[Piece][Rank][Position] // Disambiguating standard move
+      //[Piece]x[Position] // Capturing
+      //[Column]x[Position]e.p. // En passant captures  // used as flag instead
+      //[Position]=[Promotion] // Promoting Pawn
+      // "(=)" // Draw ?
+      //[Position]+ // Check
+      // "O-O" // Castling (king side) - this can probably be hard coded
+      // "O-O-O" // Castling (queen side)
+      // # or ++  // Checkmate?
+
       let block = moveList[index].slice(-2);
 
       document.getElementById(block).classList.add("avaliableMove");
-
     }
 
   }
 
   drop(ev) {
+    //this.snackbarService.show('test','success', 3000);
+    this.showPrmotion = true;
+
     console.log("drop");
-    // if (canDrop)
-    // {
+
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
 
@@ -120,25 +133,63 @@ export class GameComponent implements OnInit {
 
     console.log(checkMove);
     
-    if (checkMove) {      
-      block.firstChild.childNodes.forEach(element => {
-      
-        let name = element.nodeName.toLowerCase();
-        if (name === "app-pawn" || name === "app-queen" || name === "app-bishop" || name === "app-knight" || name === "app-rook")
-          element.remove();
-        
-      });
+    if (checkMove) { 
+
+      // Flags
+      // 'n' - a non-capture
+      // 'b' - a pawn push of two squares
+      // 'e' - an en passant capture
+      // 'c' - a standard capture
+      // 'p' - a promotion
+      // 'k' - kingside castling
+      // 'q' - queenside castling
+
+      if (checkMove.flags.includes('c')) 
+        this.removePieceFromChildNode(block);
 
       this.pieceLastPosition = "";
-
       block.firstChild.appendChild(document.getElementById(data));
-      
-      let highlighted = document.getElementsByClassName("avaliableMove");
-      while (highlighted.length > 0) {
-        highlighted[0].classList.remove(("avaliableMove"));
+
+      if (checkMove.flags.includes('e')) {
+        //eg
+          // b d7 > d5    w e5 > d6   w  en passant captures b on d5
+          // w d2 > d4    b e4 > d3   b  en passant captures w on d4
+
+        let passantBlockID = '';
+        if (checkMove.color === "w")
+          passantBlockID = (block.id[0] + (parseInt(block.id[1]) - 1).toString());
+        else 
+          passantBlockID = (block.id[0] + (parseInt(block.id[1]) + 1).toString());
+
+        this.removePieceFromChildNode(document.getElementById(passantBlockID));
       }
     }
+    this.removeBlockHighlighting();
+  }
+  
+  removePieceFromChildNode(blockNode) {
+    blockNode.firstChild.childNodes.forEach(element => {
 
+      let name = element.nodeName.toLowerCase();
+      if (name === "app-pawn" || name === "app-queen" || name === "app-bishop" || name === "app-knight" || name === "app-rook")
+        element.remove();
+
+    });
+  }
+
+  removeBlockHighlighting() {
+    let highlighted = document.getElementsByClassName("avaliableMove");
+
+    while (highlighted.length > 0) {
+      highlighted[0].classList.remove(("avaliableMove"));
+    }
+  }
+
+  receiveSelectedPromotion($event) {
+    this.selectedPromotion = $event
+    console.log("incoming: " + this.selectedPromotion);
+
+    this.showPrmotion = false;
   }
 
 }

@@ -1,0 +1,48 @@
+<div *ngIf="show" [ngClass]="['snackbar-wrap']">
+    <div class="card z-depth1">
+      <header>
+      </header>
+      <main class="snackbar-text">
+        <!-- PIECE PROMOTION -->
+        <ng-container>
+          <div class="square-container">
+            <div class="square">
+              <div class="square-content" >
+                <button id="rook-button" (click)="pieceSelect($event)">
+                  <app-rook [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="rook">
+                  </app-rook>
+                </button>
+              </div>
+            </div>
+            <div class="square">
+              <div class="square-content">
+                <button id="knight-button" (click)="pieceSelect($event)">
+                  <app-knight [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="knight">
+                  </app-knight>
+                </button>
+              </div>
+            </div>
+            <div class="square">
+              <div class="square-content">
+                <button id="bishop-button" (click)="pieceSelect($event)">
+                  <app-bishop [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="bishop" >
+                  </app-bishop>
+                </button>
+              </div>
+            </div>
+            <div class="square">
+              <div class="square-content">
+                <button id="queen-button" (click)="pieceSelect($event)">
+                  <app-queen [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="queen" >
+                  </app-queen>
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </main>
+      <footer>
+      </footer>
+    </div>
+  </div>
+  

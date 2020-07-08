@@ -79,6 +79,5 @@
     <footer>
     </footer>
   </div>
-
-
+  <app-snackbar-promotion *ngIf="showPrmotion" (selectedPromotionEvent)="receiveSelectedPromotion($event)"></app-snackbar-promotion>
 </div>
