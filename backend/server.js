@@ -100,7 +100,7 @@ function createNewSession(sessionID, playerName) {
   let Game = { 'White': White, 'Black': Black, 'Start': CurrentDate.getTime(), 'State': State };
 
   Sessions[sessionID] = Game;
-  console.log(Sessions);
+  //console.log(Sessions);
   return { 'SessionID': sessionID, 'Result': true };
 }
 
