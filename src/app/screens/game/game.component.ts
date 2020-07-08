@@ -25,9 +25,10 @@ export class GameComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.snackbarService.show('test','success');
-    //this.snackbarService.promote(true);
+    //this.snackbarService.show('test','success', 3000);
+    let ret = this.snackbarService.promote(true);
 
+    console.log(ret);
 
     for (let row = 0; row < this.chessboard.length; row++) {
 

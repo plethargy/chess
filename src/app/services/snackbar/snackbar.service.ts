@@ -18,6 +18,8 @@ export class SnackbarService {
       type,
       timer
     });
+
+    return {unsubscribe() {}};
   }
 
   promote(piecePromotion: boolean, piecePromotionColour?: string, type?: string) {
@@ -25,7 +27,7 @@ export class SnackbarService {
       piecePromotion: true,
       piecePromotionColour,
       show: true,
-      type,
+      type
     });
   }
 }

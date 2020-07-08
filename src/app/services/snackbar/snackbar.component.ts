@@ -57,7 +57,6 @@ export class SnackbarComponent implements OnInit, OnDestroy {
 
           this.cardType = 'promotion-card';
           this.show = state.show;
-          
         }
         else {
           this.type = state.type;
