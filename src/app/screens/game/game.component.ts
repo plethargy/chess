@@ -140,6 +140,7 @@ export class GameComponent implements OnInit {
   }
 
   drop(ev) {
+    let colourTurn = this.chess.turn(); // store in a variable
     //this.snackbarService.show('test','success', 3000);
     //this.showPrmotion = true;
 
@@ -198,24 +199,38 @@ export class GameComponent implements OnInit {
       }  
 
       if (checkMove.flags.includes('k') || checkMove.flags.includes('q')) {
-        // CASTLING
-          let currentRookBlock = document.getElementById('h1');
-          let newRookBlock = document.getElementById('f1');
+        // CASTLING         
+          let currentRookBlock;
+          let newRookBlock;
 
-          console.log("GONNA SWAP");
-          this.swapPieceFromChildNode(newRookBlock, currentRookBlock);
-          console.log("SWAPPED");
-          console.log(this.chess.ascii())
-        // Kings's Side
-        // white :  king e1 > g1   rook h1 > f1
-        // black :  king e8 > g8   rook h8 > f8
-        // data = ev.dataTransfer.getData("text");
-        // block.firstChild.appendChild(document.getElementById(data));
-
-        // Queen's Side
-        // white :  king e1 > c1   rook a1 > d1
-        // black :  king e8 > c8   rook a8 > d8
-
+          if (checkMove.flags.includes('k')) {
+            // Kings's Side
+            // white :  king e1 > g1   rook h1 > f1
+            // black :  king e8 > g8   rook h8 > f8
+            if (colourTurn === 'w') {
+              currentRookBlock = document.getElementById('h1');
+              newRookBlock = document.getElementById('f1');
+            } 
+            else {
+              currentRookBlock = document.getElementById('h8');
+              newRookBlock = document.getElementById('f8');
+            }
+          }
+          else if (checkMove.flags.includes('q')) {
+            // Queen's Side
+            // white :  king e1 > c1   rook a1 > d1
+            // black :  king e8 > c8   rook a8 > d8
+            if (colourTurn === 'w') {              
+              currentRookBlock = document.getElementById('a1');
+              newRookBlock = document.getElementById('d1');
+            } 
+            else {             
+              currentRookBlock = document.getElementById('a8');
+              newRookBlock = document.getElementById('d8');
+            }
+          }
+  
+          this.swapPieceFromChildNode(currentRookBlock, newRookBlock);
       }      
     }
     this.gameCondition();
@@ -247,7 +262,7 @@ export class GameComponent implements OnInit {
     }
   }
 
-  swapPieceFromChildNode(newBlockNode, oldBlockNode) {
+  swapPieceFromChildNode(oldBlockNode, newBlockNode) {
 
       oldBlockNode.firstChild.childNodes.forEach(element => {
         console.log("element");
