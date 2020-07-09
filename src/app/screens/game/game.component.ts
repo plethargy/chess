@@ -15,12 +15,12 @@ export class GameComponent implements OnInit {
   pieceLastPosition = "";
   color: boolean;
 
-  pieceDark: string = 'var(--chesspiece-dark)';
-  pieceLight: string = 'var(--chesspiece-light)';
-  blockColour1: string = 'light-section';
-  blockColour2: string = 'dark-section';
+  pieceDark: string = "var(--chesspiece-dark)";
+  pieceLight: string = "var(--chesspiece-light)";
+  blockColour1: string = "light-section";
+  blockColour2: string = "dark-section";
 
-  showPrmotion: boolean = false;
+  showPromotion: boolean = false;
   selectedPromotion:string;
 
   constructor(
@@ -62,8 +62,8 @@ export class GameComponent implements OnInit {
 
     if (a % 8 == 0) {
       // invert colour
-      this.blockColour1 = this.blockColour1 == 'light-section' ? 'dark-section' : 'light-section';
-      this.blockColour2 = this.blockColour2 == 'dark-section' ? 'light-section' : 'dark-section';
+      this.blockColour1 = this.blockColour1 == "light-section" ? "dark-section" : "light-section";
+      this.blockColour2 = this.blockColour2 == "dark-section" ? "light-section" : "dark-section";
     }
 
     if (a % 2 == 0)
@@ -77,7 +77,7 @@ export class GameComponent implements OnInit {
   }
 
   drag(ev) {
-    this.showPrmotion = false;
+    this.showPromotion = false;
 
     this.removeBlockHighlighting();
 
@@ -108,7 +108,7 @@ export class GameComponent implements OnInit {
       let colourTurn = this.chess.turn(); // store in a variable
 
       // can refactor with regex      
-      if (block.includes('O-'))
+      if (block.includes("O-"))
       {
         // CASTLING
         // King Side
@@ -142,7 +142,7 @@ export class GameComponent implements OnInit {
   drop(ev) {
     let colourTurn = this.chess.turn(); // store in a variable
     //this.snackbarService.show('test','success', 3000);
-    //this.showPrmotion = true;
+    //this.showPromotion = true;
 
     console.log("drop");
 
@@ -158,6 +158,14 @@ export class GameComponent implements OnInit {
 // const chess = new Chess()
 
 // chess.move({ from: 'g2', to: 'g3' })
+
+    //check if a pawn on the 8th Rank 
+    //
+    // let checkMove = this.chess.move({
+    //   from: this.pieceLastPosition,
+    //   to: block.id,
+    //   promotion: ''    
+    // });
 
     let checkMove = this.chess.move({
       from: this.pieceLastPosition,
@@ -189,8 +197,8 @@ export class GameComponent implements OnInit {
           // b d7 > d5    w e5 > d6   w  en passant captures b on d5
           // w d2 > d4    b e4 > d3   b  en passant captures w on d4
 
-        let passantBlockID = '';
-        if (checkMove.color === "w")
+        let passantBlockID = "";
+        if (checkMove.color === 'w')
           passantBlockID = (block.id[0] + (parseInt(block.id[1]) - 1).toString());
         else 
           passantBlockID = (block.id[0] + (parseInt(block.id[1]) + 1).toString());
@@ -208,12 +216,12 @@ export class GameComponent implements OnInit {
             // white :  king e1 > g1   rook h1 > f1
             // black :  king e8 > g8   rook h8 > f8
             if (colourTurn === 'w') {
-              currentRookBlock = document.getElementById('h1');
-              newRookBlock = document.getElementById('f1');
+              currentRookBlock = document.getElementById("h1");
+              newRookBlock = document.getElementById("f1");
             } 
             else {
-              currentRookBlock = document.getElementById('h8');
-              newRookBlock = document.getElementById('f8');
+              currentRookBlock = document.getElementById("h8");
+              newRookBlock = document.getElementById("f8");
             }
           }
           else if (checkMove.flags.includes('q')) {
@@ -221,17 +229,22 @@ export class GameComponent implements OnInit {
             // white :  king e1 > c1   rook a1 > d1
             // black :  king e8 > c8   rook a8 > d8
             if (colourTurn === 'w') {              
-              currentRookBlock = document.getElementById('a1');
-              newRookBlock = document.getElementById('d1');
+              currentRookBlock = document.getElementById("a1");
+              newRookBlock = document.getElementById("d1");
             } 
             else {             
-              currentRookBlock = document.getElementById('a8');
-              newRookBlock = document.getElementById('d8');
+              currentRookBlock = document.getElementById("a8");
+              newRookBlock = document.getElementById("d8");
             }
           }
   
           this.swapPieceFromChildNode(currentRookBlock, newRookBlock);
       }      
+
+      // if (checkMove.flags.includes('p'))
+      // {
+      //   this.showPromotion = true;
+      // }
     }
     this.gameCondition();
     this.removeBlockHighlighting();
@@ -243,21 +256,21 @@ export class GameComponent implements OnInit {
 
     // change red or green depending who is in check?
     if (this.chess.in_check())
-      this.snackbarService.show('CHECK','', timer);
+      this.snackbarService.show("CHECK","", timer);
 
     // Check for End Game Conditions
     if (this.chess.in_checkmate())
-      this.snackbarService.show('checkmate', '', timer);
+      this.snackbarService.show("checkmate", "", timer);
     if (this.chess.in_draw())
-      this.snackbarService.show('Draw','', timer);
+      this.snackbarService.show("Draw","", timer);
     if (this.chess.in_stalemate())
-      this.snackbarService.show('Stalemate','', timer);
+      this.snackbarService.show("Stalemate","", timer);
     if (this.chess.in_threefold_repetition())
-      this.snackbarService.show('threefold repetition','', timer);
+      this.snackbarService.show("threefold repetition","", timer);
     
     if (this.chess.game_over()){
       setTimeout(() => {
-        this.snackbarService.show('Game Over');
+        this.snackbarService.show("Game Over");
       }, timer);     
     }
   }
@@ -298,7 +311,7 @@ export class GameComponent implements OnInit {
     this.selectedPromotion = $event
     console.log("incoming: " + this.selectedPromotion);
 
-    this.showPrmotion = false;
+    this.showPromotion = false;
   }
 
 }
