@@ -96,20 +96,71 @@ export class GameComponent implements OnInit {
     console.log("moveList");
     console.log(moveList);
     for (let index = 0; index < moveList.length; index++) {
-      // chess notation
-      //[Piece][Position] // Standard move
-      //[Piece][Rank][Position] // Disambiguating standard move
-      //[Piece]x[Position] // Capturing
-      //[Column]x[Position]e.p. // En passant captures  // used as flag instead
-      //[Position]=[Promotion] // Promoting Pawn
-      // "(=)" // Draw ?
-      //[Position]+ // Check
-      // "O-O" // Castling (king side) - this can probably be hard coded
-      // "O-O-O" // Castling (queen side)
-      // # or ++  // Checkmate?
+      // CHESS NOTATION
+      // [Piece][Position]        // Standard move
+      // [Piece][Rank][Position]  // Disambiguating standard move
+      // [Piece]x[Position]       // Capturing
+      // [Column]x[Position]      // En passant captures  // used as flag instead
+      // [Position]=[Promotion]   // Promoting Pawn eg =Q, =R, =B, =N (g8x=N)
+      // "O-O"                    // Castling (king side) - this can probably be hard coded
+      // "O-O-O"                  // Castling (queen side)
+      // [Position]+              // Check
+      // [Piece][Position]#       // Checkmate
 
-      let block = moveList[index].slice(-2);
+      let block = moveList[index];
+      let colourTurn = this.chess.turn(); // store in a variable
 
+      // can refactor with regex
+      if (block.includes('='))
+      { 
+        block = block.replace('+',''); // PROMOTION
+        console.log("promo " + block);
+        //(?<==)[^\]]+
+      }
+      if (block.includes('+'))        
+      {
+        block = block.replace('+',''); // CHECK
+        console.log("check " + block);
+      }
+      if (block.includes('#'))
+      {
+        block =block.replace('#',''); // CHECKMATE
+        console.log("checkmate " + block);
+      }
+      if (block.includes('O-'))
+      {
+        // CASTLING
+        // King Side
+        if (block === "O-O")
+        {
+          if (colourTurn === 'w')
+            block = "g1";
+          if (colourTurn === 'b')
+            block = "g8"
+          // white
+          // king > g1   rook > f1
+          
+          // black
+          // king > g8   rook > f8
+        }
+
+        // Queen Side
+        if (block === "O-O-O")
+        {
+          if (colourTurn === 'w')
+            block = "c1";
+          if (colourTurn === 'b')
+            block = "c8"
+          // white
+          // king to c1   rook > d1
+          // black
+          // king > c8    rook > d8
+        }
+        console.log("castling " + block);
+      }
+
+      block = block.slice(-2); 
+      console.log(block);
       document.getElementById(block).classList.add("avaliableMove");
     }
 
@@ -126,6 +177,12 @@ export class GameComponent implements OnInit {
 
     let block = ev.target.closest(".block");
     
+//     Or by passing .move() a move object (only the 'to', 'from', and when necessary 'promotion', fields are needed):
+
+// const chess = new Chess()
+
+// chess.move({ from: 'g2', to: 'g3' })
+
     let checkMove = this.chess.move({
       from: this.pieceLastPosition,
       to: block.id
