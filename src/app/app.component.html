@@ -3,6 +3,7 @@
 <app-navbar></app-navbar>
 <main [@routeAnimations]="prepareRoute(outlet)">
   <router-outlet #outlet="outlet"></router-outlet>
+  <app-snackbar></app-snackbar>
 </main>
 <app-footer>
   Copyright 2020 	

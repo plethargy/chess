@@ -7,12 +7,20 @@ const db = require('./db');
 
 var app = express();
 
+var Http = require("http").Server(express);
+var io = require('socket.io')(Http);
+
+Http.listen(4001, () => {
+  console.log("Socket running on port 4001");
+});
+
+var Lobbies = [];
 var Sessions = {};
 var error_response = {};
 
 const WHITE = 'w';
 const BLACK = 'b';
-
+const defaultFen = "6k1/5p1p/6p1/1P1n4/1K4P1/N6P/8/8 w - - 0 0";
 const version = '/v1';
 const service = '/chess';
 
@@ -22,120 +30,198 @@ app.get(version.concat(service,"/sessions"), (req, res) => {
     res.json(Sessions);
 });
 
+io.on("connection", socket => {
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+  console.log("user connected");
+  socket.emit("lobbies", Lobbies);
 
-let db1 = new db();
-db1.connect();
+  //add lobby
+  socket.on("addLobby", playerName => {
+    //lobbies
+    let Lobby = { 'ID': uuidv4(), 'Player1': playerName, 'Player2': null };
+    Lobbies.push(Lobby);
+    io.emit("lobbies", Lobbies);
+    console.log(`lobby id: ${Lobby.ID}`);
+    socket.join(`${Lobby.ID}`);
+    //game session
+    socket.emit("newGame", createNewSession(Lobby.ID, playerName));
+  })
 
-app.post(version.concat(service,"/createSession"), function(req, res){
+  //join lobby
+  socket.on("joinLobby", (lobbyID, playerName) => {
+    //lobbies
+    Lobbies.find(x => x.ID == lobbyID).Player2 = playerName;
+    Lobbies = Lobbies.filter(function (lobby) { return lobby.ID != lobbyID });
+    io.emit("lobbies", Lobbies);
 
-    let UUID = uuidv4();
+    //game session
+    socket.emit("joinGame", joinGame(lobbyID, playerName, socket));
+  })
 
-    let White = req.body.White;
-    let Black = req.body.Black;
-    let Fen = req.body.Fen;
+  //get lobbies
+  socket.on("getLobbies", () => {
+    socket.emit("lobbies", Lobbies);
+  })
 
-    let State = null;
+  //move
+  socket.on("move", (sessionID, fromPosition, toPosition) => {
+    io.to(`${sessionID}`).emit("moveResult", move(sessionID, fromPosition, toPosition));
+  })
 
-    if(Fen === null)
-    {
-        State = new Chess();
-    }
+  //get moves
+  socket.on("getMoves", (sessionID, position) => {
+    io.to(`${sessionID}`).emit("postMoves", getMoves(sessionID, position));
+  })
+
+
+  //load/get board
+  socket.on("getBoard", (sessionID) => {
+    console.log(`getBoard called with ID: ${sessionID}`)
+    console.log(Object.keys(socket.rooms).filter(item => item!=socket.id));
+    io.to(`${sessionID}`).emit("postBoard", getBoard(sessionID));
+  })
+
+  socket.on("getMoveHistory", sessionID => {
+    io.to(`${sessionID}`).emit("postMoveHistory", getMoveHistory(sessionID));
+  })
+
+  socket.on("getUsersForSession", sessionID => {
+    io.to(`${sessionID}`).emit("postUsersForSession", getUsersForSession(sessionID));
+  })
+
+})
+
+//creates default game
+function createNewSession(sessionID, playerName) {
+
+  console.log(`new session ID: ${sessionID}`);
+  let White = playerName;
+  let Black = null;
+  let Fen = null;
+
+  let State = null;
+
+  if (Fen === null) {
+    State = new Chess();
+  }
+  else {
+    State = new Chess(Fen);
+  }
+
+  let CurrentDate = new Date();
+
+  let Game = { 'White': White, 'Black': Black, 'Start': CurrentDate.getTime(), 'State': State };
+
+  Sessions[sessionID] = Game;
+  //console.log(Sessions);
+  return { 'SessionID': sessionID, 'Result': true };
+}
+
+function joinGame(sessionID, playerName, sock) {
+  if (Sessions[sessionID] != undefined) {
+    Sessions[sessionID].Black = playerName;
+    sock.join(`${sessionID}`);
+    return { 'SessionID': sessionID, 'Result': true };
+  }
+  else
+    return { 'SessionID': null, 'Result': false };
+}
+
+function move(sessionID, fromPosition, toPosition) {
+  let session = Sessions[sessionID];
+  let game = session['State'];
+
+  let move = game.move({ from: fromPosition, to: toPosition });
+
+  checkGameOver(sessionID);
+
+  console.log(move);
+
+  return move;
+}
+
+function checkGameOver(sessionID) {
+  let session = Sessions[sessionID];
+  console.log(Sessions);
+  let game = session['State'];
+  if (game.game_over()) {
+    let winner;
+    if (game.turn() === "w")
+      winner = session.White;
     else
-    {
-        State = new Chess(Fen);
-    }
+      winner = session.Black;
 
-    let CurrentDate = new Date();
+    io.to(`${sessionID}`).emit("gameOver", winner);
+    deleteSession(sessionID);
+  }
+}
 
-    let Game = {'White' : White, 'Black' : Black , 'Start' : CurrentDate.getTime(), 'State' : State};
+function deleteSession(sessionID) {
+  if (Sessions[sessionID]) {
+    console.log("Before Deleteion:");
+    console.log(Sessions);
+    delete Sessions[sessionID];
+    console.log("After Deleteion:");
+    console.log(Sessions);
+  }
+}
 
-    Sessions[UUID] = Game;
+function getMoves(sessionID, position) {
+  console.log("ran getMoves with ID:" + sessionID);
+  let session = Sessions[sessionID];
+  let game = session['State'];
 
-    res.json({'Session' : UUID, 'Result': true});
+  let current_player = game.turn();
 
-});
+  let conditions = {
+    "check": game.in_check(),
+    "checkmate": game.in_checkmate(),
+    "draw": game.in_draw(),
+    "stalemate": game.in_stalemate(),
+    "threefold-repetition": game.in_threefold_repetition(),
+    "insufficient-material": game.insufficient_material()
+  }
 
+  if (current_player == WHITE) {
+    current_player = { 'white': session['White'] };
+  }
+  else {
+    current_player = { 'black': session['Black'] };
+  };
 
-app.post(version.concat(service,"/move"), function(req, res){
+  let legal_moves = game.moves({ square: position });
 
-    let session = Sessions[req.body.Id];
-    let game = session['State'];
+  console.log(legal_moves);
 
-    let move = game.move(req.body.move);
+  return legal_moves;
+}
 
-    // console.log(game.ascii());
+function getBoard(sessionID){
+  console.log("ran getBoard with ID:" + sessionID);
 
-    if(move === null)
-    {
+  let session = Sessions[sessionID];
+  let game = session['State'];
 
-        let current_player = game.turn();
+  console.log(game.board());
 
-        if (current_player == WHITE)
-        {
-            current_player = {'White' : session['White']};
-        } 
-        else 
-        {
-            current_player = {'Black' : session['Black']};
-        }
+  return game.board();
+}
 
-        error_response["Error"] = "Illegal Move";
-        error_response["Move"] = req.body.move;
-        error_response["Player"] = current_player;
+function getMoveHistory(sessionID) {
+  let session = Sessions[sessionID];
+  let game = session['State'];
 
-        res.statusCode = 408;
-        res.json(error_response);
-    }
-    else
-    {
-        res.statusCode = 200;
-        res.json(move);
-    }
+  let history = game.history({ verbose: true })
 
-});
+  return { "move history": history };
+}
 
+function getUsersForSession(sessionID)
+{
+  let black = Sessions[sessionID].Black;
+  let white = Sessions[sessionID].White;
 
-app.get(version.concat(service,"/moves"), (req, res) => {
-
-    let session = Sessions[req.body.Id];
-    let game = session['State'];
-
-    let current_player = game.turn();
-
-    let conditions = {
-        "check": game.in_check(),
-        "checkmate": game.in_checkmate(),
-        "draw": game.in_draw(),
-        "stalemate": game.in_stalemate(),
-        "threefold-repetition": game.in_threefold_repetition(),
-        "insufficient-material": game.insufficient_material()
-    } 
-
-    if (current_player == WHITE)
-    {
-        current_player = {'white' : session['White']};
-    }
-    else 
-    {
-        current_player = {'black' : session['Black']};
-    };
-
-    let legal_moves = {'current player' : current_player, 'conditions' : conditions, 'legal moves': game.moves()};
-
-    res.json(legal_moves);
-});
-
-app.get(version.concat(service,"/history"), (req, res) => {
-
-    let session = Sessions[req.body.Id];
-    let game = session['State'];
-
-    let history = game.history({ verbose: true })
-
-    res.json({"move history" : history});
-});
-
-
-app.listen(process.env.PORT || 4000, () => {
-    console.log("Server running on port 4000");
-});
+  return { playerWhite: white, playerBlack: black};
+}

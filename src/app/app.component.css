@@ -21,12 +21,12 @@ body {
 }
 
 a {
-  color: var(--main-font-fade);
+  color: var(--main-fade-light);
   text-decoration: none;
 }
 
 span {
-  color: var(--main-font-fade);
+  color: var(--main-fade-light);
   display: flex;
   justify-content: center;
 }

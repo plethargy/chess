@@ -11,11 +11,6 @@
 
   background: var(--component-background);
   border-radius: 2px;
-  
-  margin: 1rem;
-
-  width: 300px;
-  height: fit-content; 
 }
 
 .z-depth1 {
@@ -46,9 +41,9 @@
   /* BUTTONS */
   .borderbutton {
     background-color: transparent;
-    color: var(--main-font-fade);
+    color: var(--main-fade-light);
     border: 2px solid;
-    border-color: var(--main-font-fade);
+    border-color: var(--main-fade-light);
 
     padding: 16px 32px;
     text-align: center;
@@ -61,14 +56,14 @@
   }
 
   .borderbutton:hover {
-    border-color: var(--main-font-fade);
-    background-color: var(--main-font-fade);
+    border-color: var(--main-fade-light);
+    background-color: var(--main-fade-light);
     color: white;
   }
 
   .borderbutton:focus {
-    border-color: var(--main-font-fade);
-    background-color: var(--main-font-fade);
+    border-color: var(--main-fade-light);
+    background-color: var(--main-fade-light);
     color: white;
     outline: none;
   }
@@ -76,7 +71,7 @@
   .iconbutton {
     border: none;
     background-color: transparent;
-    color: var(--main-font-fade);
+    color: var(--main-fade-light);
     text-decoration: none;
     font: 1.2em Helvetica, arial, sans-serif;
     outline: none;
