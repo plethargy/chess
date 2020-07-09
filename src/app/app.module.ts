@@ -39,7 +39,6 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { LoadingSpinnerComponent } from './shared/loading-spinner.component';
-import { SessionSetupComponent } from './screens/session-setup/session-setup.component';
 import { LeaderboardComponent } from './screens/leaderboard/leaderboard.component';
 import { LobbiesComponent } from './screens/lobbies/lobbies.component';
 library.add(fas, far, fab);
@@ -62,7 +61,6 @@ library.add(fas, far, fab);
     SnackbarComponent,
     SnackbarPromotionComponent,
     LoadingSpinnerComponent,
-    SessionSetupComponent,
     LeaderboardComponent,
     LobbiesComponent,
   ],

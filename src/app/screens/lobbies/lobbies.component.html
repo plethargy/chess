@@ -1,24 +1,34 @@
-<alert></alert>
 <div class="login-body">
   <div class="card z-depth1">
     <main></main>
     <div class="alignText">
       <h2 class="projectFontFamily">Open Lobbies</h2>
-      <!-- <div *ngFor="person; of: leaderboardList" class="darkerCard">
-        {{ person.name }} - {{ person.score }}
-      </div> -->
-      <ul>
-        <li *ngFor="let lobby of openLobbies" (click)="joinLobby(lobby.id,TEMPNAME2)" class="darkerCard">
+      <ul *ngIf="openLobbies || openLobbies.length > 0">
+        <li
+          *ngFor="let lobby of openLobbies"
+          (click)="joinLobby(lobby.id, TEMPNAME2)"
+          class="darkerCard"
+        >
           <a>
-            <div>{{lobby.player1}}'s Lobby</div>
+            <div>{{ lobby.player1 }}'s Lobby</div>
           </a>
         </li>
       </ul>
+      <div *ngIf="!openLobbies || openLobbies.length <= 0" id="noOpenLobbies">
+        No open lobbies currently found...
+      </div>
+      <div class="orText" *ngIf="openLobbies.length > 0">
+        OR
+      </div>
+    </div>
+    <button (click)="addLobby(TEMPNAME)" class="google-btn projectFont">
+      Start New Game
+    </button>
+    <div>
+      <alert></alert>
     </div>
   </div>
 </div>
-
-<button (click)="addLobby(TEMPNAME)">New game </button>
 
 <!--JUST AN EXAMPLE FROM LIBRARY
 <button class="btn btn-success m-1" (click)="alertService.success('Success!!', options)">Success</button>

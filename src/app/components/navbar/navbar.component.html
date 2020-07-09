@@ -12,6 +12,11 @@
       >
     </li>
     <li>
+      <a *ngIf="loggedIn" [routerLink]="['/lobbies']" routerLinkActive="active"
+        >Lobbies</a
+      >
+    </li>
+    <li>
       <a [routerLink]="['/leaderboard']" routerLinkActive="active"
         >Leaderboard</a
       >
@@ -21,11 +26,5 @@
         >Logout</a
       >
     </li>
-    <li><a [routerLink]="['/lobbies']" routerLinkActive="active">Lobbies</a></li>
-
-
-    <!-- <li>
-            <a routerLink="" routerLinkActive="active" routerLinkActiveOptions="{exact:true}">About</a>
-        </li> -->
   </ul>
 </nav>
