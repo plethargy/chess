@@ -354,26 +354,24 @@ export class GameComponent implements OnInit {
   addPieceToChildNode(blockNode, pieceType, pieceID, pieceColour) {
     let piece = pieceType;
     console.log(blockNode.firstElementChild)
-    console.log(blockNode.firstElementChild.firstElementChildinnerHTML)
-    blockNode.firstElementChild.firstElementChildinnerHTML = ""
-    // `
-
-    //                       <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
-    //                         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    //                         xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"
-    //                         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-    //                         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" style="width: 100%; height: 100%"
-    //                         viewBox="0 0 52.916666 52.916666" version="1.1"
-    //                         inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="queen.svg">
-    //                         <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
-    //                           transform="translate(0,-244.08334)">
-    //                           <path fill="${pieceColour === 'b' ? this.pieceDark : this.pieceLight}"
-    //                             d="m 26.148267,253.05075 a 3.1509065,3.3821693 0 0 0 -3.15071,3.3817 3.1509065,3.3821693 0 0 0 1.79007,3.04633 l -1.5043,10.53372 -4.10724,-8.07444 a 3.1509065,3.3821693 0 0 0 1.15393,-2.61276 3.1509065,3.3821693 0 0 0 -3.15071,-3.38222 3.1509065,3.3821693 0 0 0 -3.15123,3.38222 3.1509065,3.3821693 0 0 0 2.9931,3.37344 l 1.16892,8.91263 -5.19865,-5.81101 a 3.1509065,3.3821693 0 0 0 0.45631,-1.74408 3.1509065,3.3821693 0 0 0 -3.15123,-3.38223 3.1509065,3.3821693 0 0 0 -3.1507097,3.38223 3.1509065,3.3821693 0 0 0 3.1507097,3.38222 3.1509065,3.3821693 0 0 0 0.12299,-0.005 c 2.28321,4.9786 8.18623,13.65068 3.72638,15.63781 h 24.36492 c -4.45984,-1.98713 1.44318,-10.65921 3.72639,-15.63781 a 3.1509065,3.3821693 0 0 0 0.12248,0.005 3.1509065,3.3821693 0 0 0 3.15071,-3.38222 3.1509065,3.3821693 0 0 0 -3.15071,-3.38223 3.1509065,3.3821693 0 0 0 -3.15072,3.38223 3.1509065,3.3821693 0 0 0 0.45579,1.74408 l -5.19813,5.81101 1.1684,-8.91263 a 3.1509065,3.3821693 0 0 0 2.9931,-3.37344 3.1509065,3.3821693 0 0 0 -3.15071,-3.38222 3.1509065,3.3821693 0 0 0 -3.15123,3.38222 3.1509065,3.3821693 0 0 0 1.15393,2.61276 l -4.10724,8.07444 -1.5043,-10.53372 a 3.1509065,3.3821693 0 0 0 1.79059,-3.04633 3.1509065,3.3821693 0 0 0 -3.15123,-3.3817 3.1509065,3.3821693 0 0 0 -0.17983,0.007 3.1509065,3.3821693 0 0 0 -0.17984,-0.007 z m -14.84715,30.02142 v 5.29167 h 30.42708 v -5.29167 z"
-    //                             id="path5338" inkscape:connector-curvature="0" />
-    //                         </g>
-    //                       </svg>
-                        
-    // `;
+    console.log(blockNode.firstElementChild.children[0])
+    console.log(blockNode.firstElementChild.firstElementChild.innerHTML)
+    blockNode.firstElementChild.firstElementChild.innerHTML = `
+                          <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+                            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                            xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" style="width: 100%; height: 100%"
+                            viewBox="0 0 52.916666 52.916666" version="1.1"
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="queen.svg">
+                            <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
+                              transform="translate(0,-244.08334)">
+                              <path fill="${pieceColour === 'b' ? this.pieceDark : this.pieceLight}"
+                                d="m 26.148267,253.05075 a 3.1509065,3.3821693 0 0 0 -3.15071,3.3817 3.1509065,3.3821693 0 0 0 1.79007,3.04633 l -1.5043,10.53372 -4.10724,-8.07444 a 3.1509065,3.3821693 0 0 0 1.15393,-2.61276 3.1509065,3.3821693 0 0 0 -3.15071,-3.38222 3.1509065,3.3821693 0 0 0 -3.15123,3.38222 3.1509065,3.3821693 0 0 0 2.9931,3.37344 l 1.16892,8.91263 -5.19865,-5.81101 a 3.1509065,3.3821693 0 0 0 0.45631,-1.74408 3.1509065,3.3821693 0 0 0 -3.15123,-3.38223 3.1509065,3.3821693 0 0 0 -3.1507097,3.38223 3.1509065,3.3821693 0 0 0 3.1507097,3.38222 3.1509065,3.3821693 0 0 0 0.12299,-0.005 c 2.28321,4.9786 8.18623,13.65068 3.72638,15.63781 h 24.36492 c -4.45984,-1.98713 1.44318,-10.65921 3.72639,-15.63781 a 3.1509065,3.3821693 0 0 0 0.12248,0.005 3.1509065,3.3821693 0 0 0 3.15071,-3.38222 3.1509065,3.3821693 0 0 0 -3.15071,-3.38223 3.1509065,3.3821693 0 0 0 -3.15072,3.38223 3.1509065,3.3821693 0 0 0 0.45579,1.74408 l -5.19813,5.81101 1.1684,-8.91263 a 3.1509065,3.3821693 0 0 0 2.9931,-3.37344 3.1509065,3.3821693 0 0 0 -3.15071,-3.38222 3.1509065,3.3821693 0 0 0 -3.15123,3.38222 3.1509065,3.3821693 0 0 0 1.15393,2.61276 l -4.10724,8.07444 -1.5043,-10.53372 a 3.1509065,3.3821693 0 0 0 1.79059,-3.04633 3.1509065,3.3821693 0 0 0 -3.15123,-3.3817 3.1509065,3.3821693 0 0 0 -0.17983,0.007 3.1509065,3.3821693 0 0 0 -0.17984,-0.007 z m -14.84715,30.02142 v 5.29167 h 30.42708 v -5.29167 z"
+                                id="path5338" inkscape:connector-curvature="0" />
+                            </g>
+                          </svg>
+                        `;
     //blockNode.firstElementChild.firstElementChildinnerHTML = document.getElementById("d1").firstElementChild.innerHTML;
 
     // switch (pieceType.toLowerCase()) {
