@@ -186,10 +186,20 @@ span {
 }
 
 .errorCard {
-  color: red;
+  text-align: center;
   background-color: rgb(255, 159, 159);
   border: solid red 1px;
   border-radius: 4px;
   padding: 0.5em;
   margin: 0.5em;
+}
+
+#alertMessage {
+  color: red;
+}
+
+#closeIconAlert {
+  color: red;
+  float: right;
+  cursor: pointer;
 }

@@ -66,8 +66,8 @@ io.on("connection", socket => {
   })
 
   //move
-  socket.on("move", (sessionID, fromPosition, toPosition) => {
-    io.to(`${sessionID}`).emit("moveResult", move(sessionID, fromPosition, toPosition));
+  socket.on("move", (sessionID, fromPosition, toPosition, promotion) => {
+    io.to(`${sessionID}`).emit("moveResult", move(sessionID, fromPosition, toPosition, promotion));
   })
 
   //get moves
@@ -93,6 +93,9 @@ io.on("connection", socket => {
 
   socket.on("userSignUp", email => {
     signupUser(email);
+  })
+  socket.on("getTurn", sessionID => {
+    io.to(`${sessionID}`).emit("postTurn", getTurn(sessionID));
   })
 
 })
@@ -133,17 +136,24 @@ function joinGame(sessionID, playerName, sock) {
     return { 'SessionID': null, 'Result': false };
 }
 
-function move(sessionID, fromPosition, toPosition) {
+function move(sessionID, fromPosition, toPosition, toPromotion) {
   let session = Sessions[sessionID];
   let game = session['State'];
 
-  let move = game.move({ from: fromPosition, to: toPosition });
+  let move = [];
+
+  if (typeof toPromotion === 'undefined') {
+    move = game.move({ from: fromPosition, to: toPosition });
+  } else {
+    move = game.move({ from: fromPosition, to: toPosition , promotion: toPromotion});
+  }
 
   checkGameOver(sessionID);
 
   console.log(move);
 
   return move;
+
 }
 
 function checkGameOver(sessionID) {
@@ -226,6 +236,15 @@ function getMoveHistory(sessionID) {
   let history = game.history({ verbose: true })
 
   return { "move history": history };
+}
+
+function getTurn(sessionID) {
+  let session = Sessions[sessionID];
+  let game = session['State'];
+
+  console.log(game.turn());
+
+  return game.turn();
 }
 
 function getUsersForSession(sessionID)

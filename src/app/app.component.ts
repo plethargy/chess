@@ -8,6 +8,7 @@ import {
   animate,
 } from '@angular/animations';
 import { ThemeService } from './services/theme/theme.service';
+import { AuthService } from './services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -50,8 +51,15 @@ import { ThemeService } from './services/theme/theme.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
-  constructor(public themeService: ThemeService) {
+  constructor(
+    public themeService: ThemeService,
+    private authService: AuthService
+  ) {
     themeService.setLightTheme();
+  }
+
+  ngOnInit() {
+    this.authService.autoLogin();
   }
 
   title = 'chessApp';
