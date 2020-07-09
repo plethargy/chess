@@ -2,6 +2,7 @@ import { Component, OnInit, ViewContainerRef, ViewChild, ComponentFactoryResolve
 // import { style } from '@angular/animations';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
 import { SocketService } from 'src/app/services/socket/socket.service';
+import { Router } from '@angular/router'
 
 
 @Component({
@@ -43,7 +44,7 @@ export class GameComponent implements OnInit {
   data: any;
   colourTurn: any;
 
-  constructor(private snackbarService: SnackbarService, private socketService : SocketService, private componentFactoryResolver: ComponentFactoryResolver) {
+  constructor(private snackbarService: SnackbarService, private socketService: SocketService, private componentFactoryResolver: ComponentFactoryResolver, private router: Router) {
 
     this.socket = socketService.socket;
     this.sessionId = socketService.sessionID;
@@ -65,6 +66,13 @@ export class GameComponent implements OnInit {
       }
     })
 
+    //game end
+    this.socket.on("gameOver", data => {
+      console.log("Game Over");
+      console.log(data);
+      this.socketService.sessionID = null;
+      this.router.navigateByUrl('/lobbies');
+    })
 
     this.socket.on("postMoves", data =>{
       console.log('Moves' , data);

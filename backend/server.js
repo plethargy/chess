@@ -174,14 +174,27 @@ function move(sessionID, fromPosition, toPosition) {
 
 function checkGameOver(sessionID) {
   let session = Sessions[sessionID];
+  console.log(Sessions);
   let game = session['State'];
   if (game.game_over()) {
     let winner;
-    if (game.turn === "w")
-      winner = game.White;
+    if (game.turn() === "w")
+      winner = session.White;
     else
-      winner = game.Black;
-    socket.emit("gameOver", winner);
+      winner = session.Black;
+
+    io.to(`${sessionID}`).emit("gameOver", winner);
+    deleteSession(sessionID);
+  }
+}
+
+function deleteSession(sessionID) {
+  if (Sessions[sessionID]) {
+    console.log("Before Deleteion:");
+    console.log(Sessions);
+    delete Sessions[sessionID];
+    console.log("After Deleteion:");
+    console.log(Sessions);
   }
 }
 
