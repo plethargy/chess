@@ -147,6 +147,8 @@ export class GameComponent implements OnInit {
 
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
+    console.log("ev");
+    console.log(ev)
 
     let block = ev.target.closest(".block");
     
@@ -197,14 +199,22 @@ export class GameComponent implements OnInit {
 
       if (checkMove.flags.includes('k') || checkMove.flags.includes('q')) {
         // CASTLING
+          let currentRookBlock = document.getElementById('h1');
+          let newRookBlock = document.getElementById('f1');
 
+          console.log("GONNA SWAP");
+          this.swapPieceFromChildNode(newRookBlock, currentRookBlock);
+          console.log("SWAPPED");
+          console.log(this.chess.ascii())
         // Kings's Side
-        // white :  king > g1   rook > f1
-        // black :  king > g8   rook > f8
+        // white :  king e1 > g1   rook h1 > f1
+        // black :  king e8 > g8   rook h8 > f8
+        // data = ev.dataTransfer.getData("text");
+        // block.firstChild.appendChild(document.getElementById(data));
 
         // Queen's Side
-        // white :  king to c1   rook > d1
-        // black :  king > c8    rook > d8
+        // white :  king e1 > c1   rook a1 > d1
+        // black :  king e8 > c8   rook a8 > d8
 
       }      
     }
@@ -235,6 +245,20 @@ export class GameComponent implements OnInit {
         this.snackbarService.show('Game Over');
       }, timer);     
     }
+  }
+
+  swapPieceFromChildNode(newBlockNode, oldBlockNode) {
+
+      oldBlockNode.firstChild.childNodes.forEach(element => {
+        console.log("element");
+        let name = element.nodeName.toLowerCase();
+        if (name === "app-pawn" || name === "app-queen" || name === "app-bishop" || name === "app-knight" || name === "app-rook")
+        {
+          console.log("found rook");
+          newBlockNode.firstChild.appendChild(element);  
+        }
+
+      });
   }
   
   removePieceFromChildNode(blockNode) {
