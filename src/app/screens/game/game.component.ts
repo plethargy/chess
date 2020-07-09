@@ -46,6 +46,7 @@ export class GameComponent implements OnInit {
   colourTurn: any;
   thisPlayer : boolean;
   players : any = {white: null, black: null};
+  history : any;
 
   playerLookup : PlayerlookupService;
 
@@ -66,8 +67,15 @@ export class GameComponent implements OnInit {
       this.thisPlayer = true;
     else
       this.thisPlayer = false;
+
+
+    this.socket.on("postTurn", data => {
+      this.colourTurn = data;
+    })
+    
     
     this.socket.emit("getBoard", this.sessionId);
+    this.socket.emit("getTurn", this.sessionId);
 
     this.socket.on("postBoard", data => {
       console.log("hi there");
@@ -102,7 +110,7 @@ export class GameComponent implements OnInit {
         // [Piece][Position]#       // Checkmate
   
         let block = this.moveList[index];
-        this.colourTurn = 'w'; // store in a variable // ### FIX - GET FROM SERVER
+        this.socket.emit("getTurn", this.sessionId);; // store in a variable // ### FIX - GET FROM SERVER
   
         // can refactor with regex      
         if (block.includes("O-"))
@@ -233,6 +241,7 @@ export class GameComponent implements OnInit {
 
       this.dragging = true;
       this.socket.emit("getBoard", this.sessionId);
+      this.socket.emit("getTurn", this.sessionId);
     
     });
 
@@ -258,8 +267,8 @@ export class GameComponent implements OnInit {
     this.socket.emit("getMoves", this.sessionId, position);
   }
 
-  move(from : string, to : string) : void{
-    this.socket.emit("move", this.sessionId, from, to);
+  move(from : string, to : string, toPromotion : string) : void{
+    this.socket.emit("move", this.sessionId, from, to, toPromotion);
   }
 
   counter(i: number){
@@ -322,7 +331,8 @@ export class GameComponent implements OnInit {
 
   drop(ev) {
 
-    this.colourTurn = 'w'; // ### FIX - GET FROM SERVER 
+    this.socket.emit("getTurn", this.sessionId); // ### FIX - GET FROM SERVER 
+
     //this.snackbarService.show('test','success', 3000);
     //this.showPromotion = true;
 
@@ -351,9 +361,11 @@ export class GameComponent implements OnInit {
       //   promotion: 'q'
       // });
 
+      this.move(this.pieceLastPosition, this.block.id, 'q');
+
     }
     else {
-      this.move(this.pieceLastPosition, this.block.id);
+      this.move(this.pieceLastPosition, this.block.id, undefined);
     }
 
   }
