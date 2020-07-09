@@ -172,7 +172,7 @@ export class GameComponent implements OnInit {
     let checkMove;
     let currentPiece = this.fetchPieceFromChildNode(document.getElementById(this.pieceLastPosition));
 
-    this.addPieceToChildNode(block, 'q', 'sigh', 'b'); // this works but doesn't work - need to inject the component
+    //this.addPieceToChildNode(block, 'q', 'sigh', 'b'); // this works but doesn't work - need to inject the component
 
     if (currentPiece.nodeName.toLowerCase() === "app-pawn" && (block.id.includes(8) || block.id.includes(1)))
     {
@@ -208,7 +208,7 @@ export class GameComponent implements OnInit {
         this.removePieceFromChildNode(block);
 
       this.pieceLastPosition = "";
-      //block.firstChild.appendChild(document.getElementById(data));
+      block.firstChild.appendChild(document.getElementById(data));
 
       if (checkMove.flags.includes('e')) {
         // EN PASSANT CAPTURE
