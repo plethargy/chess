@@ -14,7 +14,11 @@
           </a>
         </li>
       </ul>
-      <div *ngIf="!openLobbies || openLobbies.length <= 0" id="noOpenLobbies">
+      <div
+        *ngIf="!openLobbies || openLobbies.length <= 0"
+        id="noOpenLobbies"
+        class="projectFont"
+      >
         No open lobbies currently found...
       </div>
       <div class="orText" *ngIf="openLobbies.length > 0">
