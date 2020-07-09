@@ -56,10 +56,11 @@ export class GameComponent implements OnInit {
 
     //this.snackbarService.show('test','success', 3000);
     //let ret = this.snackbarService.promote(true);
-
+    
     this.socket.emit("getBoard", this.sessionId);
 
     this.socket.on("postBoard", data => {
+      console.log("hi there");
       this.chessboard = [];
       for (let item of data) {
         this.chessboard.push(item);
@@ -91,6 +92,11 @@ export class GameComponent implements OnInit {
     });
 
     this.socket.on("moveResult", response => {
+      if (response.sessionID !== this.sessionId)
+      {
+        console.log("not my problem");
+        return;
+      }
       let checkMove = response;
 
       console.log("Move result",checkMove);

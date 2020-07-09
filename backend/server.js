@@ -42,7 +42,8 @@ io.on("connection", socket => {
     let Lobby = { 'ID': uuidv4(), 'Player1': playerName, 'Player2': null };
     Lobbies.push(Lobby);
     io.emit("lobbies", Lobbies);
-
+    console.log(`lobby id: ${Lobby.ID}`);
+    socket.join(`${Lobby.ID}`);
     //game session
     socket.emit("newGame", createNewSession(Lobby.ID, playerName));
   })
@@ -55,7 +56,7 @@ io.on("connection", socket => {
     io.emit("lobbies", Lobbies);
 
     //game session
-    socket.emit("joinGame", joinGame(lobbyID, playerName));
+    socket.emit("joinGame", joinGame(lobbyID, playerName, socket));
   })
 
   //get lobbies
@@ -65,22 +66,24 @@ io.on("connection", socket => {
 
   //move
   socket.on("move", (sessionID, fromPosition, toPosition) => {
-    socket.emit("moveResult", move(sessionID, fromPosition, toPosition));
+    io.to(`${sessionID}`).emit("moveResult", move(sessionID, fromPosition, toPosition));
   })
 
   //get moves
   socket.on("getMoves", (sessionID, position) => {
-    socket.emit("postMoves", getMoves(sessionID, position));
+    io.to(`${sessionID}`).emit("postMoves", getMoves(sessionID, position));
   })
 
 
   //load/get board
   socket.on("getBoard", (sessionID) => {
-    socket.emit("postBoard", getBoard(sessionID));
+    console.log(`getBoard called with ID: ${sessionID}`)
+    console.log(Object.keys(socket.rooms).filter(item => item!=socket.id));
+    io.to(`${sessionID}`).emit("postBoard", getBoard(sessionID));
   })
 
   socket.on("getMoveHistory", sessionID => {
-    socket.emit("postMoveHistory", getMoveHistory(sessionID));
+    io.to(`${sessionID}`).emit("postMoveHistory", getMoveHistory(sessionID));
   })
 
 })
@@ -88,6 +91,7 @@ io.on("connection", socket => {
 //creates default game
 function createNewSession(sessionID, playerName) {
 
+  console.log(`new session ID: ${sessionID}`);
   let White = playerName;
   let Black = null;
   let Fen = null;
@@ -110,9 +114,10 @@ function createNewSession(sessionID, playerName) {
   return { 'SessionID': sessionID, 'Result': true };
 }
 
-function joinGame(sessionID, playerName) {
+function joinGame(sessionID, playerName, sock) {
   if (Sessions[sessionID] != undefined) {
-    Sessions[sessionID].Black = playerName
+    Sessions[sessionID].Black = playerName;
+    sock.join(`${sessionID}`);
     return { 'SessionID': sessionID, 'Result': true };
   }
   else
