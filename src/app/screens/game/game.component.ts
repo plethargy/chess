@@ -177,12 +177,11 @@ export class GameComponent implements OnInit {
       this.showPromotion = true; // also how to subscribe unil the user is done selecting a piece //receiveSelectedPromotion
 
       this.promotionSelectionService.promotionSelection.subscribe((pieceData) => {
-          selectedPromotion = pieceData;
 
           checkMove = this.chess.move({
             from: this.pieceLastPosition,
             to: block.id,
-            promotion: 'q'
+            promotion: pieceData
           });
 
           this.movePiece(checkMove, currentPiece, block, data, colourTurn);          
