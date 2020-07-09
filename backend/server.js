@@ -171,7 +171,7 @@ function move(sessionID, fromPosition, toPosition) {
 function checkGameOver(sessionID) {
   let session = Sessions[sessionID];
   let game = session['State'];
-  if (game.checkGameOver()) {
+  if (game.game_over()) {
     let winner;
     if (game.turn === "w")
       winner = game.White;
