@@ -44,6 +44,7 @@ export class GameComponent implements OnInit {
   data: any;
   colourTurn: any;
   thisPlayer : boolean;
+  players : any = {white: null, black: null};
 
   playerLookup : PlayerlookupService;
 
@@ -226,6 +227,15 @@ export class GameComponent implements OnInit {
       this.socket.emit("getBoard", this.sessionId);
     
     });
+
+
+    this.socket.on("postUsersForSession", data => {
+      this.players.white = data.playerWhite;
+      this.players.black = data.playerBlack;
+    });
+
+
+    this.socket.emit("getUsersForSession", this.sessionId);
 
   }
 
