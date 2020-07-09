@@ -32,6 +32,9 @@ export class GameComponent implements OnInit {
   chessboard : any; // load/save chess board to server 
   moveList : any;
 
+  block: any;
+  data: any;
+
   constructor(private snackbarService: SnackbarService, private socketService : SocketService, private ref: ChangeDetectorRef) {
 
     this.socket = socketService.socket;
@@ -62,6 +65,72 @@ export class GameComponent implements OnInit {
         this.chessboard.push(item);
       }
     })
+
+
+    this.socket.on("postMoves", data =>{
+      console.log('Moves' , data);
+      this.moveList = data;
+
+      for (let index = 0; index < this.moveList.length; index++) {
+        // chess notation
+        //[Piece][Position] // Standard move
+        //[Piece][Rank][Position] // Disambiguating standard move
+        //[Piece]x[Position] // Capturing
+        //[Column]x[Position]e.p. // En passant captures  // used as flag instead
+        //[Position]=[Promotion] // Promoting Pawn
+        // "(=)" // Draw ?
+        //[Position]+ // Check
+        // "O-O" // Castling (king side) - this can probably be hard coded
+        // "O-O-O" // Castling (queen side)
+        // # or ++  // Checkmate?
+  
+        let block = this.moveList[index].slice(-2);
+  
+        document.getElementById(block).classList.add("avaliableMove");
+      }
+    });
+
+    this.socket.on("moveResult", response => {
+      let checkMove = response;
+
+      console.log("Move result",checkMove);
+    
+      if (checkMove) { 
+  
+        // Flags
+        // 'n' - a non-capture
+        // 'b' - a pawn push of two squares
+        // 'e' - an en passant capture
+        // 'c' - a standard capture
+        // 'p' - a promotion
+        // 'k' - kingside castling
+        // 'q' - queenside castling
+  
+        if (checkMove.flags.includes('c')) 
+          this.removePieceFromChildNode(this.block);
+  
+        this.pieceLastPosition = "";
+        this.block.firstChild.appendChild(document.getElementById(this.data));
+  
+        if (checkMove.flags.includes('e')) {
+          //eg
+            // b d7 > d5    w e5 > d6   w  en passant captures b on d5
+            // w d2 > d4    b e4 > d3   b  en passant captures w on d4
+  
+          let passantBlockID = '';
+          if (checkMove.color === "w")
+            passantBlockID = (this.block.id[0] + (parseInt(this.block.id[1]) - 1).toString());
+          else 
+            passantBlockID = (this.block.id[0] + (parseInt(this.block.id[1]) + 1).toString());
+  
+          this.removePieceFromChildNode(document.getElementById(passantBlockID));
+        }
+      }
+      this.removeBlockHighlighting();
+
+      this.dragging = true;
+    
+    });
 
   }
 
@@ -104,7 +173,7 @@ export class GameComponent implements OnInit {
 
     this.pieceLastPosition = ev.target.closest(".block").id;
 
-    console.log(this.pieceLastPosition);
+    console.log("Last position of piece",this.pieceLastPosition);
     ev.dataTransfer.setData("text", ev.target.id);
 
     if (this.dragging) {
@@ -112,92 +181,20 @@ export class GameComponent implements OnInit {
       this.getMoves(this.pieceLastPosition);
     }
 
-    this.socket.on("postMoves", data =>{
-      console.log('Moves' , data);
-      this.moveList = data;
-
-      console.log("moveList");
-      console.log(this.moveList);
-      for (let index = 0; index < this.moveList.length; index++) {
-        // chess notation
-        //[Piece][Position] // Standard move
-        //[Piece][Rank][Position] // Disambiguating standard move
-        //[Piece]x[Position] // Capturing
-        //[Column]x[Position]e.p. // En passant captures  // used as flag instead
-        //[Position]=[Promotion] // Promoting Pawn
-        // "(=)" // Draw ?
-        //[Position]+ // Check
-        // "O-O" // Castling (king side) - this can probably be hard coded
-        // "O-O-O" // Castling (queen side)
-        // # or ++  // Checkmate?
-  
-        let block = this.moveList[index].slice(-2);
-  
-        document.getElementById(block).classList.add("avaliableMove");
-      }
-    });
-
-
-
   }
 
   drop(ev) {
     //this.snackbarService.show('test','success', 3000);
     this.showPrmotion = true;
 
-    console.log("drop");
+    console.log("Piece dropped");
 
     ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
+    this.data = ev.dataTransfer.getData("text");
 
-    let block = ev.target.closest(".block");
+    this.block = ev.target.closest(".block");
 
-
-    this.move(this.pieceLastPosition, block.id);
-
-    this.socket.on("moveResult", response => {
-      let checkMove = response;
-
-      console.log(checkMove);
-    
-      if (checkMove) { 
-  
-        // Flags
-        // 'n' - a non-capture
-        // 'b' - a pawn push of two squares
-        // 'e' - an en passant capture
-        // 'c' - a standard capture
-        // 'p' - a promotion
-        // 'k' - kingside castling
-        // 'q' - queenside castling
-  
-        if (checkMove.flags.includes('c')) 
-          this.removePieceFromChildNode(block);
-  
-        this.pieceLastPosition = "";
-        block.firstChild.appendChild(document.getElementById(data));
-  
-        if (checkMove.flags.includes('e')) {
-          //eg
-            // b d7 > d5    w e5 > d6   w  en passant captures b on d5
-            // w d2 > d4    b e4 > d3   b  en passant captures w on d4
-  
-          let passantBlockID = '';
-          if (checkMove.color === "w")
-            passantBlockID = (block.id[0] + (parseInt(block.id[1]) - 1).toString());
-          else 
-            passantBlockID = (block.id[0] + (parseInt(block.id[1]) + 1).toString());
-  
-          this.removePieceFromChildNode(document.getElementById(passantBlockID));
-        }
-      }
-      this.removeBlockHighlighting();
-
-      this.dragging = true;
-    
-    });
-
-
+    this.move(this.pieceLastPosition, this.block.id);
   }
   
   removePieceFromChildNode(blockNode) {
@@ -224,5 +221,6 @@ export class GameComponent implements OnInit {
 
     this.showPrmotion = false;
   }
+
 
 }
