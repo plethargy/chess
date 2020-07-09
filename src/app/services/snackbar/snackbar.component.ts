@@ -3,7 +3,6 @@ import { SnackbarService } from './snackbar.service';
 import { Subscription } from 'rxjs';
 
 import { trigger, transition, animate, style } from '@angular/animations';
-
 @Component({
   selector: 'app-snackbar',
   templateUrl: './snackbar.component.html',
@@ -11,7 +10,10 @@ import { trigger, transition, animate, style } from '@angular/animations';
   animations: [
     trigger('state', [
       transition(':enter', [
-        style({ bottom: '-100px', transform: 'translate(-50%, 0%) scale(0.3)' }),
+        style({
+          bottom: '-100px',
+          transform: 'translate(-50%, 0%) scale(0.3)'
+        }),
         animate('150ms cubic-bezier(0, 0, 0.2, 1)', style({
           transform: 'translate(-50%, 0%) scale(1)',
           opacity: 1,
@@ -31,47 +33,34 @@ import { trigger, transition, animate, style } from '@angular/animations';
 
 export class SnackbarComponent implements OnInit, OnDestroy {
 
-  // CHESS PROMOTION
-  piecePromotion = false;
-  piecePromotionColour: string = 'b'; // b || w
-  pieceDark: string = 'var(--chesspiece-dark)';
-  pieceLight: string = 'var(--chesspiece-light)';
-
-  // GENERAL ALERTS
   show = false;
-  message: string = '';
+  message: string = 'This is snackbar';
   type: string = '';
-  cardType: string = '';
   timer: number = 0;
   snackbarSubscription: Subscription;
 
-  constructor(private snackbarService: SnackbarService) { }
+  constructor(private snackbarService: SnackbarService) {}
 
   ngOnInit() {
     this.snackbarSubscription = this.snackbarService.snackbarState
-    .subscribe(
-      (state) => {
-        this.piecePromotion = state.piecePromotion;
-        if (this.piecePromotion) {
-          state.piecePromotionColour = this.piecePromotionColour;
+      .subscribe(
+        (state) => {
+          if (state.type)
+            this.type = state.type;
 
-          this.cardType = 'promotion-card';
-          this.show = state.show;
-        }
-        else {
-          this.type = state.type;
           this.message = state.message;
-
           this.show = state.show;
 
-          this.timer = state.timer;
-          if (this.timer > 0) {
-            setTimeout(() => {
-              this.show = false;
-            }, this.timer);
+          if (state.timer) {
+            this.timer = state.timer;
+            console.log("time: " + this.timer);
+            if (this.timer > 0) {
+              setTimeout(() => {
+                this.show = false;
+              }, this.timer);
+            }
           }
-        }        
-      });
+        });
   }
 
   ngOnDestroy() {

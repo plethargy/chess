@@ -1,52 +1,13 @@
-<div *ngIf="show" @state [ngClass]="['snackbar-wrap']">
-  <div class="card z-depth1" [ngClass]="[type, cardType]">
-    <header>
-    </header>
-    <main class="snackbar-text">
-      <!-- POPUP MESSAGE -->
-      <ng-container *ngIf="!piecePromotion">
-        {{message}}
-      </ng-container>     
-
-      <!-- PIECE PROMOTION -->
-      <ng-container *ngIf="piecePromotion">
-        <div class="square-container">
-          <div class="square">
-            <div class="square-content">
-              <button>
-                <app-rook [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="rook">
-                </app-rook>
-              </button>
-            </div>
-          </div>
-          <div class="square">
-            <div class="square-content">
-              <button>
-                <app-knight [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="knight">
-                </app-knight>
-              </button>
-            </div>
-          </div>
-          <div class="square">
-            <div class="square-content">
-              <button>
-                <app-bishop [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="bishop">
-                </app-bishop>
-              </button>
-            </div>
-          </div>
-          <div class="square">
-            <div class="square-content">
-              <button>
-                <app-queen [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="queen">
-                </app-queen>
-              </button>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-    </main>
-    <footer>
-    </footer>
-  </div>
+<div *ngIf="show"
+@state
+[ngClass]="['snackbar-wrap']">
+<div class="card z-depth1" [ngClass]="[type]">
+  <header>
+  </header>
+  <main class="snackbar-text">
+    {{message}}
+  </main>
+  <footer>
+  </footer>
+</div>
 </div>

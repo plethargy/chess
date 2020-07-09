@@ -73,9 +73,6 @@ export class GameComponent implements OnInit {
   }
 
   allowDrop(ev) {
-    console.log("alowdrop");
-    // if (canDrop)
-
     ev.preventDefault();
   }
 
@@ -118,27 +115,18 @@ export class GameComponent implements OnInit {
         if (block === "O-O")
         {
           if (colourTurn === 'w')
-            block = "g1";
+            block = "g1"; // king > g1   rook > f1
           if (colourTurn === 'b')
-            block = "g8"
-          // white
-          // king > g1   rook > f1
-          
-          // black
-          // king > g8   rook > f8
+            block = "g8"; // king > g8   rook > f8
         }
 
         // Queen Side
         if (block === "O-O-O")
         {
           if (colourTurn === 'w')
-            block = "c1";
+            block = "c1"; // king to c1   rook > d1
           if (colourTurn === 'b')
-            block = "c8"
-          // white
-          // king to c1   rook > d1
-          // black
-          // king > c8    rook > d8
+            block = "c8"; // king > c8    rook > d8
         }
       }
       if (block.includes('='))
@@ -153,7 +141,7 @@ export class GameComponent implements OnInit {
 
   drop(ev) {
     //this.snackbarService.show('test','success', 3000);
-    this.showPrmotion = true;
+    //this.showPrmotion = true;
 
     console.log("drop");
 
@@ -193,6 +181,7 @@ export class GameComponent implements OnInit {
       block.firstChild.appendChild(document.getElementById(data));
 
       if (checkMove.flags.includes('e')) {
+        // EN PASSANT CAPTURE
         //eg
           // b d7 > d5    w e5 > d6   w  en passant captures b on d5
           // w d2 > d4    b e4 > d3   b  en passant captures w on d4
@@ -204,9 +193,48 @@ export class GameComponent implements OnInit {
           passantBlockID = (block.id[0] + (parseInt(block.id[1]) + 1).toString());
 
         this.removePieceFromChildNode(document.getElementById(passantBlockID));
-      }
+      }  
+
+      if (checkMove.flags.includes('k') || checkMove.flags.includes('q')) {
+        // CASTLING
+
+        // Kings's Side
+        // white :  king > g1   rook > f1
+        // black :  king > g8   rook > f8
+
+        // Queen's Side
+        // white :  king to c1   rook > d1
+        // black :  king > c8    rook > d8
+
+      }      
     }
+    this.gameCondition();
     this.removeBlockHighlighting();
+  }
+
+  gameCondition()
+  { 
+    let timer = 3000;
+
+    // change red or green depending who is in check?
+    if (this.chess.in_check())
+      this.snackbarService.show('CHECK','', timer);
+
+    // Check for End Game Conditions
+    if (this.chess.in_checkmate())
+      this.snackbarService.show('checkmate', '', timer);
+    if (this.chess.in_draw())
+      this.snackbarService.show('Draw','', timer);
+    if (this.chess.in_stalemate())
+      this.snackbarService.show('Stalemate','', timer);
+    if (this.chess.in_threefold_repetition())
+      this.snackbarService.show('threefold repetition','', timer);
+    
+    if (this.chess.game_over()){
+      setTimeout(() => {
+        this.snackbarService.show('Game Over');
+      }, timer);     
+    }
   }
   
   removePieceFromChildNode(blockNode) {
