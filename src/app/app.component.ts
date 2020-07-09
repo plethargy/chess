@@ -17,25 +17,33 @@ import { ThemeService } from './services/theme/theme.service';
     trigger('routeAnimations', [
       transition('* <=> *', [
         // Set a default  style for enter and leave
-        query(':enter, :leave', [
-          style({
-            position: 'absolute',
-            left: 0,
-            width: '100%',
-            opacity: 0,
-            transform: 'scale(0) translateY(100%)',
-          }),
-        ]),
-        // Animate the new page in
-        query(':enter', [
-          animate(
-            '600ms ease',
+        query(
+          ':enter, :leave',
+          [
             style({
-              opacity: 1,
-              transform: 'scale(1) translateY(0)',
-            })
-          ),
-        ]),
+              position: 'absolute',
+              left: 0,
+              width: '100%',
+              opacity: 0,
+              transform: 'scale(0) translateY(100%)',
+            }),
+          ],
+          { optional: true }
+        ),
+        // Animate the new page in
+        query(
+          ':enter',
+          [
+            animate(
+              '600ms ease',
+              style({
+                opacity: 1,
+                transform: 'scale(1) translateY(0)',
+              })
+            ),
+          ],
+          { optional: true }
+        ),
       ]),
     ]),
   ],
@@ -49,7 +57,11 @@ export class AppComponent {
   title = 'chessApp';
 
   prepareRoute(outlet: RouterOutlet) {
-    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
+    return (
+      outlet &&
+      outlet.activatedRouteData &&
+      outlet.activatedRouteData['animation']
+    );
   }
 
   toggleTheme() {
