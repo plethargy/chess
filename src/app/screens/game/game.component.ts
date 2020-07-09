@@ -2,7 +2,7 @@ import { Component, OnInit, NgZone, ChangeDetectorRef} from '@angular/core';
 // import { style } from '@angular/animations';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
 import { SocketService } from 'src/app/services/socket/socket.service';
-import { Block } from './block';
+
 
 @Component({
   selector: 'app-game',
