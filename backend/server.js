@@ -86,6 +86,10 @@ io.on("connection", socket => {
     io.to(`${sessionID}`).emit("postMoveHistory", getMoveHistory(sessionID));
   })
 
+  // socket.on("refreshBoard", sessionID => {
+  //   io.
+  // })
+
 })
 
 //creates default game

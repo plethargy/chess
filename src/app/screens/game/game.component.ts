@@ -92,11 +92,7 @@ export class GameComponent implements OnInit {
     });
 
     this.socket.on("moveResult", response => {
-      if (response.sessionID !== this.sessionId)
-      {
-        console.log("not my problem");
-        return;
-      }
+      
       let checkMove = response;
 
       console.log("Move result",checkMove);
@@ -135,6 +131,7 @@ export class GameComponent implements OnInit {
       this.removeBlockHighlighting();
 
       this.dragging = true;
+      this.socket.emit("getBoard", this.sessionId);
     
     });
 
@@ -173,6 +170,7 @@ export class GameComponent implements OnInit {
   }
 
   drag(ev) {
+    console.log(ev);
     this.showPrmotion = false;
 
     this.removeBlockHighlighting();
