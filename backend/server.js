@@ -3,7 +3,7 @@
 var express = require("express");
 const { Chess } = require('chess.js');
 const { v4: uuidv4 } = require('uuid');
-const db = require('./db');
+const db = require('./database');
 
 var app = express();
 
@@ -91,6 +91,10 @@ io.on("connection", socket => {
     io.to(`${sessionID}`).emit("postUsersForSession", getUsersForSession(sessionID));
   })
 
+  socket.on("userSignUp", email => {
+    signupUser(email);
+  })
+
 })
 
 //creates default game
@@ -152,6 +156,12 @@ function checkGameOver(sessionID) {
       winner = session.White;
     else
       winner = session.Black;
+
+    let dbInstance = new db();
+  
+    let query = `UPDATE Player SET [Score] = [Score] + 50, [LastPlayed] = GETDATE() WHERE Username = '${winner}'`;
+    dbInstance.connect(query);
+    
 
     io.to(`${sessionID}`).emit("gameOver", winner);
     deleteSession(sessionID);
@@ -221,7 +231,23 @@ function getMoveHistory(sessionID) {
 function getUsersForSession(sessionID)
 {
   let black = Sessions[sessionID].Black;
-  let white = Sessions[sessionID].White;
+  let white = Sessions[sessionID].White; 
 
   return { playerWhite: white, playerBlack: black};
+}
+
+function signupUser(email)
+{
+
+  let dbInstance = new db();
+  let query = 
+  `
+  DECLARE @count int;
+  SELECT @count = COUNT(PlayerId) FROM [Player] WHERE [Username] = '${email}';
+  IF @count = 0
+  BEGIN
+    INSERT INTO Player(Username, Score) VALUES ('${email}', 0)
+  END`;
+  dbInstance.connect(query);
+
 }

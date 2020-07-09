@@ -1,6 +1,4 @@
 const { Connection, Request } = require("tedious");
-
-// Create connection to database
 const config = {
   authentication: {
     options: {
@@ -16,39 +14,82 @@ const config = {
   }
 };
 
-const connection = new Connection(config);
 
-// Attempt to connect and execute queries if connection goes through
-connection.on("connect", err => {
-  if (err) {
-    console.error(err.message);
-  } else {
-    console.log("Connected")
-    queryDatabase();
+class Database {
+  
+  constructor() {
+    
+      this.results = null;
+      this.connection = null;
   }
-});
 
-function queryDatabase() {
-  console.log("Reading rows from the Table...");
+  connect(query) {
+      this.connection = new Connection(config);
 
-  // Read all rows from table
-  const request = new Request(
-    `SELECT TOP 20 Result
-     FROM [ConnectionTest]`,
-    (err, rowCount) => {
-      if (err) {
-        console.error(err.message);
-      } else {
-        console.log(`${rowCount} row(s) returned`);
+      this.connection.on("connect", err => {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log("Connected")
+          this.executeQuery(query);
+        }
+      });
+  }
+
+  executeQueryWithCallback(query, callback) {
+    const request = new Request(
+      `${query}`,
+      (err, rowCount) => {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log(`${rowCount} row(s) returned`);
+        }
       }
-    }
-  );
-
-  request.on("row", columns => {
-    columns.forEach(column => {
-      console.log("%s\t%s", column.metadata.colName, column.value);
+    );
+  
+    request.on("row", columns => {
+      columns.forEach(column => {
+        console.log("%s\t%s", column.metadata.colName, column.value);
+      });
     });
-  });
+  
+    this.connection.execSql(request);
+  }
 
-  connection.execSql(request);
+  executeQuery(query) {
+    console.log(query);
+    const request = new Request(
+      `${query}`,
+      (err, rowCount) => {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log(`${rowCount} row(s) returned`);
+        }
+
+        this.connection.close();
+      }
+    );
+
+    request.on("row", columns => {
+      this.results = columns;
+      
+    });
+
+    this.connection.execSql(request);
+  }
+
+  getResults()
+  {
+    return this.results;
+  }
+
+
+
+  disconnect() {
+      this.connection.close();
+  }
 }
+
+module.exports = Database;
