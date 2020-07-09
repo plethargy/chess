@@ -2,6 +2,7 @@ import { Component, OnInit, ViewContainerRef, ViewChild, ComponentFactoryResolve
 // import { style } from '@angular/animations';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
 import { SocketService } from 'src/app/services/socket/socket.service';
+import { PlayerlookupService } from 'src/app/services/playerlookup/playerlookup.service';
 
 
 @Component({
@@ -43,10 +44,13 @@ export class GameComponent implements OnInit {
   data: any;
   colourTurn: any;
 
-  constructor(private snackbarService: SnackbarService, private socketService : SocketService, private componentFactoryResolver: ComponentFactoryResolver) {
+  playerLookup : PlayerlookupService;
+
+  constructor(private snackbarService: SnackbarService, private socketService : SocketService, private componentFactoryResolver: ComponentFactoryResolver, private playerLookupService : PlayerlookupService) {
 
     this.socket = socketService.socket;
     this.sessionId = socketService.sessionID;
+    this.playerLookup = playerLookupService;
 
   }
 
@@ -257,7 +261,14 @@ export class GameComponent implements OnInit {
   }
 
   drag(ev) {
+    let email : string = JSON.parse(localStorage.getItem("userData")).email;
+    let colour : string = this.playerLookup.getUserColour(email);
+    if (ev.target.id[0] == "w" && colour !== "white")
+      return;
+    if (ev.target.id[0] == "b" && colour !== "black")
+      return;
     console.log("DRAG")
+    
     this.showPromotion = false;
 
     this.removeBlockHighlighting();
