@@ -4,6 +4,18 @@
     <header>
     </header>
     <main>
+      <head>
+        <style>
+        p {text-align: center;
+          font-family: Arial Black, Arial Bold, Gadget, sans-serif;
+          font-size: 150%;}
+        div {text-align: center;}
+        img {float:center;
+          width: 300px;
+          height: 100px;}
+        h3 {float:right;}
+        </style>
+        </head>
       <div>
         <div class="square-container">
           <div class="square">
@@ -12,7 +24,23 @@
               <div class="name-tag">
                 <div id="player-one-turn-indicator"></div>
                 <div id="player-one-username">
-                  <!-- <h2>Player 1</h2> -->
+                    <div>
+                    <!--h6>Player 1</h6 -->
+                    <img 
+                      src="assets/pieces/pawn.svg" 
+                      height="77"
+                      width="100" />
+                    <p><strong>Username1</strong></p>
+
+                      <div class="player-container">
+                        <div class="grid-item">Time Elapsed</div>
+                        <div class="grid-item">2</div>
+                        <div class="grid-item">Moves Played</div>  
+                        <div class="grid-item">4</div>
+                        <div class="grid-item">Player Score</div>
+                        <div class="grid-item">6</div>  
+                      </div>
+                    </div>
                 </div>
               </div>
 
@@ -63,12 +91,28 @@
               </div>
             </div>
           </div>
+
           <div class="square">
             <div class="square-content">
               <!-- THIS IS PLAYER TWO -->
               <div class="name-tag">
                 <div id="player-two-turn-indicator">
-                  <!-- <h2>Player 1</h2> -->
+                  <div >
+                    <!-- h6>Player 2</h6 -->
+                    <img 
+                    src="assets/pieces/pawn.svg" 
+                    height="87"
+                    width="100" />
+                    <p><strong>Username2</strong></p>
+                    <div class="player-container">
+                      <div class="grid-item">Time Elapsed</div>
+                      <div class="grid-item">22</div>
+                      <div class="grid-item">Moves Played</div>  
+                      <div class="grid-item">44</div>
+                      <div class="grid-item">Player Score</div>
+                      <div class="grid-item">66</div>  
+                    </div>
+                  </div>
                 </div>
                 <div id="player-two-username"></div>
               </div>
