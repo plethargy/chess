@@ -110,23 +110,7 @@ export class GameComponent implements OnInit {
       let block = moveList[index];
       let colourTurn = this.chess.turn(); // store in a variable
 
-      // can refactor with regex
-      if (block.includes('='))
-      { 
-        block = block.replace('+',''); // PROMOTION
-        console.log("promo " + block);
-        //(?<==)[^\]]+
-      }
-      if (block.includes('+'))        
-      {
-        block = block.replace('+',''); // CHECK
-        console.log("check " + block);
-      }
-      if (block.includes('#'))
-      {
-        block =block.replace('#',''); // CHECKMATE
-        console.log("checkmate " + block);
-      }
+      // can refactor with regex      
       if (block.includes('O-'))
       {
         // CASTLING
@@ -156,14 +140,15 @@ export class GameComponent implements OnInit {
           // black
           // king > c8    rook > d8
         }
-        console.log("castling " + block);
       }
+      if (block.includes('='))
+        block = block.replace(/(?<==)[^\]]+/,'');  // PROMOTION // replace everything after = // can refactor
 
-      block = block.slice(-2); 
-      console.log(block);
+      block = block.replace(/[\=, \+, \#]+/g,''); // remove suffix of PROMOTION(=), CHECK (+), CHECKMATE (#)
+      block = block.slice(-2); // STANDARD MOVE
+
       document.getElementById(block).classList.add("avaliableMove");
     }
-
   }
 
   drop(ev) {
