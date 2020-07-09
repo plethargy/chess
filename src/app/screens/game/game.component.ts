@@ -140,6 +140,7 @@ export class GameComponent implements OnInit {
   }
 
   drop(ev) {
+    
     let colourTurn = this.chess.turn(); // store in a variable
     //this.snackbarService.show('test','success', 3000);
     //this.showPromotion = true;
@@ -167,10 +168,28 @@ export class GameComponent implements OnInit {
     //   promotion: ''    
     // });
 
-    let checkMove = this.chess.move({
-      from: this.pieceLastPosition,
-      to: block.id
-    });
+
+    let checkMove;
+    let currentPiece = this.fetchPieceFromChildNode(document.getElementById(this.pieceLastPosition));
+
+    this.addPieceToChildNode(block, 'q', 'lol', 'b');
+
+    if (currentPiece.nodeName.toLowerCase() === "app-pawn" && (block.id.includes(8) || block.id.includes(1)))
+    {
+      this.showPromotion = true;
+      
+      checkMove = this.chess.move({
+        from: this.pieceLastPosition,
+        to: block.id,
+        promotion: 'q'
+      });
+    }
+    else {
+      checkMove = this.chess.move({
+        from: this.pieceLastPosition,
+        to: block.id
+      });
+    }
 
     console.log(checkMove);
     
@@ -189,7 +208,7 @@ export class GameComponent implements OnInit {
         this.removePieceFromChildNode(block);
 
       this.pieceLastPosition = "";
-      block.firstChild.appendChild(document.getElementById(data));
+      //block.firstChild.appendChild(document.getElementById(data));
 
       if (checkMove.flags.includes('e')) {
         // EN PASSANT CAPTURE
@@ -239,12 +258,20 @@ export class GameComponent implements OnInit {
           }
   
           this.swapPieceFromChildNode(currentRookBlock, newRookBlock);
-      }      
+      }
+      if (checkMove.flags.includes('p')) {
+        // captured: "r"
+        // color: "w"
+        // flags: "cp"
+        // from: "g7"
+        // piece: "p"
+        // promotion: "q"
+        // san: "gxh8=Q+"
+        // to: "h8"
+        
 
-      // if (checkMove.flags.includes('p'))
-      // {
-      //   this.showPromotion = true;
-      // }
+        console.log(currentPiece.id)
+      }
     }
     this.gameCondition();
     this.removeBlockHighlighting();
@@ -275,28 +302,75 @@ export class GameComponent implements OnInit {
     }
   }
 
-  swapPieceFromChildNode(oldBlockNode, newBlockNode) {
-
-      oldBlockNode.firstChild.childNodes.forEach(element => {
-        console.log("element");
-        let name = element.nodeName.toLowerCase();
-        if (name === "app-pawn" || name === "app-queen" || name === "app-bishop" || name === "app-knight" || name === "app-rook")
-        {
-          console.log("found rook");
-          newBlockNode.firstChild.appendChild(element);  
-        }
-
-      });
-  }
-  
-  removePieceFromChildNode(blockNode) {
+  fetchPieceFromChildNode(blockNode) {
+    let piece;
     blockNode.firstChild.childNodes.forEach(element => {
 
       let name = element.nodeName.toLowerCase();
       if (name === "app-pawn" || name === "app-queen" || name === "app-bishop" || name === "app-knight" || name === "app-rook")
-        element.remove();
-
+        piece = element;
+      
     });
+    return piece;
+  }
+
+  swapPieceFromChildNode(oldBlockNode, newBlockNode) {
+    newBlockNode.firstChild.appendChild(this.fetchPieceFromChildNode(oldBlockNode));
+  }
+  
+  removePieceFromChildNode(blockNode) {
+   blockNode.firstChild.removeChild(this.fetchPieceFromChildNode(blockNode));
+  }
+
+  addPieceToChildNode(blockNode, pieceType, pieceID, pieceColour) {
+    let piece = pieceType;
+    blockNode.firstChild.innerHTML += `<app-rook [pieceColour]="${pieceColour} === 'b' ? pieceDark : pieceLight" id="${pieceID}" draggable="true" (dragstart)="drag($event)"></app-rook>`;
+    // switch (pieceType.toLowerCase()) {
+
+    //     case 'p':
+
+    //     break;
+    //     case 'r':
+    //       `<app-rook [pieceColour]="column.color === 'b' ? pieceDark : pieceLight" id="{{column.color}}_rook_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
+    //       </app-rook>`
+    //       break;
+    //     case 'n':
+
+    //       break;
+    //     case 'b':
+
+    //       break;
+    //     case 'k':
+
+    //       break;
+    //     case 'q':
+
+    //       break;
+    // }
+    // <app-rook *ngIf="column.type === 'r'"
+    //   [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
+    //   id="{{column.color}}_rook_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
+    // </app-rook>
+    // <app-knight *ngIf="column.type === 'n'"
+    //   [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
+    //   id="{{column.color}}_knight_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
+    // </app-knight>
+    // <app-bishop *ngIf="column.type === 'b'"
+    //   [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
+    //   id="{{column.color}}_bishop_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
+    // </app-bishop>
+    // <app-queen *ngIf="column.type === 'q'"
+    //   [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
+    //   id="{{column.color}}_queen_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
+    // </app-queen>
+    // <app-king *ngIf="column.type === 'k'"
+    //   [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
+    //   id="{{column.color}}_king_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
+    // </app-king>
+    // <app-pawn *ngIf="column.type === 'p'"
+    //   [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
+    //   id="{{column.color}}_pawn_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
+    // </app-pawn>
   }
 
   removeBlockHighlighting() {

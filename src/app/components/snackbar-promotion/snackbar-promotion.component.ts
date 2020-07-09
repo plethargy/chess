@@ -41,30 +41,7 @@ export class SnackbarPromotionComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    // this.snackbarSubscription = this.snackbarService.snackbarState
-    // .subscribe(
-    //   (state) => {
-    //     this.piecePromotion = state.piecePromotion;
-    //     if (this.piecePromotion) {
-    //       state.piecePromotionColour = this.piecePromotionColour;
 
-    //       this.cardType = 'promotion-card';
-    //       this.show = state.show;
-    //     }
-    //     else {
-    //       this.type = state.type;
-    //       this.message = state.message;
-
-    //       this.show = state.show;
-
-    //       this.timer = state.timer;
-    //       if (this.timer > 0) {
-    //         setTimeout(() => {
-    //           this.show = false;
-    //         }, this.timer);
-    //       }
-    //     }        
-    //   });
   }
 
   pieceSelect(event) {
