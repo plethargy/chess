@@ -25,7 +25,7 @@
           <div class="square">
             <!-- THIS IS THE CHESS BOARD -->
             <div class="square-content">
-              <div class="block-container">
+              <div class="block-container" [ngClass]="{'rotate': thisPlayer}">
                 <ng-container *ngFor='let row of this.chessboard; let rowIndex = index'>
                   <ng-container *ngFor='let column of row; let columnIndex = index'>
                     <div class="block" [ngClass]="mod(columnIndex) ? this.blockColour2 : this.blockColour1"
@@ -41,7 +41,7 @@
                             xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
                             xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
                             viewBox="0 0 52.916666 52.916666" version="1.1"
-                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="rook.svg">
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="rook.svg" [ngClass]="{'rotate': thisPlayer}">
                             <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
                               transform="translate(0,-244.08334)">
                               <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
@@ -58,7 +58,7 @@
                             xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
                             xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
                             viewBox="0 0 52.916666 52.916666" version="1.1"
-                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="knight.svg">
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="knight.svg" [ngClass]="{'rotate': thisPlayer}">
                             <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
                               transform="translate(0,-244.08334)">
                               <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
@@ -76,7 +76,7 @@
                             xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
                             xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
                             viewBox="0 0 52.916666 52.916666" version="1.1"
-                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="bishop.svg">
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="bishop.svg" [ngClass]="{'rotate': thisPlayer}">
                             <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
                               transform="translate(0,-244.08334)">
                               <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
@@ -95,7 +95,7 @@
                             xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
                             xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
                             viewBox="0 0 52.916666 52.916666" version="1.1"
-                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="queen.svg">
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="queen.svg" [ngClass]="{'rotate': thisPlayer}">
                             <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
                               transform="translate(0,-244.08334)">
                               <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
@@ -112,7 +112,7 @@
                             xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
                             xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
                             viewBox="0 0 52.916666 52.916666" version="1.1"
-                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="king.svg">
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="king.svg" [ngClass]="{'rotate': thisPlayer}">
                             <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
                               transform="translate(0,-244.08334)">
                               <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
@@ -131,7 +131,7 @@
                             xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
                             xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
                             viewBox="0 0 52.916666 52.916666" version="1.1"
-                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="pawn.svg">
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="pawn.svg" [ngClass]="{'rotate': thisPlayer}">
                             <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
                               transform="translate(0,-244.08334)">
                               <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
