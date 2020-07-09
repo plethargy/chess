@@ -128,6 +128,8 @@ export class GameComponent implements OnInit {
       console.log("Move result",checkMove);
     
       if (checkMove) { 
+
+        this.sound();
   
         // Flags
         // 'n' - a non-capture
@@ -219,6 +221,13 @@ export class GameComponent implements OnInit {
     
     });
 
+  }
+
+  sound(){
+    let audio = new Audio();
+    audio.src = '../../../assets/sound/move.wav';
+    audio.load();
+    audio.play();
   }
 
   getMoves(position : string) : void {
