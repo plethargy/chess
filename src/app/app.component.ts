@@ -49,11 +49,7 @@ export class AppComponent {
   title = 'chessApp';
 
   prepareRoute(outlet: RouterOutlet) {
-    return (
-      outlet &&
-      outlet.activatedRouteData &&
-      outlet.activatedRouteData['animation']
-    );
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
 
   toggleTheme() {

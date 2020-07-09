@@ -4,9 +4,9 @@ nav ul {
   justify-content: start;
 }
 
-li a {
-  color: var(--main-font-fade);
-  padding: 0 16px;
+  li a {
+    color: var(--main-fade-light);
+    padding: 0 16px;
 
   text-decoration: none;
   text-transform: uppercase;
