@@ -20,6 +20,9 @@ export class GameComponent implements OnInit {
   blockColour1: string = 'light-section';
   blockColour2: string = 'dark-section';
 
+  dragging: boolean = true;
+  dropping: boolean = true;
+
   showPrmotion: boolean = false;
   selectedPromotion:string;
 
@@ -104,7 +107,10 @@ export class GameComponent implements OnInit {
     console.log(this.pieceLastPosition);
     ev.dataTransfer.setData("text", ev.target.id);
 
-    this.getMoves(this.pieceLastPosition);
+    if (this.dragging) {
+      this.dragging = false;
+      this.getMoves(this.pieceLastPosition);
+    }
 
     this.socket.on("postMoves", data =>{
       console.log('Moves' , data);
@@ -186,6 +192,8 @@ export class GameComponent implements OnInit {
         }
       }
       this.removeBlockHighlighting();
+
+      this.dragging = true;
     
     });
 
