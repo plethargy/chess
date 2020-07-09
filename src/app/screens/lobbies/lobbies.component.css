@@ -1,3 +1,9 @@
+ul {
+  padding: 0;
+}
+a {
+  color: black;
+}
 .darkerCard {
   background-color: rgb(139, 139, 139);
   border-radius: 4px;
