@@ -7,6 +7,9 @@
         <div class="square-container">
           <div class="square">
             <div class="square-content">
+              <ng-template #container>
+
+              </ng-template>
               <!-- THIS IS PLAYER ONE -->
               <div class="name-tag">
                 <div id="player-one-turn-indicator"></div>
@@ -29,32 +32,115 @@
                       id="{{generateBlockID(rowIndex, columnIndex)}}" (drop)="drop($event)"
                       (dragover)="allowDrop($event)">
                       <div class="content">
-                        <ng-container *ngIf="column">
-                          <app-rook *ngIf="column.type === 'r'"
-                          [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
-                          id="{{column.color}}_rook_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
-                        </app-rook>
-                        <app-knight *ngIf="column.type === 'n'"
-                          [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
+                        <ng-container *ngIf="column"> 
+                        <div tag="rook" *ngIf="column.type === 'r'" id="{{column.color}}_rook_{{columnIndex}}"
+                          draggable="true" (dragstart)="drag($event)" class="rook">
+                          <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+                            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                            xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
+                            viewBox="0 0 52.916666 52.916666" version="1.1"
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="rook.svg">
+                            <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
+                              transform="translate(0,-244.08334)">
+                              <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
+                                d="m 21.307215,250.607 v 5.27668 h -3.507799 v -4.92114 h -6.61462 v 15.48949 h 6.54382 c 0.0169,6.61647 0.35063,14.33684 -6.57999,18.29242 v 5.29167 h 15.213577 15.213543 v -5.29167 c -6.930584,-3.95559 -6.59683,-11.67595 -6.579963,-18.29242 h 6.543791 v -15.48949 h -6.614586 v 4.92114 H 31.417193 V 250.607 Z"
+                                id="rect739-1" inkscape:connector-curvature="0" />
+                            </g>
+                          </svg>
+                        </div>
+                        <div tag="knight" class="knight" *ngIf="column.type === 'n'"
                           id="{{column.color}}_knight_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
-                        </app-knight>
-                        <app-bishop *ngIf="column.type === 'b'"
-                          [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
+                          <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+                            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                            xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
+                            viewBox="0 0 52.916666 52.916666" version="1.1"
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="knight.svg">
+                            <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
+                              transform="translate(0,-244.08334)">
+                              <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
+                                d="m 22.90838,269.73806 -7.79101,5.78676 c 0.17465,0.14138 3.21764,7.37363 -3.75946,9.29668 v 0 5.29167 h 30.427079 v -5.29167 0 c -10.640568,-2.76251 -5.11547,-14.37436 -1.117949,-21.11625 l -11.22117,-13.05537 -1.823439,0.7256 0.237368,5.42175 -16.249069,6.84579 1.61843,8.48616 z"
+                                id="rect852-6-9" inkscape:connector-curvature="0"
+                                sodipodi:nodetypes="ccccccccccccccc" />
+                            </g>
+                          </svg>
+                        </div>
+                        <div tag="bishop" class="bishop" *ngIf="column.type === 'b'"
                           id="{{column.color}}_bishop_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
-                        </app-bishop>
-                        <app-queen *ngIf="column.type === 'q'"
-                          [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
+                          <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+                            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                            xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
+                            viewBox="0 0 52.916666 52.916666" version="1.1"
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="bishop.svg">
+                            <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
+                              transform="translate(0,-244.08334)">
+                              <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
+                                d="m 26.179169,250.74863 c -2.922506,0 -5.291666,2.36916 -5.291666,5.29167 1.95e-4,1.18992 0.401441,2.34505 1.138948,3.27887 -3.946632,4.82008 -8.450912,9.05138 -9.318811,15.89412 -1.143478,9.01551 7.258745,9.44056 -1.856215,10.11824 l -5.29e-4,-5.3e-4 v 5.29167 h 15.213541 v -17.31471 c -0.414166,-0.0818 -0.808844,-0.24211 -1.16272,-0.47232 -1.529101,-0.99929 -1.958524,-3.04899 -0.959114,-4.57801 0.486996,-0.74161 1.251535,-1.25645 2.121834,-1.42886 -2.41e-4,-6.78785 5.55e-4,-4.87487 5.29e-4,-5.3e-4 0.570805,-0.11455 1.161736,-0.0764 1.713075,0.11059 l 3.81372,-5.83634 c -0.461958,-0.54236 -0.92274,-1.08838 -1.376662,-1.64124 0.810414,-0.95568 1.255395,-2.16794 1.255739,-3.42098 0,-2.92251 -2.369161,-5.29167 -5.291667,-5.29167 z m 6.549988,11.69748 -3.547071,5.42757 c 0.989852,1.11458 1.111748,2.7536 0.297657,4.00234 -0.739339,1.12951 -2.090947,1.69629 -3.414779,1.43196 v 17.3147 h 15.21406 v -5.29166 l -5.29e-4,5.3e-4 c -9.115216,-0.6777 -0.712692,-1.10275 -1.856205,-10.11826 -0.677455,-5.34107 -3.577784,-9.08752 -6.693133,-12.76718 z"
+                                id="rect857-2-8-2" inkscape:connector-curvature="0"
+                                sodipodi:nodetypes="sccscccccccccccccsccccccccsc" />
+                            </g>
+                          </svg>
+
+                        </div>
+                        <div tag="queen" class="queen" *ngIf="column.type === 'q'"
                           id="{{column.color}}_queen_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
-                        </app-queen>
-                        <app-king *ngIf="column.type === 'k'"
-                          [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
+                          <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+                            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                            xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
+                            viewBox="0 0 52.916666 52.916666" version="1.1"
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="queen.svg">
+                            <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
+                              transform="translate(0,-244.08334)">
+                              <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
+                                d="m 26.148267,253.05075 a 3.1509065,3.3821693 0 0 0 -3.15071,3.3817 3.1509065,3.3821693 0 0 0 1.79007,3.04633 l -1.5043,10.53372 -4.10724,-8.07444 a 3.1509065,3.3821693 0 0 0 1.15393,-2.61276 3.1509065,3.3821693 0 0 0 -3.15071,-3.38222 3.1509065,3.3821693 0 0 0 -3.15123,3.38222 3.1509065,3.3821693 0 0 0 2.9931,3.37344 l 1.16892,8.91263 -5.19865,-5.81101 a 3.1509065,3.3821693 0 0 0 0.45631,-1.74408 3.1509065,3.3821693 0 0 0 -3.15123,-3.38223 3.1509065,3.3821693 0 0 0 -3.1507097,3.38223 3.1509065,3.3821693 0 0 0 3.1507097,3.38222 3.1509065,3.3821693 0 0 0 0.12299,-0.005 c 2.28321,4.9786 8.18623,13.65068 3.72638,15.63781 h 24.36492 c -4.45984,-1.98713 1.44318,-10.65921 3.72639,-15.63781 a 3.1509065,3.3821693 0 0 0 0.12248,0.005 3.1509065,3.3821693 0 0 0 3.15071,-3.38222 3.1509065,3.3821693 0 0 0 -3.15071,-3.38223 3.1509065,3.3821693 0 0 0 -3.15072,3.38223 3.1509065,3.3821693 0 0 0 0.45579,1.74408 l -5.19813,5.81101 1.1684,-8.91263 a 3.1509065,3.3821693 0 0 0 2.9931,-3.37344 3.1509065,3.3821693 0 0 0 -3.15071,-3.38222 3.1509065,3.3821693 0 0 0 -3.15123,3.38222 3.1509065,3.3821693 0 0 0 1.15393,2.61276 l -4.10724,8.07444 -1.5043,-10.53372 a 3.1509065,3.3821693 0 0 0 1.79059,-3.04633 3.1509065,3.3821693 0 0 0 -3.15123,-3.3817 3.1509065,3.3821693 0 0 0 -0.17983,0.007 3.1509065,3.3821693 0 0 0 -0.17984,-0.007 z m -14.84715,30.02142 v 5.29167 h 30.42708 v -5.29167 z"
+                                id="path5338" inkscape:connector-curvature="0" />
+                            </g>
+                          </svg>
+                        </div>
+                        <div tag="king" class="king" *ngIf="column.type === 'k'"
                           id="{{column.color}}_king_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
-                        </app-king>
-                        <app-pawn *ngIf="column.type === 'p'"
-                          [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
+                          <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+                            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                            xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
+                            viewBox="0 0 52.916666 52.916666" version="1.1"
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="king.svg">
+                            <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
+                              transform="translate(0,-244.08334)">
+                              <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
+                                d="m 25.021295,251.59612 v 2.89078 l -3.558439,0.01 0.0036,1.96112 3.554822,-0.0103 v 4.84466 c -7.757702,-4.27135 -14.502435,-0.50755 -15.8238235,6.95904 -1.490418,8.72493 10.9762965,14.3471 6.6941645,15.51689 h -5.143355 v 5.29167 h 30.427082 v -5.29167 h -4.97024 c -4.282133,-1.16979 8.184579,-6.79196 6.694167,-15.51689 -1.321382,-7.4666 -8.066151,-11.23038 -15.823842,-6.95926 v -4.84466 l 3.554822,0.0103 0.0041,-1.96112 -3.558958,-0.01 V 251.5959 H 26.04807 Z"
+                                id="rect5098-5-98-9-0" inkscape:connector-curvature="0"
+                                sodipodi:nodetypes="cccccccccccccccccccccc" />
+                            </g>
+                          </svg>
+
+                        </div>
+                        <div tag="pawn" class="pawn" *ngIf="column.type === 'p'"
                           id="{{column.color}}_pawn_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
-                        </app-pawn>
-                        </ng-container>
+                          <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+                            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                            xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="200" height="200"
+                            viewBox="0 0 52.916666 52.916666" version="1.1"
+                            inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)" sodipodi:docname="pawn.svg">
+                            <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1"
+                              transform="translate(0,-244.08334)">
+                              <path style.fill="{{column.color === 'b' ? pieceDark : pieceLight}}"
+                                d="m 26.34722,250.50366 c -0.319379,0.002 -0.638518,0.0185 -0.956531,0.0481 -0.187955,0.018 -0.375431,0.0408 -0.56224,0.0682 -0.184626,0.0232 -0.368654,0.0509 -0.551904,0.0832 -0.18393,0.0364 -0.366925,0.0774 -0.548804,0.12299 -0.182685,0.0418 -0.3643,0.0881 -0.54467,0.13901 -0.179214,0.0546 -0.357039,0.11373 -0.5333,0.17725 -0.177448,0.0598 -0.353378,0.12412 -0.527617,0.19275 -0.171001,0.0716 -0.340209,0.14742 -0.507462,0.22738 -0.173109,0.0782 -0.344218,0.1607 -0.513146,0.24753 -0.163499,0.0885 -0.324783,0.18102 -0.483693,0.2775 -0.161925,0.0939 -0.321483,0.19172 -0.478523,0.29352 -0.15675,0.10617 -0.310798,0.21627 -0.461988,0.33021 -0.150197,0.10848 -0.297694,0.22066 -0.44235,0.33642 -0.14416,0.12047 -0.285285,0.24453 -0.423229,0.37207 -0.140102,0.12403 -0.277089,0.25153 -0.410829,0.3824 -0.130865,0.13374 -0.258375,0.27073 -0.382404,0.41083 -0.127539,0.13795 -0.251604,0.27907 -0.372071,0.42323 -0.115764,0.14466 -0.227938,0.29215 -0.336414,0.44235 -0.11394,0.1512 -0.224049,0.30524 -0.330212,0.46199 -0.101807,0.15704 -0.199679,0.3166 -0.293522,0.47852 -0.09648,0.15892 -0.189015,0.32019 -0.277502,0.48369 -0.08683,0.16893 -0.169368,0.34004 -0.247531,0.51315 -0.07996,0.16726 -0.155779,0.33645 -0.227376,0.50746 -0.06863,0.17424 -0.132906,0.35017 -0.192753,0.52762 -0.06352,0.17626 -0.12262,0.35409 -0.177251,0.5333 -0.05087,0.18037 -0.09722,0.36199 -0.139008,0.54467 -0.04556,0.18188 -0.08657,0.36486 -0.122991,0.5488 -0.0323,0.18325 -0.06004,0.36728 -0.0832,0.55191 -0.02745,0.18681 -0.0502,0.37428 -0.06821,0.56224 -0.0296,0.31802 -0.04563,0.63715 -0.04806,0.95653 0.0026,0.32579 0.01929,0.65131 0.05013,0.97565 0.01602,0.16043 0.03549,0.32048 0.05839,0.48007 0.02657,0.21744 0.05948,0.43406 0.0987,0.64958 0.02825,0.13803 0.05909,0.27551 0.0925,0.41238 0.05256,0.2358 0.112712,0.46984 0.180351,0.70176 0.03482,0.11029 0.07135,0.22003 0.109554,0.32918 0.08288,0.25347 0.174749,0.50392 0.275435,0.75086 0.0357,0.0826 0.0724,0.16477 0.110071,0.2465 0.116881,0.26701 0.244103,0.52938 0.381372,0.78651 0.03406,0.0608 0.06868,0.12124 0.10387,0.18138 0.150826,0.26976 0.312712,0.5332 0.485241,0.78962 0.03205,0.0454 0.06443,0.0905 0.09715,0.13539 0.185591,0.2668 0.382668,0.52543 0.590662,0.77515 0.02364,0.0272 0.04741,0.0542 0.07131,0.0811 0.223109,0.26214 0.458144,0.5139 0.70435,0.75448 0.01409,0.0129 0.02823,0.0258 0.04238,0.0387 0.256362,0.24754 0.524351,0.48277 0.803052,0.70487 -0.120732,5.80453 0.1408,11.7946 -7.435206,13.97796 v 5.18573 h 28.850953 v -5.18573 c -7.576008,-2.18336 -7.314475,-8.17343 -7.435207,-13.97796 0.278701,-0.2221 0.54669,-0.45733 0.803055,-0.70487 0.01415,-0.0129 0.02828,-0.0257 0.04237,-0.0387 0.246208,-0.24058 0.48124,-0.49234 0.70435,-0.75448 0.02389,-0.0269 0.04767,-0.054 0.07131,-0.0811 0.207997,-0.24972 0.405072,-0.50835 0.590661,-0.77515 0.03272,-0.0449 0.0651,-0.09 0.09715,-0.13539 0.17253,-0.25642 0.334418,-0.51986 0.485243,-0.78962 0.03518,-0.0601 0.06981,-0.1206 0.103868,-0.18138 0.137271,-0.25713 0.264491,-0.5195 0.381373,-0.78651 0.03767,-0.0817 0.07437,-0.1639 0.110072,-0.2465 0.100684,-0.24694 0.192553,-0.49739 0.275434,-0.75086 0.03821,-0.10915 0.07473,-0.21889 0.109553,-0.32918 0.06764,-0.23192 0.127791,-0.46596 0.180353,-0.70176 0.03341,-0.13687 0.06425,-0.27435 0.0925,-0.41238 0.03922,-0.21552 0.07213,-0.43214 0.0987,-0.64958 0.02291,-0.15959 0.04238,-0.31964 0.05839,-0.48007 0.03083,-0.32434 0.04756,-0.64986 0.05013,-0.97565 -0.0024,-0.31938 -0.01847,-0.63851 -0.04806,-0.95653 -0.01802,-0.18796 -0.04077,-0.37543 -0.06822,-0.56224 -0.02315,-0.18463 -0.0509,-0.36866 -0.0832,-0.55191 -0.03641,-0.18394 -0.07742,-0.36692 -0.122989,-0.5488 -0.04179,-0.18268 -0.08814,-0.3643 -0.139009,-0.54467 -0.05463,-0.17921 -0.113734,-0.35704 -0.177252,-0.5333 -0.05985,-0.17745 -0.124116,-0.35338 -0.192752,-0.52762 -0.0716,-0.17101 -0.147415,-0.3402 -0.227377,-0.50746 -0.07816,-0.17311 -0.1607,-0.34422 -0.247529,-0.51315 -0.08849,-0.1635 -0.181017,-0.32477 -0.277503,-0.48369 -0.09384,-0.16192 -0.191717,-0.32148 -0.293523,-0.47852 -0.106162,-0.15675 -0.216271,-0.31079 -0.330211,-0.46199 -0.108476,-0.1502 -0.220649,-0.29769 -0.336415,-0.44235 -0.120465,-0.14416 -0.24453,-0.28528 -0.37207,-0.42323 -0.124029,-0.1401 -0.251542,-0.27709 -0.382405,-0.41083 -0.133739,-0.13087 -0.270727,-0.25837 -0.410827,-0.3824 -0.137945,-0.12754 -0.279069,-0.2516 -0.42323,-0.37207 -0.144655,-0.11576 -0.292153,-0.22794 -0.442351,-0.33642 -0.151188,-0.11394 -0.305237,-0.22404 -0.461987,-0.33021 -0.15704,-0.1018 -0.3166,-0.19967 -0.478525,-0.29352 -0.158909,-0.0965 -0.320193,-0.18901 -0.48369,-0.2775 -0.168931,-0.0868 -0.340037,-0.16937 -0.513146,-0.24753 -0.167254,-0.08 -0.336463,-0.15578 -0.507463,-0.22738 -0.174239,-0.0686 -0.350168,-0.1329 -0.527616,-0.19275 -0.176263,-0.0635 -0.354087,-0.12262 -0.533302,-0.17725 -0.180367,-0.0509 -0.361985,-0.0972 -0.544669,-0.13901 -0.181877,-0.0456 -0.364876,-0.0866 -0.548804,-0.12299 -0.183251,-0.0323 -0.367279,-0.06 -0.551905,-0.0832 -0.186809,-0.0274 -0.374285,-0.0502 -0.56224,-0.0682 -0.318013,-0.0296 -0.637151,-0.0456 -0.956529,-0.0481 z"
+                                id="rect87-7-7-7" inkscape:connector-curvature="0" />
+                            </g>
+                          </svg>
+                        </div>
+                       </ng-container>
                       </div>
                     </div>
                   </ng-container>
@@ -81,5 +167,6 @@
     <footer>
     </footer>
   </div>
-  <app-snackbar-promotion *ngIf="showPrmotion" (selectedPromotionEvent)="receiveSelectedPromotion($event)"></app-snackbar-promotion>
+  <app-snackbar-promotion *ngIf="showPromotion" (selectedPromotionEvent)="receiveSelectedPromotion($event)">
+  </app-snackbar-promotion>
 </div>
