@@ -172,11 +172,11 @@ export class GameComponent implements OnInit {
     let checkMove;
     let currentPiece = this.fetchPieceFromChildNode(document.getElementById(this.pieceLastPosition));
 
-    this.addPieceToChildNode(block, 'q', 'lol', 'b');
+    this.addPieceToChildNode(block, 'q', 'sigh', 'b'); // this works but doesn't work - need to inject the component
 
     if (currentPiece.nodeName.toLowerCase() === "app-pawn" && (block.id.includes(8) || block.id.includes(1)))
     {
-      this.showPromotion = true;
+      this.showPromotion = true; // also how to subscribe unil the user is done selecting a piece //receiveSelectedPromotion
       
       checkMove = this.chess.move({
         from: this.pieceLastPosition,
