@@ -3,6 +3,7 @@ import { Lobby } from './lobby'
 import { Router } from '@angular/router'
 import io from "socket.io-client"
 import { SocketService } from '../../services/socket/socket.service'
+import { PlayerlookupService } from 'src/app/services/playerlookup/playerlookup.service';
 
 @Component({
   selector: 'app-lobbies',
@@ -16,12 +17,14 @@ export class LobbiesComponent implements OnInit {
   TEMPNAME2: string;
 
   private socket: any;
+  private playerLookup : PlayerlookupService;
 
-  constructor(private router: Router, private socketService: SocketService) {
+  constructor(private router: Router, private socketService: SocketService, private playerLookupService : PlayerlookupService) {
     this.openLobbies = [],
       this.TEMPNAME = "Player1",
       this.TEMPNAME2 = "Player2"
     this.socket = socketService.socket;
+    this.playerLookup = playerLookupService;
   }
 
   ngOnInit(): void {
@@ -36,16 +39,23 @@ export class LobbiesComponent implements OnInit {
   }
 
   addLobby(playerName: string): void {
-    this.socket.emit("addLobby", playerName);
+    let user : any = localStorage.getItem("userData");
+    this.socket.emit("addLobby", user.email);
+
     this.socket.on("newGame", data => {
+      let user : any = localStorage.getItem("userData");
+      this.playerLookup.addUser(user.email, "white");
       //need to setup proper navigation to specific session
       this.router.navigateByUrl('/game');
     })
   }
 
   joinLobby(id: string, playerName: string): void {
-    this.socket.emit("joinLobby", id, playerName);
+    let user : any = localStorage.getItem("userData");
+    this.socket.emit("joinLobby", id, user.email);
     this.socket.on("joinGame", data => {
+      
+      this.playerLookup.addUser(user.email, "black");
       //need to setup proper navigation to specific session
       this.router.navigateByUrl('/game');
     })

@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone, ChangeDetectorRef} from '@angular/core';
 // import { style } from '@angular/animations';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
 import { SocketService } from 'src/app/services/socket/socket.service';
+import { PlayerlookupService } from 'src/app/services/playerlookup/playerlookup.service';
 
 
 @Component({
@@ -35,10 +36,15 @@ export class GameComponent implements OnInit {
   block: any;
   data: any;
 
-  constructor(private snackbarService: SnackbarService, private socketService : SocketService, private ref: ChangeDetectorRef) {
+  players : any = { white: null, black: null};
+
+  playerLookup : PlayerlookupService;
+
+  constructor(private snackbarService: SnackbarService, private socketService : SocketService, private ref: ChangeDetectorRef, private playerLookupService : PlayerlookupService) {
 
     this.socket = socketService.socket;
     this.sessionId = socketService.sessionID;
+    this.playerLookup = playerLookupService;
 
   }
 
@@ -66,6 +72,14 @@ export class GameComponent implements OnInit {
         this.chessboard.push(item);
       }
     })
+
+    this.socket.on("postUsersForSession", data => {
+      this.players.white = data.playerWhite;
+      this.players.black = data.playerBlack;
+    });
+
+
+    this.socket.emit("getUsersForSession", this.sessionId);
 
 
     this.socket.on("postMoves", data =>{
@@ -170,6 +184,10 @@ export class GameComponent implements OnInit {
   }
 
   drag(ev) {
+    let user : any = localStorage.getItem("userData");
+
+    let colour : string = this.playerLookup.getUserColour(user.email);
+    console.log(colour);
     console.log(ev);
     this.showPrmotion = false;
 

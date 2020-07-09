@@ -86,9 +86,9 @@ io.on("connection", socket => {
     io.to(`${sessionID}`).emit("postMoveHistory", getMoveHistory(sessionID));
   })
 
-  // socket.on("refreshBoard", sessionID => {
-  //   io.
-  // })
+  socket.on("getUsersForSession", sessionID => {
+    io.to(`${sessionID}`).emit("postUsersForSession", getUsersForSession(sessionID));
+  })
 
 })
 
@@ -218,6 +218,14 @@ function getMoveHistory(sessionID) {
   let history = game.history({ verbose: true })
 
   return { "move history": history };
+}
+
+function getUsersForSession(sessionID)
+{
+  let black = Sessions[sessionID].Black;
+  let white = Sessions[sessionID].White;
+
+  return { playerWhite: white, playerBlack: black};
 }
 
 /*
