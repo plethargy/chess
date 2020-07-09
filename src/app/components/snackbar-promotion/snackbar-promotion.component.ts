@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { trigger, transition, animate, style } from '@angular/animations';
+import { SnackbarPromotionService } from '../../../app/components/snackbar-promotion/snackbar-promotion.service';
 
 @Component({
   selector: 'app-snackbar-promotion',
@@ -38,7 +39,7 @@ export class SnackbarPromotionComponent implements OnInit {
 
   @Output() selectedPromotionEvent = new EventEmitter<string>();
 
-  constructor() { }
+  constructor(private promotionSelectionService: SnackbarPromotionService) { }
 
   ngOnInit() {
 
@@ -49,7 +50,7 @@ export class SnackbarPromotionComponent implements OnInit {
     var idAttr = target.closest('button').id; 
 
     this.selectedPromotionEvent.emit(idAttr)
-    console.log("send out: " + idAttr );
+    this.promotionSelectionService.promotionSelection.next(idAttr);
   }
 
 }

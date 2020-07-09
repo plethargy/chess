@@ -6,10 +6,8 @@ import {
 import {
   SnackbarService
 } from '../../services/snackbar/snackbar.service';
+import { SnackbarPromotionService } from '../../../app/components/snackbar-promotion/snackbar-promotion.service';
 import * as Chess from 'chess.js';
-import {
-  QueenComponent
-} from 'src/app/components/pieces/queen/queen.component';
 
 @Component({
   selector: 'app-game',
@@ -31,14 +29,9 @@ export class GameComponent implements OnInit {
   showPromotion: boolean = false;
   selectedPromotion: string;
 
-  // Keep track of list of generated components for removal purposes
-  components = [];
-
-  // Expose class so that it can be used in the template
-  queenComponentClass = QueenComponent;
-
   constructor(
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private promotionSelectionService: SnackbarPromotionService 
   ) {}
 
   ngOnInit(): void {
@@ -156,6 +149,7 @@ export class GameComponent implements OnInit {
 
   drop(ev) {
 
+    let checkMove;
     console.log("DROP");
 
     let colourTurn = this.chess.turn(); // store in a variable
@@ -173,28 +167,101 @@ export class GameComponent implements OnInit {
     let block = ev.target.closest(".block");
     console.log(block);
 
-    let checkMove;
+    
     console.log("last")
     console.log(document.getElementById(this.pieceLastPosition));
     let currentPiece = this.fetchPieceFromChildNode(document.getElementById(this.pieceLastPosition));
 
-    if (currentPiece.id.includes("pawn") && (block.id.includes('8') || block.id.includes('1'))) {
+      if (currentPiece.id.includes("pawn") && (block.id.includes('8') || block.id.includes('1'))) {
+      let selectedPromotion;
       this.showPromotion = true; // also how to subscribe unil the user is done selecting a piece //receiveSelectedPromotion
 
-      checkMove = this.chess.move({
-        from: this.pieceLastPosition,
-        to: block.id,
-        promotion: 'q'
-      });
+      this.promotionSelectionService.promotionSelection.subscribe((pieceData) => {
+          selectedPromotion = pieceData;
+
+          checkMove = this.chess.move({
+            from: this.pieceLastPosition,
+            to: block.id,
+            promotion: 'q'
+          });
+
+          this.movePiece(checkMove, currentPiece, block, data, colourTurn);          
+       });      
+      
     } else {
       checkMove = this.chess.move({
         from: this.pieceLastPosition,
         to: block.id
       });
+      this.movePiece(checkMove, currentPiece, block, data, colourTurn);
     }
+  }
 
+  gameCondition() {
+    let timer = 3000;
 
-    console.log(checkMove);
+    // change red or green depending who is in check?
+    if (this.chess.in_check())
+      this.snackbarService.show("CHECK", "", timer);
+
+    // Check for End Game Conditions
+    if (this.chess.in_checkmate())
+      this.snackbarService.show("checkmate", "", timer);
+    if (this.chess.in_draw())
+      this.snackbarService.show("Draw", "", timer);
+    if (this.chess.in_stalemate())
+      this.snackbarService.show("Stalemate", "", timer);
+    if (this.chess.in_threefold_repetition())
+      this.snackbarService.show("threefold repetition", "", timer);
+
+    if (this.chess.game_over()) {
+      setTimeout(() => {
+        this.snackbarService.show("Game Over");
+      }, timer);
+    }
+  }
+
+  fetchPieceFromChildNode(blockNode) {
+    console.log("blockNode");
+    console.log(blockNode);
+    let piece;
+    blockNode.firstChild.childNodes.forEach(element => {
+
+      let name = element.nodeName.toLowerCase();
+      //if (name === "app-pawn" || name === "app-queen" || name === "app-bishop" || name === "app-knight" || name === "app-rook")
+      if (name === "div")
+        piece = element;
+
+    });
+    return piece;
+  }
+
+  movePiece(checkMove, currentPiece, block, data, colourTurn)
+  {
+    // let checkMove;
+
+    // if (currentPiece.id.includes("pawn") && (block.id.includes('8') || block.id.includes('1'))) {
+    //   let selectedPromotion;
+    //   this.showPromotion = true; // also how to subscribe unil the user is done selecting a piece //receiveSelectedPromotion
+
+    //   this.promotionSelectionService.promotionSelection.subscribe((data) => {
+    //       console.log("incoming: " + data);
+    //       selectedPromotion = data;
+
+    //       checkMove = this.chess.move({
+    //         from: this.pieceLastPosition,
+    //         to: block.id,
+    //         promotion: selectedPromotion
+    //       });
+          
+    //    });      
+      
+    // } else {
+    //   checkMove = this.chess.move({
+    //     from: this.pieceLastPosition,
+    //     to: block.id
+    //   });
+    // }
 
     if (checkMove) {
 
@@ -265,45 +332,6 @@ export class GameComponent implements OnInit {
     }
     this.gameCondition();
     this.removeBlockHighlighting();
-  }
-
-  gameCondition() {
-    let timer = 3000;
-
-    // change red or green depending who is in check?
-    if (this.chess.in_check())
-      this.snackbarService.show("CHECK", "", timer);
-
-    // Check for End Game Conditions
-    if (this.chess.in_checkmate())
-      this.snackbarService.show("checkmate", "", timer);
-    if (this.chess.in_draw())
-      this.snackbarService.show("Draw", "", timer);
-    if (this.chess.in_stalemate())
-      this.snackbarService.show("Stalemate", "", timer);
-    if (this.chess.in_threefold_repetition())
-      this.snackbarService.show("threefold repetition", "", timer);
-
-    if (this.chess.game_over()) {
-      setTimeout(() => {
-        this.snackbarService.show("Game Over");
-      }, timer);
-    }
-  }
-
-  fetchPieceFromChildNode(blockNode) {
-    console.log("blockNode");
-    console.log(blockNode);
-    let piece;
-    blockNode.firstChild.childNodes.forEach(element => {
-
-      let name = element.nodeName.toLowerCase();
-      //if (name === "app-pawn" || name === "app-queen" || name === "app-bishop" || name === "app-knight" || name === "app-rook")
-      if (name === "div")
-        piece = element;
-
-    });
-    return piece;
   }
 
   swapPieceFromChildNode(oldBlockNode, newBlockNode) {
@@ -406,7 +434,6 @@ export class GameComponent implements OnInit {
 
   receiveSelectedPromotion($event) {
     this.selectedPromotion = $event
-    console.log("incoming: " + this.selectedPromotion);
 
     this.showPromotion = false;
   }

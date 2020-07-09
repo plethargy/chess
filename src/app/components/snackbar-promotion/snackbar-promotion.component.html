@@ -8,7 +8,7 @@
           <div class="square-container">
             <div class="square">
               <div class="square-content" >
-                <button id="rook-button" (click)="pieceSelect($event)">
+                <button id="rook" (click)="pieceSelect($event)">
                   <app-rook [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="rook">
                   </app-rook>
                 </button>
@@ -16,7 +16,7 @@
             </div>
             <div class="square">
               <div class="square-content">
-                <button id="knight-button" (click)="pieceSelect($event)">
+                <button id="knight" (click)="pieceSelect($event)">
                   <app-knight [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="knight">
                   </app-knight>
                 </button>
@@ -24,7 +24,7 @@
             </div>
             <div class="square">
               <div class="square-content">
-                <button id="bishop-button" (click)="pieceSelect($event)">
+                <button id="bishop" (click)="pieceSelect($event)">
                   <app-bishop [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="bishop" >
                   </app-bishop>
                 </button>
@@ -32,7 +32,7 @@
             </div>
             <div class="square">
               <div class="square-content">
-                <button id="queen-button" (click)="pieceSelect($event)">
+                <button id="queen" (click)="pieceSelect($event)">
                   <app-queen [pieceColour]="piecePromotionColour === 'b' ? pieceDark : pieceLight" id="queen" >
                   </app-queen>
                 </button>
