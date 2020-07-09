@@ -64,13 +64,19 @@ io.on("connection", socket => {
   })
 
   //move
-  socket.on("move", (sessionID, inputMove) => {
-    socket.emit("moveResult", move(sessionID, inputMove));
+  socket.on("move", (sessionID, fromPosition, toPosition) => {
+    socket.emit("moveResult", move(sessionID, fromPosition, toPosition));
   })
 
   //get moves
-  socket.on("getMoves", sessionID => {
-    socket.emit("postMoves", getMoves(sessionID));
+  socket.on("getMoves", (sessionID, position) => {
+    socket.emit("postMoves", getMoves(sessionID, position));
+  })
+
+
+  //load/get board
+  socket.on("getBoard", (sessionID) => {
+    socket.emit("postBoard", getBoard(sessionID));
   })
 
   socket.on("getMoveHistory", sessionID => {
@@ -84,7 +90,7 @@ function createNewSession(sessionID, playerName) {
 
   let White = playerName;
   let Black = null;
-  let Fen = defaultFen;
+  let Fen = null;
 
   let State = null;
 
@@ -113,43 +119,49 @@ function joinGame(sessionID, playerName) {
     return { 'SessionID': null, 'Result': false };
 }
 
-function move(sessionID, inputMove) {
+function move(sessionID, fromPosition, toPosition) {
   let session = Sessions[sessionID];
   let game = session['State'];
 
-  let move = game.move(inputMove);
+  let move = game.move({ from: fromPosition, to: toPosition });
+
+  console.log(move);
+
+  return move;
+
+  // let move = game.move(inputMove);
 
   // console.log(game.ascii());
-  res = {};
+  // res = {};
 
-  if (move === null) {
+  // if (move === null) {
 
-    let current_player = game.turn();
+  //   let current_player = game.turn();
 
-    if (current_player == WHITE) {
-      current_player = { 'White': session['White'] };
-    }
-    else {
-      current_player = { 'Black': session['Black'] };
-    }
+  //   if (current_player == WHITE) {
+  //     current_player = { 'White': session['White'] };
+  //   }
+  //   else {
+  //     current_player = { 'Black': session['Black'] };
+  //   }
 
-    error_response["Error"] = "Illegal Move";
-    error_response["Move"] = inputMove;
-    error_response["Player"] = current_player;
+  //   error_response["Error"] = "Illegal Move";
+  //   error_response["Move"] = inputMove;
+  //   error_response["Player"] = current_player;
 
-    res.statusCode = 408;
-    res.error_response = error_response;
-    //res.json(error_response);
-  }
-  else {
-    res.statusCode = 200;
-    res.move = move;
-    //res.json(move);
-  }
-  return res;
+  //   res.statusCode = 408;
+  //   res.error_response = error_response;
+  //   //res.json(error_response);
+  // }
+  // else {
+  //   res.statusCode = 200;
+  //   res.move = move;
+  //   //res.json(move);
+  // }
+
 }
 
-function getMoves(sessionID) {
+function getMoves(sessionID, position) {
   console.log("ran getMoves with ID:" + sessionID);
   let session = Sessions[sessionID];
   let game = session['State'];
@@ -172,9 +184,22 @@ function getMoves(sessionID) {
     current_player = { 'black': session['Black'] };
   };
 
-  let legal_moves = { 'current player': current_player, 'conditions': conditions, 'legal moves': game.moves() };
+  let legal_moves = game.moves({ square: position });
+
+  console.log(legal_moves);
 
   return legal_moves;
+}
+
+function getBoard(sessionID){
+  console.log("ran getBoard with ID:" + sessionID);
+
+  let session = Sessions[sessionID];
+  let game = session['State'];
+
+  console.log(game.board());
+
+  return game.board();
 }
 
 function getMoveHistory(sessionID) {

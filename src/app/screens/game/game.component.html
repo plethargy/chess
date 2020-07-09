@@ -29,7 +29,8 @@
                       id="{{generateBlockID(rowIndex, columnIndex)}}" (drop)="drop($event)"
                       (dragover)="allowDrop($event)">
                       <div class="content">
-                        <app-rook *ngIf="column.type === 'r'"
+                        <ng-container *ngIf="column">
+                          <app-rook *ngIf="column.type === 'r'"
                           [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
                           id="{{column.color}}_rook_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
                         </app-rook>
@@ -53,6 +54,7 @@
                           [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
                           id="{{column.color}}_pawn_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
                         </app-pawn>
+                        </ng-container>
                       </div>
                     </div>
                   </ng-container>

@@ -1,7 +1,8 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef} from '@angular/core';
 // import { style } from '@angular/animations';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
-import * as Chess from 'chess.js';
+import { SocketService } from 'src/app/services/socket/socket.service';
+import { Block } from './block';
 
 @Component({
   selector: 'app-game',
@@ -10,8 +11,7 @@ import * as Chess from 'chess.js';
 })
 export class GameComponent implements OnInit {
 
-  chess = new Chess()
-  chessboard = this.chess.board();
+
   pieceLastPosition = "";
   color: boolean;
 
@@ -23,28 +23,43 @@ export class GameComponent implements OnInit {
   showPrmotion: boolean = false;
   selectedPromotion:string;
 
-  constructor(
-    private snackbarService: SnackbarService
-  ) { }
+  private socket: any;
+  private sessionId: string;
+
+  chessboard : any; // load/save chess board to server 
+  moveList : any;
+
+  constructor(private snackbarService: SnackbarService, private socketService : SocketService, private ref: ChangeDetectorRef) {
+
+    this.socket = socketService.socket;
+    this.sessionId = socketService.sessionID;
+
+  }
+
+  getMoves(position : string) : void {
+    this.socket.emit("getMoves", this.sessionId, position);
+  }
+
+
+  move(from : string, to : string) : void{
+
+    this.socket.emit("move", this.sessionId, from, to);
+  }
 
   ngOnInit(): void {
 
     //this.snackbarService.show('test','success', 3000);
     //let ret = this.snackbarService.promote(true);
 
-    for (let row = 0; row < this.chessboard.length; row++) {
+    this.socket.emit("getBoard", this.sessionId);
 
-      for (let block = 0; block < this.chessboard[row].length; block++) {
-
-        if (!this.chessboard[row][block])
-          this.chessboard[row][block] = {
-            type: '',
-            color: ''
-          };
+    this.socket.on("postBoard", data => {
+      this.chessboard = [];
+      for (let item of data) {
+        this.chessboard.push(item);
       }
-    }
+    })
 
-    console.log(this.chessboard);
   }
 
   counter(i: number) {
@@ -89,29 +104,34 @@ export class GameComponent implements OnInit {
     console.log(this.pieceLastPosition);
     ev.dataTransfer.setData("text", ev.target.id);
 
-    let moveList = this.chess.moves({
-      square: this.pieceLastPosition
+    this.getMoves(this.pieceLastPosition);
+
+    this.socket.on("postMoves", data =>{
+      console.log('Moves' , data);
+      this.moveList = data;
+
+      console.log("moveList");
+      console.log(this.moveList);
+      for (let index = 0; index < this.moveList.length; index++) {
+        // chess notation
+        //[Piece][Position] // Standard move
+        //[Piece][Rank][Position] // Disambiguating standard move
+        //[Piece]x[Position] // Capturing
+        //[Column]x[Position]e.p. // En passant captures  // used as flag instead
+        //[Position]=[Promotion] // Promoting Pawn
+        // "(=)" // Draw ?
+        //[Position]+ // Check
+        // "O-O" // Castling (king side) - this can probably be hard coded
+        // "O-O-O" // Castling (queen side)
+        // # or ++  // Checkmate?
+  
+        let block = this.moveList[index].slice(-2);
+  
+        document.getElementById(block).classList.add("avaliableMove");
+      }
     });
 
-    console.log("moveList");
-    console.log(moveList);
-    for (let index = 0; index < moveList.length; index++) {
-      // chess notation
-      //[Piece][Position] // Standard move
-      //[Piece][Rank][Position] // Disambiguating standard move
-      //[Piece]x[Position] // Capturing
-      //[Column]x[Position]e.p. // En passant captures  // used as flag instead
-      //[Position]=[Promotion] // Promoting Pawn
-      // "(=)" // Draw ?
-      //[Position]+ // Check
-      // "O-O" // Castling (king side) - this can probably be hard coded
-      // "O-O-O" // Castling (queen side)
-      // # or ++  // Checkmate?
 
-      let block = moveList[index].slice(-2);
-
-      document.getElementById(block).classList.add("avaliableMove");
-    }
 
   }
 
@@ -125,46 +145,51 @@ export class GameComponent implements OnInit {
     var data = ev.dataTransfer.getData("text");
 
     let block = ev.target.closest(".block");
+
+
+    this.move(this.pieceLastPosition, block.id);
+
+    this.socket.on("moveResult", response => {
+      let checkMove = response;
+
+      console.log(checkMove);
     
-    let checkMove = this.chess.move({
-      from: this.pieceLastPosition,
-      to: block.id
+      if (checkMove) { 
+  
+        // Flags
+        // 'n' - a non-capture
+        // 'b' - a pawn push of two squares
+        // 'e' - an en passant capture
+        // 'c' - a standard capture
+        // 'p' - a promotion
+        // 'k' - kingside castling
+        // 'q' - queenside castling
+  
+        if (checkMove.flags.includes('c')) 
+          this.removePieceFromChildNode(block);
+  
+        this.pieceLastPosition = "";
+        block.firstChild.appendChild(document.getElementById(data));
+  
+        if (checkMove.flags.includes('e')) {
+          //eg
+            // b d7 > d5    w e5 > d6   w  en passant captures b on d5
+            // w d2 > d4    b e4 > d3   b  en passant captures w on d4
+  
+          let passantBlockID = '';
+          if (checkMove.color === "w")
+            passantBlockID = (block.id[0] + (parseInt(block.id[1]) - 1).toString());
+          else 
+            passantBlockID = (block.id[0] + (parseInt(block.id[1]) + 1).toString());
+  
+          this.removePieceFromChildNode(document.getElementById(passantBlockID));
+        }
+      }
+      this.removeBlockHighlighting();
+    
     });
 
-    console.log(checkMove);
-    
-    if (checkMove) { 
 
-      // Flags
-      // 'n' - a non-capture
-      // 'b' - a pawn push of two squares
-      // 'e' - an en passant capture
-      // 'c' - a standard capture
-      // 'p' - a promotion
-      // 'k' - kingside castling
-      // 'q' - queenside castling
-
-      if (checkMove.flags.includes('c')) 
-        this.removePieceFromChildNode(block);
-
-      this.pieceLastPosition = "";
-      block.firstChild.appendChild(document.getElementById(data));
-
-      if (checkMove.flags.includes('e')) {
-        //eg
-          // b d7 > d5    w e5 > d6   w  en passant captures b on d5
-          // w d2 > d4    b e4 > d3   b  en passant captures w on d4
-
-        let passantBlockID = '';
-        if (checkMove.color === "w")
-          passantBlockID = (block.id[0] + (parseInt(block.id[1]) - 1).toString());
-        else 
-          passantBlockID = (block.id[0] + (parseInt(block.id[1]) + 1).toString());
-
-        this.removePieceFromChildNode(document.getElementById(passantBlockID));
-      }
-    }
-    this.removeBlockHighlighting();
   }
   
   removePieceFromChildNode(blockNode) {
