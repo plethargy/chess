@@ -43,6 +43,8 @@ export class GameComponent implements OnInit {
   data: any;
   colourTurn: any;
 
+  thisPlayer: boolean;
+
   constructor(private snackbarService: SnackbarService, private socketService : SocketService, private componentFactoryResolver: ComponentFactoryResolver) {
 
     this.socket = socketService.socket;
@@ -54,6 +56,8 @@ export class GameComponent implements OnInit {
 
     //this.snackbarService.show('test','success', 3000);
     //let ret = this.snackbarService.promote(true);
+
+    this.thisPlayer = true;
     
     this.socket.emit("getBoard", this.sessionId);
 
