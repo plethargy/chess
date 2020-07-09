@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 // Modules
 import { AppRoutingModule } from './app-routing.module';
+import { AlertModule } from './_alert';
 // Modules - Generated modules
 import { ThemeModule } from './services/theme/theme.module';
 
@@ -74,6 +75,7 @@ library.add(fas, far, fab);
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    AlertModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
