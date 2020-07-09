@@ -130,6 +130,8 @@ function move(sessionID, fromPosition, toPosition) {
 
   let move = game.move({ from: fromPosition, to: toPosition });
 
+  checkGameOver(sessionID);
+
   console.log(move);
 
   return move;
@@ -164,6 +166,19 @@ function move(sessionID, fromPosition, toPosition) {
   //   //res.json(move);
   // }
 
+}
+
+function checkGameOver(sessionID) {
+  let session = Sessions[sessionID];
+  let game = session['State'];
+  if (game.checkGameOver()) {
+    let winner;
+    if (game.turn === "w")
+      winner = game.White;
+    else
+      winner = game.Black;
+    socket.emit("gameOver", winner);
+  }
 }
 
 function getMoves(sessionID, position) {
