@@ -86,36 +86,10 @@
   grid-template-rows: repeat(8, 1fr);
 }
 
-app-pawn {
-  height: inherit;
-  width: inherit;
+svg {
+  height: 100%;
+  width: 100%;
 }
-
-app-bishop {
-  height: inherit;
-  width: inherit;
-}
-
-app-rook {
-  height: inherit;
-  width: inherit;
-}
-
-app-knight {
-  height: inherit;
-  width: inherit;
-}
-
-app-king {
-  height: inherit;
-  width: inherit;
-}
-
-app-queen {
-  height: inherit;
-  width: inherit;
-}
-
 
 .light-section {
   background-color: var(--chessboard-light);

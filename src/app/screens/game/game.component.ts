@@ -1,7 +1,8 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild, ComponentFactoryResolver, Type} from '@angular/core';
 // import { style } from '@angular/animations';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
 import * as Chess from 'chess.js';
+import { QueenComponent } from 'src/app/components/pieces/queen/queen.component';
 
 @Component({
   selector: 'app-game',
@@ -9,6 +10,8 @@ import * as Chess from 'chess.js';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
+  @ViewChild('check', {read: ViewContainerRef}) container: ViewContainerRef;
+  
 
   chess = new Chess()
   chessboard = this.chess.board();
@@ -23,8 +26,14 @@ export class GameComponent implements OnInit {
   showPromotion: boolean = false;
   selectedPromotion:string;
 
+    // Keep track of list of generated components for removal purposes
+    components = [];
+
+    // Expose class so that it can be used in the template
+    queenComponentClass = QueenComponent;
+
   constructor(
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService, private componentFactoryResolver: ComponentFactoryResolver
   ) { }
 
   ngOnInit(): void {
@@ -167,30 +176,40 @@ export class GameComponent implements OnInit {
     //   to: block.id,
     //   promotion: ''    
     // });
-
+    // this.addComponent(this.queenComponentClass)
 
     let checkMove;
     let currentPiece = this.fetchPieceFromChildNode(document.getElementById(this.pieceLastPosition));
-
+    console.log("currentPiece")
+    console.log(document.getElementById(this.pieceLastPosition))
+    console.log(document.getElementById(this.pieceLastPosition).firstChild)
+    console.log(document.getElementById(this.pieceLastPosition).firstChild.childNodes)
+    console.log("currentPiece child")
+    console.log(document.getElementById(this.pieceLastPosition).firstElementChild.firstElementChild)
+    console.log(currentPiece)
     //this.addPieceToChildNode(block, 'q', 'sigh', 'b'); // this works but doesn't work - need to inject the component
 
-    if (currentPiece.nodeName.toLowerCase() === "app-pawn" && (block.id.includes(8) || block.id.includes(1)))
-    {
-      this.showPromotion = true; // also how to subscribe unil the user is done selecting a piece //receiveSelectedPromotion
+    // if (currentPiece.nodeName.toLowerCase() === "app-pawn" && (block.id.includes(8) || block.id.includes(1)))
+    // {
+    //   this.showPromotion = true; // also how to subscribe unil the user is done selecting a piece //receiveSelectedPromotion
       
-      checkMove = this.chess.move({
-        from: this.pieceLastPosition,
-        to: block.id,
-        promotion: 'q'
-      });
-    }
-    else {
-      checkMove = this.chess.move({
-        from: this.pieceLastPosition,
-        to: block.id
-      });
-    }
-
+    //   checkMove = this.chess.move({
+    //     from: this.pieceLastPosition,
+    //     to: block.id,
+    //     promotion: 'q'
+    //   });
+    // }
+    // else {
+    //   checkMove = this.chess.move({
+    //     from: this.pieceLastPosition,
+    //     to: block.id
+    //   });
+    // }
+    
+    checkMove = this.chess.move({
+      from: this.pieceLastPosition,
+      to: block.id
+    });
     console.log(checkMove);
     
     if (checkMove) { 
@@ -307,7 +326,8 @@ export class GameComponent implements OnInit {
     blockNode.firstChild.childNodes.forEach(element => {
 
       let name = element.nodeName.toLowerCase();
-      if (name === "app-pawn" || name === "app-queen" || name === "app-bishop" || name === "app-knight" || name === "app-rook")
+      //if (name === "app-pawn" || name === "app-queen" || name === "app-bishop" || name === "app-knight" || name === "app-rook")
+      if (name === "div")  
         piece = element;
       
     });
@@ -371,6 +391,14 @@ export class GameComponent implements OnInit {
     //   [pieceColour]="column.color === 'b' ? pieceDark : pieceLight"
     //   id="{{column.color}}_pawn_{{columnIndex}}" draggable="true" (dragstart)="drag($event)">
     // </app-pawn>
+  }
+  addComponent(componentClass: Type<any>) {
+    // Create component dynamically inside the ng-template
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentClass);
+    const component = this.container.createComponent(componentFactory);
+
+    // Push the component so that we can keep track of which components are created
+    this.components.push(component);
   }
 
   removeBlockHighlighting() {
