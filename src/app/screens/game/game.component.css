@@ -1,0 +1,134 @@
+.game-body {
+  height: calc(100vh - 125px);
+
+  display: flex;
+  align-items: center;
+}
+
+.card {
+  padding: 10px;
+
+  height: fit-content;
+  width: 100%;
+}
+
+
+.grid-content {
+  display: grid;
+  grid-gap: 1px;
+  grid-template-columns: 2fr 1fr;
+  grid-template-areas:
+    "game""info";
+}
+
+.game-info-container {
+  grid-area: info;
+}
+
+.square-container {
+  grid-area: game;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(30%, 1fr));
+  grid-gap: 10px;
+}
+
+.square {
+  padding-top: 100%;
+  /* padding trick directly on the grid item */
+  box-sizing: border-box;
+  position: relative;
+}
+
+.square .square-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.block-container {
+  grid-area: game;
+
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+
+}
+
+.block {
+  /* padding-top: 100%; */
+  padding-top: calc(50% - 2px);
+  padding-bottom: calc(50% - 2px);
+  padding-left: calc(50% - 2px);
+  padding-right: calc(50% - 2px);
+  /* padding trick directly on the grid item */
+  box-sizing: border-box;
+  position: relative;
+  border: solid 2px transparent;
+}
+
+.block .content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.game-container {
+  height: 100%;
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+}
+
+app-pawn {
+  height: inherit;
+  width: inherit;
+}
+
+app-bishop {
+  height: inherit;
+  width: inherit;
+}
+
+app-rook {
+  height: inherit;
+  width: inherit;
+}
+
+app-knight {
+  height: inherit;
+  width: inherit;
+}
+
+app-king {
+  height: inherit;
+  width: inherit;
+}
+
+app-queen {
+  height: inherit;
+  width: inherit;
+}
+
+
+.light-section {
+  background-color: var(--chessboard-light);
+}
+
+.dark-section {
+  background-color: var(--chessboard-dark);
+}
+
+.avaliableMove {
+  border-color: yellowgreen;
+}
+
+.moveReset {
+  border-color: transparent;
+}
