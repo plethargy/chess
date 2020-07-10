@@ -6,6 +6,18 @@
       </div>
     </header>
     <main>
+      <head>
+        <style>
+        p {text-align: center;
+          font-family: Arial Black, Arial Bold, Gadget, sans-serif;
+          font-size: 150%;}
+        div {text-align: center;}
+        img {float:center;
+          width: 300px;
+          height: 100px;}
+        h3 {float:right;}
+        </style>
+      </head>
       <div>
         <div class="square-container">
           <div class="square">
@@ -15,7 +27,18 @@
               <div class="name-tag">
                 <div id="player-one-turn-indicator"></div>
                 <div id="player-one-username">
-                  <!-- <h2>Player 1</h2> -->
+                  <div>
+                    <!--h6>Player 1</h6 -->
+                    <img 
+                      src="assets/pieces/pawn.svg" 
+                      height="77"
+                      width="100" />
+                    <p><strong>{{players.white}}</strong></p>
+
+                      <div class="player-container">
+
+                      </div>
+                    </div>
                 </div>
               </div>
 
@@ -341,10 +364,44 @@
               <div class="name-tag">
                 <div id="player-two-turn-indicator">
                   <!-- <h2>Player 1</h2> -->
+                  <div >
+                    <!-- h6>Player 2</h6 -->
+                    <img 
+                    src="assets/pieces/pawn.svg" 
+                    height="87"
+                    width="100" />
+                    <p><strong>{{players.black}}</strong></p>
+                    <div class="player-container">
+                   
+                    </div>
+                  </div>
                 </div>
                 <div id="player-two-username"></div>
               </div>
-              <div class="player-two-move-history"></div>
+              <div class="player-two-move-history">
+                <table class="fixed_header">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th></th>
+                      <th>Moves</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let move of history">
+                      <tr>
+                        <td>{{move.color}}</td>
+                        <td>{{move.from}}</td>
+                        <td>--></td>
+                        <td>{{move.to}}</td>
+                        <td>{{move.san}}</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
