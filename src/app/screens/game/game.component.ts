@@ -103,9 +103,9 @@ export class GameComponent implements OnInit {
       let result;
 
       if (data === JSON.parse(localStorage.getItem('userData')).email) {
-        result = 'win';
-      } else {
         result = 'lose';
+      } else {
+        result = 'win';
       }
       this.router.navigate(['/', 'game-result', result]);
     });

@@ -3,7 +3,6 @@ import io from 'socket.io-client';
 import { AlertService } from '../../_alert';
 import { Router } from '@angular/router';
 
-
 // const url = 'https://grad-chess-api.herokuapp.com/';
 const url = 'http://localhost:4001';
 @Injectable({
@@ -47,7 +46,9 @@ export class SocketService {
     });
     this.socket.on('reconnect_failed', () => {
       alertService.clear();
-      alertService.error("Couldn't connect to server: Something went wrong ", { keepAfterRouteChange: true });
+      alertService.error("Couldn't connect to server: Something went wrong ", {
+        keepAfterRouteChange: true,
+      });
       this.router.navigateByUrl('/lobbies');
     });
   }
