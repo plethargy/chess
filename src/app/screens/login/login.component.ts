@@ -6,6 +6,7 @@ import {
   AuthService,
   AuthResponseData,
 } from 'src/app/services/auth/auth.service';
+import { SocketService } from 'src/app/services/socket/socket.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
   isLoginMode = true;
   error: string = null;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private socketService : SocketService) {}
 
   ngOnInit(): void {}
 
@@ -39,13 +40,15 @@ export class LoginComponent implements OnInit {
     if (this.isLoginMode) {
       authObs = this.authService.login(email, password);
     } else {
+      this.socketService.socket.emit("userSignUp", email);
       authObs = this.authService.signup(email, password);
+      
     }
 
     authObs.subscribe(
       (resData) => {
         this.isLoading = false;
-        this.router.navigate(['/session-setup']);
+        this.router.navigate(['/lobbies']);
       },
       (errorMessage) => {
         this.error = errorMessage;

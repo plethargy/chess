@@ -1,18 +1,20 @@
 <nav>
   <ul style="width: 75%;">
-    <li><a [routerLink]="['/home']" routerLinkActive="active">Home</a></li>
+    <li>
+      <a *ngIf="!loggedIn" [routerLink]="['/home']" routerLinkActive="active"
+        >Home</a
+      >
+    </li>
     <li>
       <a *ngIf="!loggedIn" [routerLink]="['/login']" routerLinkActive="active"
         >Login</a
       >
     </li>
     <li>
-      <a *ngIf="loggedIn" [routerLink]="['/game']" routerLinkActive="active"
-        >Game</a
-      >
-    </li>
-    <li>
-      <a [routerLink]="['/leaderboard']" routerLinkActive="active"
+      <a
+        *ngIf="!loggedIn"
+        [routerLink]="['/leaderboard']"
+        routerLinkActive="active"
         >Leaderboard</a
       >
     </li>
@@ -21,9 +23,5 @@
         >Logout</a
       >
     </li>
-
-    <!-- <li>
-            <a routerLink="" routerLinkActive="active" routerLinkActiveOptions="{exact:true}">About</a>
-        </li> -->
   </ul>
 </nav>

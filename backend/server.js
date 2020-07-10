@@ -3,15 +3,25 @@
 var express = require("express");
 const { Chess } = require('chess.js');
 const { v4: uuidv4 } = require('uuid');
+const db = require('./database');
+const { createAssignment } = require("typescript");
 
 var app = express();
 
+var Http = require("http").Server(express);
+var io = require('socket.io')(Http);
+
+Http.listen(4001, () => {
+  console.log("Socket running on port 4001");
+});
+
+var Lobbies = [];
 var Sessions = {};
 var error_response = {};
 
 const WHITE = 'w';
 const BLACK = 'b';
-
+const defaultFen = "6k1/5p1p/6p1/1P1n4/1K4P1/N6P/8/8 w - - 0 0";
 const version = '/v1';
 const service = '/chess';
 
@@ -21,117 +31,327 @@ app.get(version.concat(service,"/sessions"), (req, res) => {
     res.json(Sessions);
 });
 
+io.on("connection", socket => {
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+  console.log("user connected");
+  socket.emit("lobbies", Lobbies);
 
-app.post(version.concat(service,"/createSession"), function(req, res){
+  //add lobby
+  socket.on("addLobby", playerName => {
+    //lobbies
+    let Lobby = { 'ID': uuidv4(), 'Player1': playerName, 'Player2': null };
+    Lobbies.push(Lobby);
+    io.emit("lobbies", Lobbies);
+    socket.join(`${Lobby.ID}`);
+    //game session
+    socket.emit("newGame", createNewSession(Lobby.ID, playerName));
+  })
 
-    let UUID = uuidv4();
+  //join lobby
+  socket.on("joinLobby", (lobbyID, playerName) => {
+    //lobbies
+    Lobbies.find(x => x.ID == lobbyID).Player2 = playerName;
+    Lobbies = Lobbies.filter(function (lobby) { return lobby.ID != lobbyID });
+    io.emit("lobbies", Lobbies);
 
-    let White = req.body.White;
-    let Black = req.body.Black;
-    let Fen = req.body.Fen;
+    //game session
+    socket.emit("joinGame", joinGame(lobbyID, playerName, socket));
+  })
 
-    let State = null;
+  //get lobbies
+  socket.on("getLobbies", () => {
+    socket.emit("lobbies", Lobbies);
+  })
 
-    if(Fen === null)
-    {
-        State = new Chess();
-    }
-    else
-    {
-        State = new Chess(Fen);
-    }
+  //move
+  socket.on("move", (sessionID, fromPosition, toPosition, promotion) => {
+    io.to(`${sessionID}`).emit("moveResult", move(sessionID, fromPosition, toPosition, promotion));
+  })
 
-    let CurrentDate = new Date();
-
-    let Game = {'White' : White, 'Black' : Black , 'Start' : CurrentDate.getTime(), 'State' : State};
-
-    Sessions[UUID] = Game;
-
-    res.json({'Session' : UUID, 'Result': true});
-
-});
+  //get moves
+  socket.on("getMoves", (sessionID, position) => {
+    io.to(`${sessionID}`).emit("postMoves", getMoves(sessionID, position));
+  })
 
 
-app.post(version.concat(service,"/move"), function(req, res){
+  //load/get board
+  socket.on("getBoard", (sessionID) => {
+    io.to(`${sessionID}`).emit("postBoard", getBoard(sessionID));
+  })
 
-    let session = Sessions[req.body.Id];
+  socket.on("getMoveHistory", sessionID => {
+    io.to(`${sessionID}`).emit("postMoveHistory", getMoveHistory(sessionID));
+  })
+
+  socket.on("getUsersForSession", sessionID => {
+    io.to(`${sessionID}`).emit("postUsersForSession", getUsersForSession(sessionID));
+  })
+
+  socket.on("leaveRoom", (sessionID) => {
+    socket.leave(sessionID, () => {
+      console.log("users leaving room");
+    })
+  })    
+  socket.on("userSignUp", email => {
+    signupUser(email);
+  })
+  
+  socket.on("getTurn", sessionID => {
+    io.to(`${sessionID}`).emit("postTurn", getTurn(sessionID));
+  })
+
+})
+
+//creates default game
+function createNewSession(sessionID, playerName) {
+
+  console.log(`new session ID: ${sessionID}`);
+  let White = playerName;
+  let Black = null;
+  let Fen = null;
+
+  let State = null;
+
+  if (Fen === null) {
+    State = new Chess();
+  }
+  else {
+    State = new Chess(Fen);
+  }
+
+  let CurrentDate = new Date();
+
+  let Game = { 'White': White, 'Black': Black, 'Start': CurrentDate.getTime(), 'State': State };
+
+  Sessions[sessionID] = Game;
+  return { 'SessionID': sessionID, 'Result': true };
+}
+
+function joinGame(sessionID, playerName, sock) {
+  if (Sessions[sessionID] != undefined) {
+    Sessions[sessionID].Black = playerName;
+    sock.join(`${sessionID}`);
+    createGame(sessionID);
+    return { 'SessionID': sessionID, 'Result': true };
+  }
+  else
+    return { 'SessionID': null, 'Result': false };
+}
+
+function move(sessionID, fromPosition, toPosition, toPromotion) {
+  if (Sessions[sessionID] != undefined) {
+
+    let session = Sessions[sessionID];
     let game = session['State'];
 
-    let move = game.move(req.body.move);
+    let move = [];
 
-    // console.log(game.ascii());
-
-    if(move === null)
-    {
-
-        let current_player = game.turn();
-
-        if (current_player == WHITE)
-        {
-            current_player = {'White' : session['White']};
-        } 
-        else 
-        {
-            current_player = {'Black' : session['Black']};
-        }
-
-        error_response["Error"] = "Illegal Move";
-        error_response["Move"] = req.body.move;
-        error_response["Player"] = current_player;
-
-        res.statusCode = 408;
-        res.json(error_response);
+    if (typeof toPromotion === 'undefined') {
+      move = game.move({ from: fromPosition, to: toPosition });
+    } else {
+      move = game.move({ from: fromPosition, to: toPosition , promotion: toPromotion});
     }
+
+    checkGameOver(sessionID);
+
+    return { "Data": move, "Result": true };
+
+  }
+  else {
+    return { "Data": null, "Result": false };
+  }
+}
+
+function checkGameOver(sessionID) {
+  let session = Sessions[sessionID];
+  let game = session['State'];
+  if (game.game_over()) {
+    let winner;
+    if (game.turn() === "w")
+      winner = session.White;
     else
-    {
-        res.statusCode = 200;
-        res.json(move);
-    }
+      winner = session.Black;
 
-});
+    let dbInstance = new db();
+  
+    let query = `UPDATE Player SET [Score] = [Score] + 50, [LastPlayed] = GETDATE() WHERE Username = '${winner}'`;
+    dbInstance.connect(query);
+    recordHistory(sessionID);
+    
 
+    io.to(`${sessionID}`).emit("gameOver", winner);
+    deleteSession(sessionID);
+  }
+}
 
-app.get(version.concat(service,"/moves"), (req, res) => {
+function deleteSession(sessionID) {
+  if (Sessions[sessionID]) {
+    delete Sessions[sessionID];
+  }
+}
 
-    let session = Sessions[req.body.Id];
+function getMoves(sessionID, position) {
+  if (Sessions[sessionID] != undefined) {
+
+    let session = Sessions[sessionID];
     let game = session['State'];
 
     let current_player = game.turn();
 
     let conditions = {
-        "check": game.in_check(),
-        "checkmate": game.in_checkmate(),
-        "draw": game.in_draw(),
-        "stalemate": game.in_stalemate(),
-        "threefold-repetition": game.in_threefold_repetition(),
-        "insufficient-material": game.insufficient_material()
-    } 
-
-    if (current_player == WHITE)
-    {
-        current_player = {'white' : session['White']};
+      "check": game.in_check(),
+      "checkmate": game.in_checkmate(),
+      "draw": game.in_draw(),
+      "stalemate": game.in_stalemate(),
+      "threefold-repetition": game.in_threefold_repetition(),
+      "insufficient-material": game.insufficient_material()
     }
-    else 
-    {
-        current_player = {'black' : session['Black']};
+
+    if (current_player == WHITE) {
+      current_player = { 'white': session['White'] };
+    }
+    else {
+      current_player = { 'black': session['Black'] };
     };
 
-    let legal_moves = {'current player' : current_player, 'conditions' : conditions, 'legal moves': game.moves()};
+    let legal_moves = game.moves({ square: position });
 
-    res.json(legal_moves);
-});
+    //return legal_moves;
+    return { "Data": legal_moves, "Result": true };
 
-app.get(version.concat(service,"/history"), (req, res) => {
+  }
+  else {
+    return { "Data": null, "Result": false };
+  }
+}
 
-    let session = Sessions[req.body.Id];
+function getBoard(sessionID){
+  if (Sessions[sessionID] != undefined) {
+    let session = Sessions[sessionID];
+    let game = session['State'];
+
+    return { "Data": game.board(), "Result": true };
+  }
+  else
+    return { "Data": null, "Result": false }; 
+}
+
+function getMoveHistory(sessionID) {
+  if (Sessions[sessionID] != undefined) {
+
+    let session = Sessions[sessionID];
     let game = session['State'];
 
     let history = game.history({ verbose: true })
 
-    res.json({"move history" : history});
-});
+      return { "Data": history, "Result": true };
+  }
+  else
+    return { "Data": null, "Result": false }; 
+}
+
+function getTurn(sessionID) {
+  if (Sessions[sessionID] != undefined) {
+
+    let session = Sessions[sessionID];
+    let game = session['State'];
+
+    return { "Data": game.turn(), "Result": true };
+  }
+  else
+    return { "Data": null, "Result": false }; 
+}
+
+function getUsersForSession(sessionID)
+{
+  if (Sessions[sessionID] != undefined) {
+
+    let black = Sessions[sessionID].Black;
+    let white = Sessions[sessionID].White;
+
+    let data = { playerWhite: white, playerBlack: black };
+
+    return { "Data": data, "Result": true }; 
+  }
+  else
+    return { "Data": null, "Result": false }; 
+}
+
+function signupUser(email)
+{
+
+  let dbInstance = new db();
+  let query = 
+  `
+  DECLARE @count int;
+  SELECT @count = COUNT(PlayerId) FROM [Player] WHERE [Username] = '${email}';
+  IF @count = 0
+  BEGIN
+    INSERT INTO Player(Username, Score) VALUES ('${email}', 0)
+  END`;
+  dbInstance.connect(query);
+
+}
+
+function createGame(sessionID)
+{
+  let dbInstance = new db();
+  let white = Sessions[sessionID].White;
+  let black = Sessions[sessionID].Black;
+  let query = `
+  DECLARE @player1 int
+  DECLARE @player2 int
+
+  SELECT @player1 = [PlayerId] FROM Player WHERE Username = '${white}';
+  SELECT @player2 = [PlayerId] FROM Player WHERE Username = '${black}';
+
+  INSERT INTO Game(Player1_ID, Player2_ID, Player1_Colored, Player2_Colored) VALUES (@player1, @player2, 'White', 'Black');
+  `;
+
+  dbInstance.connect(query);
+}
+
+function recordHistory(sessionID)
+{
+  let session = Sessions[sessionID];
+  let white = Sessions[sessionID].White;
+  let black = Sessions[sessionID].Black;
+  let game = session['State'];
+
+  let history = game.history({ verbose: true });
 
 
-app.listen(process.env.PORT || 4000, () => {
-    console.log("Server running on port 4000");
-});
+  let query = `
+    DECLARE @game int;
+    DECLARE @player1 int
+    DECLARE @player2 int
+  
+    SELECT @player1 = [PlayerId] FROM Player WHERE Username = '${white}';
+    SELECT @player2 = [PlayerId] FROM Player WHERE Username = '${black}';
+    SELECT @game = MAX([GameID]) FROM Game WHERE Player1_ID = @player1 AND Player2_ID = @player2 AND [EndTime] IS NULL;
+    UPDATE Game SET [EndTime] = GETDATE() WHERE GameID = @game;
+    INSERT INTO [Move](PlayerID, GameID, Piece, FromBlock, ToBlock) VALUES 
+    `;
+
+  let dbInstance = new db();
+  history.forEach((elem, index, arr) => {
+    if (elem.color === 'w')
+    {
+      if (index == arr.length - 1)
+        query += ` (@player1, @game, '${elem.piece}', '${elem.from}', '${elem.to}')`;
+      else
+        query += ` (@player1, @game, '${elem.piece}', '${elem.from}', '${elem.to}'),`
+    }
+    else
+    {
+      if (index == arr.length - 1)
+        query += ` (@player2, @game, '${elem.piece}', '${elem.from}', '${elem.to}')`;
+      else
+        query += ` (@player2, @game, '${elem.piece}', '${elem.from}', '${elem.to}'),`
+    }
+  });
+
+  dbInstance.connect(query);
+}

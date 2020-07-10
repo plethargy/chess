@@ -1,0 +1,42 @@
+<div class="login-body">
+  <div class="card z-depth1">
+    <main></main>
+    <div class="alignText">
+      <h2 class="projectFontFamily">Open Lobbies</h2>
+      <ul *ngIf="openLobbies || openLobbies.length > 0">
+        <li
+          *ngFor="let lobby of openLobbies"
+          (click)="joinLobby(lobby.id)"
+          class="darkerCard"
+        >
+          <a>
+            <div>{{ lobby.player1 }}'s Lobby</div>
+          </a>
+        </li>
+      </ul>
+      <div
+        *ngIf="!openLobbies || openLobbies.length <= 0"
+        id="noOpenLobbies"
+        class="projectFont"
+      >
+        No open lobbies currently found...
+      </div>
+      <div class="orText" *ngIf="openLobbies.length > 0">
+        OR
+      </div>
+    </div>
+    <button (click)="addLobby()" class="google-btn projectFont">
+      Start New Game
+    </button>
+    <div>
+      <alert></alert>
+    </div>
+  </div>
+</div>
+
+<!--JUST AN EXAMPLE FROM LIBRARY
+<button class="btn btn-success m-1" (click)="alertService.success('Success!!', options)">Success</button>
+<button class="btn btn-danger m-1" (click)="alertService.error('Error :(', options)">Error</button>
+<button class="btn btn-info m-1" (click)="alertService.info('Some info....', options)">Info</button>
+<button class="btn btn-warning m-1" (click)="alertService.warn('Warning: ...', options)">Warn</button>
+<button class="btn btn-outline-dark m-1" (click)="alertService.clear()">Clear</button>-->

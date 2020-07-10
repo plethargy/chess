@@ -1,0 +1,4 @@
+﻿<div *ngFor="let alert of alerts" class="errorCard">
+  <a id="closeIconAlert" (click)="removeAlert(alert)">&times;</a>
+  <span id="alertMessage" [innerHTML]="alert.message"></span>
+</div>

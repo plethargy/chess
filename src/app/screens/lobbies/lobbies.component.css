@@ -1,0 +1,15 @@
+ul {
+  padding: 0;
+}
+
+a {
+  color: black;
+}
+
+.orText {
+  margin: 1em 0;
+}
+
+#noOpenLobbies {
+  margin-bottom: 1em;
+}
