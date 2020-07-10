@@ -19,7 +19,30 @@
                 </div>
               </div>
 
-              <div class="player-one-move-history"></div>
+              <div class="player-one-move-history">
+                <table class="fixed_header">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th></th>
+                      <th>Moves</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let move of history">
+                      <tr>
+                        <td>{{move.color}}</td>
+                        <td>{{move.from}}</td>
+                        <td>--></td>
+                        <td>{{move.to}}</td>
+                        <td>{{move.san}}</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
           <div class="square">
