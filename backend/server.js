@@ -44,7 +44,6 @@ io.on("connection", socket => {
     let Lobby = { 'ID': uuidv4(), 'Player1': playerName, 'Player2': null };
     Lobbies.push(Lobby);
     io.emit("lobbies", Lobbies);
-    //console.log(`lobby id: ${Lobby.ID}`);
     socket.join(`${Lobby.ID}`);
     //game session
     socket.emit("newGame", createNewSession(Lobby.ID, playerName));
@@ -79,8 +78,6 @@ io.on("connection", socket => {
 
   //load/get board
   socket.on("getBoard", (sessionID) => {
-    //console.log(`getBoard called with ID: ${sessionID}`)
-    //console.log(Object.keys(socket.rooms).filter(item => item!=socket.id));
     io.to(`${sessionID}`).emit("postBoard", getBoard(sessionID));
   })
 
@@ -93,7 +90,6 @@ io.on("connection", socket => {
   })
 
   socket.on("leaveRoom", (sessionID) => {
-    console.log("leaveRoom called");
     socket.leave(sessionID, () => {
       console.log("users leaving room");
     })
@@ -130,7 +126,6 @@ function createNewSession(sessionID, playerName) {
   let Game = { 'White': White, 'Black': Black, 'Start': CurrentDate.getTime(), 'State': State };
 
   Sessions[sessionID] = Game;
-  //console.log(Sessions);
   return { 'SessionID': sessionID, 'Result': true };
 }
 
@@ -159,10 +154,7 @@ function move(sessionID, fromPosition, toPosition, toPromotion) {
       move = game.move({ from: fromPosition, to: toPosition , promotion: toPromotion});
     }
 
-
     checkGameOver(sessionID);
-
-    //console.log(move);
 
     return { "Data": move, "Result": true };
 
@@ -174,7 +166,6 @@ function move(sessionID, fromPosition, toPosition, toPromotion) {
 
 function checkGameOver(sessionID) {
   let session = Sessions[sessionID];
-  //console.log(Sessions);
   let game = session['State'];
   if (game.game_over()) {
     let winner;
@@ -197,16 +188,11 @@ function checkGameOver(sessionID) {
 
 function deleteSession(sessionID) {
   if (Sessions[sessionID]) {
-    console.log("Before Deleteion:");
-    console.log(Sessions);
     delete Sessions[sessionID];
-    console.log("After Deleteion:");
-    console.log(Sessions);
   }
 }
 
 function getMoves(sessionID, position) {
-  //console.log("ran getMoves with ID:" + sessionID);
   if (Sessions[sessionID] != undefined) {
 
     let session = Sessions[sessionID];
@@ -232,8 +218,6 @@ function getMoves(sessionID, position) {
 
     let legal_moves = game.moves({ square: position });
 
-    //console.log(legal_moves);
-
     //return legal_moves;
     return { "Data": legal_moves, "Result": true };
 
@@ -244,14 +228,9 @@ function getMoves(sessionID, position) {
 }
 
 function getBoard(sessionID){
-  console.log("ran getBoard with ID:" + sessionID);
-  //console.log("getBoard ran");
-  console.log(Sessions);
   if (Sessions[sessionID] != undefined) {
     let session = Sessions[sessionID];
     let game = session['State'];
-
-    //console.log(game.board());
 
     return { "Data": game.board(), "Result": true };
   }
@@ -278,8 +257,6 @@ function getTurn(sessionID) {
 
     let session = Sessions[sessionID];
     let game = session['State'];
-
-    console.log(game.turn());
 
     return { "Data": game.turn(), "Result": true };
   }

@@ -30,7 +30,6 @@ export class SocketService {
       this.sessionID = data.SessionID;
     });
     this.socket.on('connected', () => {});
-    console.log(this.socket);
     this.socket.on('disconnect', (reason) => {
       alertService.error('Lost connection to server');
     });

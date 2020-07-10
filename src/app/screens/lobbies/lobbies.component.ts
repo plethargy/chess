@@ -12,8 +12,6 @@ import { PlayerlookupService } from 'src/app/services/playerlookup/playerlookup.
 })
 export class LobbiesComponent implements OnInit {
   openLobbies: Lobby[];
-  TEMPNAME: string;
-  TEMPNAME2: string;
   alertValue: string;
 
   private socket: any;
@@ -25,9 +23,7 @@ export class LobbiesComponent implements OnInit {
     private socketService: SocketService,
     private playerLookupService: PlayerlookupService
   ) {
-    (this.openLobbies = []),
-      (this.TEMPNAME = 'Player1'),
-      (this.TEMPNAME2 = 'Player2');
+    (this.openLobbies = []);
     this.socket = socketService.socket;
     this.playerLookup = playerLookupService;
   }
@@ -47,7 +43,7 @@ export class LobbiesComponent implements OnInit {
     });
   }
 
-  addLobby(playerName: string): void {
+  addLobby(): void {
     let user: any = JSON.parse(localStorage.getItem('userData'));
     this.socket.emit('addLobby', user.email);
     this.socket.on('newGame', (data) => {
@@ -66,12 +62,4 @@ export class LobbiesComponent implements OnInit {
       this.router.navigateByUrl('/game');
     });
   }
-
-  /*
-  TESTSOCKETMETHODS(sessionID: string) {
-    this.socket.emit("move", sessionID, 'a4');
-    this.socket.on("moveResult", data => {
-      console.log(data);
-    })
-  }*/
 }
