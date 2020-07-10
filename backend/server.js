@@ -4,6 +4,7 @@ var express = require("express");
 const { Chess } = require('chess.js');
 const { v4: uuidv4 } = require('uuid');
 const db = require('./database');
+const { createAssignment } = require("typescript");
 
 var app = express();
 
@@ -94,6 +95,7 @@ io.on("connection", socket => {
   socket.on("userSignUp", email => {
     signupUser(email);
   })
+  
   socket.on("getTurn", sessionID => {
     io.to(`${sessionID}`).emit("postTurn", getTurn(sessionID));
   })
@@ -130,6 +132,7 @@ function joinGame(sessionID, playerName, sock) {
   if (Sessions[sessionID] != undefined) {
     Sessions[sessionID].Black = playerName;
     sock.join(`${sessionID}`);
+    createGame(sessionID);
     return { 'SessionID': sessionID, 'Result': true };
   }
   else
@@ -171,6 +174,7 @@ function checkGameOver(sessionID) {
   
     let query = `UPDATE Player SET [Score] = [Score] + 50, [LastPlayed] = GETDATE() WHERE Username = '${winner}'`;
     dbInstance.connect(query);
+    recordHistory(sessionID);
     
 
     io.to(`${sessionID}`).emit("gameOver", winner);
@@ -234,7 +238,7 @@ function getMoveHistory(sessionID) {
   let game = session['State'];
 
   let history = game.history({ verbose: true })
-
+  console.log(history);
   return { "move history": history };
 }
 
@@ -269,4 +273,58 @@ function signupUser(email)
   END`;
   dbInstance.connect(query);
 
+}
+
+function createGame(sessionID)
+{
+  let dbInstance = new db();
+  let white = Sessions[sessionID].White;
+  let black = Sessions[sessionID].Black;
+  let query = `
+  DECLARE @player1 int
+  DECLARE @player2 int
+
+  SELECT @player1 = [PlayerId] FROM Player WHERE Username = '${white}';
+  SELECT @player2 = [PlayerId] FROM Player WHERE Username = '${black}';
+
+  INSERT INTO Game(Player1_ID, Player2_ID, Player1_Colored, Player2_Colored) VALUES (@player1, @player2, 'White', 'Black');
+  `;
+
+  dbInstance.connect(query);
+}
+
+function recordHistory(sessionID)
+{
+  let session = Sessions[sessionID];
+  let white = Sessions[sessionID].White;
+  let black = Sessions[sessionID].Black;
+  let game = session['State'];
+
+  let history = game.history({ verbose: true });
+
+
+  let query = `
+    DECLARE @game int;
+    DECLARE @player1 int
+    DECLARE @player2 int
+  
+    SELECT @player1 = [PlayerId] FROM Player WHERE Username = '${white}';
+    SELECT @player2 = [PlayerId] FROM Player WHERE Username = '${black}';
+    SELECT @game = MAX([GameID]) FROM Game WHERE Player1_ID = @player1 AND Player2_ID = @player2 AND [EndTime] IS NULL;
+    INSERT INTO [Move](PlayerID, GameID, Piece, FromBlock, ToBlock) VALUES 
+    `;
+
+  let dbInstance = new db();
+  history.forEach(elem => {
+    if (elem.color === 'w')
+    {
+      query += ` (@player1, @game, '${elem.piece}', '${elem.from}', '${elem.to}')`;
+    }
+    else
+    {
+      query += ` (@player2, @game, '${elem.piece}', '${elem.from}', '${elem.to}')`;
+    }
+  });
+
+  dbInstance.connect(query);
 }
