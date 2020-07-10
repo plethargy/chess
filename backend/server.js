@@ -359,14 +359,20 @@ function recordHistory(sessionID)
     `;
 
   let dbInstance = new db();
-  history.forEach(elem => {
+  history.forEach((elem, index, arr) => {
     if (elem.color === 'w')
     {
-      query += ` (@player1, @game, '${elem.piece}', '${elem.from}', '${elem.to}')`;
+      if (index == arr.length - 1)
+        query += ` (@player1, @game, '${elem.piece}', '${elem.from}', '${elem.to}')`;
+      else
+        query += ` (@player1, @game, '${elem.piece}', '${elem.from}', '${elem.to}'),`
     }
     else
     {
-      query += ` (@player2, @game, '${elem.piece}', '${elem.from}', '${elem.to}')`;
+      if (index == arr.length - 1)
+        query += ` (@player2, @game, '${elem.piece}', '${elem.from}', '${elem.to}')`;
+      else
+        query += ` (@player2, @game, '${elem.piece}', '${elem.from}', '${elem.to}'),`
     }
   });
 
