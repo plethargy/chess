@@ -6,7 +6,7 @@
       <ul *ngIf="openLobbies || openLobbies.length > 0">
         <li
           *ngFor="let lobby of openLobbies"
-          (click)="joinLobby(lobby.id, TEMPNAME2)"
+          (click)="joinLobby(lobby.id)"
           class="darkerCard"
         >
           <a>

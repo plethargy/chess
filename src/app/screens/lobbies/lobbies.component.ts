@@ -53,7 +53,7 @@ export class LobbiesComponent implements OnInit {
     });
   }
 
-  joinLobby(id: string, playerName: string): void {
+  joinLobby(id: string): void {
     let user: any = JSON.parse(localStorage.getItem('userData'));
     this.socket.emit('joinLobby', id, user.email);
     this.socket.on('joinGame', (data) => {
