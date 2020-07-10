@@ -7,9 +7,6 @@
     <div *ngIf="!isLoading">
       <div class="alignText">
         <h2 class="projectFontFamily">Leaderboard</h2>
-        <!-- <div *ngFor="person; of: leaderboardList" class="darkerCard">
-          {{ person.name }} - {{ person.score }}
-        </div> -->
         <ul *ngFor="let person of leaderboardList" class="darkerCard">
           <div>{{ person.position }}.&nbsp;</div>
           <div class="leaderboardName">{{ person.name }}</div>

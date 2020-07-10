@@ -16,33 +16,3 @@ span {
 .card {
   width: 30%;
 }
-
-.google-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
-
-  height: 42px;
-
-  background-color: var(--component-background);
-
-  border: 1px solid;
-  border-color: var(--main-fade-light);
-  border-radius: 2px;
-
-  cursor: hand;
-
-  outline: none;
-}
-
-.google-btn .google-icon-svg {
-  width: 18px;
-  height: 18px;
-}
-.google-btn .btn-text {
-  color: #757575;
-  font-size: 14px;
-  letter-spacing: 0.2px;
-  font-family: Roboto;
-}

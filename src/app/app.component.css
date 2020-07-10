@@ -164,12 +164,16 @@ span {
   background-color: var(--component-background);
 
   border: 1px solid;
-  border-color: var(--main-font-fade);
+  border-color: var(--main-fade-light);
   border-radius: 2px;
 
   cursor: pointer;
 
   outline: none;
+}
+
+.alignText {
+  text-align: center;
 }
 
 .google-btn .google-icon-svg {
@@ -179,10 +183,9 @@ span {
 
 .google-btn .btn-text {
   color: #757575;
-}
-
-.alignText {
-  text-align: center;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  font-family: Roboto;
 }
 
 .errorCard {
@@ -202,4 +205,23 @@ span {
   color: red;
   float: right;
   cursor: pointer;
+}
+
+.darkerCard {
+  background-color: rgb(139, 139, 139);
+  border-radius: 4px;
+  margin: 0.5em;
+  padding: 0.5em;
+  display: flex;
+}
+
+.projectFontFamily {
+  letter-spacing: 0.2px;
+  font-family: Roboto;
+  color: #b4b4b4;
+}
+
+.leaderboardName {
+  width: 75%;
+  text-align: left;
 }

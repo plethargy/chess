@@ -23,14 +23,6 @@ export class AuthService {
   user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer: any;
 
-  // If you want to access the email - Use either the storage or use user BehaviourSubject
-  // const userData: {
-  //   email: string;
-  //   id: string;
-  //   _token: string;
-  //   _tokenExpirationDate: string;
-  // } = JSON.parse(localStorage.getItem('userData'));
-
   constructor(private http: HttpClient, private router: Router) {}
 
   signup(email: string, password: string) {
@@ -132,8 +124,6 @@ export class AuthService {
     if (!errorRes.error || !errorRes.error.error) {
       return throwError(errorMessage);
     }
-    // Not sure if we should give the user this much information?
-    // Rather change this later on to just generic error message
     switch (errorRes.error.error.message) {
       case 'EMAIL_EXISTS':
         errorMessage = 'This email exists already';
@@ -142,7 +132,7 @@ export class AuthService {
         errorMessage = 'This email does not exist.';
         break;
       case 'INVALID_PASSWORD':
-        errorMessage = 'This password is not correct.';
+        errorMessage = 'The login credentials is incorrect. Please try again';
         break;
     }
     return throwError(errorMessage);
