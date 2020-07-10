@@ -112,7 +112,7 @@ svg {
 }
 
 .fixed_header{
-  width: 400px;
+  width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
 }
@@ -136,7 +136,7 @@ color:#fff;
 .fixed_header th, .fixed_header td {
 padding: 5px;
 text-align: left;
-width: 200px;
+width: 20%;
 }
 
 td {
