@@ -233,9 +233,7 @@ function getMoveHistory(sessionID) {
   let session = Sessions[sessionID];
   let game = session['State'];
 
-  let history = game.history({ verbose: true })
-
-  return { "move history": history };
+  return game.history({ verbose: true });
 }
 
 function getTurn(sessionID) {

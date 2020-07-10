@@ -69,7 +69,10 @@ export class GameComponent implements OnInit {
     
     
     this.socket.emit("getBoard", this.sessionId);
+
     this.socket.emit("getTurn", this.sessionId);
+
+    this.socket.emit("getMoveHistory", this.sessionId);
 
     this.socket.on("postBoard", data => {
       console.log("hi there");
@@ -78,6 +81,14 @@ export class GameComponent implements OnInit {
         this.chessboard.push(item);
       }
     })
+
+
+    this.socket.on("postMoveHistory", data => {
+      console.log(data);
+      this.history = data;
+
+    })
+
 
     //game end
     this.socket.on("gameOver", data => {
@@ -144,6 +155,8 @@ export class GameComponent implements OnInit {
       console.log("Move result",checkMove);
     
       if (checkMove) { 
+
+        this.socket.emit("getMoveHistory", this.sessionId);
 
         this.sound();
   
