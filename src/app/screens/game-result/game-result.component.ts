@@ -18,6 +18,6 @@ export class GameResultComponent implements OnInit {
     });
     console.log(this.result);
     this.resultText =
-      this.result === 'WIN' ? 'Congratulations! You Won!' : 'Sorry! You Lose!';
+      this.result === 'win' ? 'Congratulations! You Won!' : 'Sorry! You Lose!';
   }
 }
