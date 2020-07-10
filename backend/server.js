@@ -256,21 +256,31 @@ function getBoard(sessionID){
 }
 
 function getMoveHistory(sessionID) {
-  let session = Sessions[sessionID];
-  let game = session['State'];
+  if (Sessions[sessionID] != undefined) {
 
-  let history = game.history({ verbose: true })
+    let session = Sessions[sessionID];
+    let game = session['State'];
 
-  return { "move history": history };
+    let history = game.history({ verbose: true })
+
+      return { "Data": history, "Result": true };
+  }
+  else
+    return { "Data": null, "Result": false }; 
 }
 
 function getTurn(sessionID) {
-  let session = Sessions[sessionID];
-  let game = session['State'];
+  if (Sessions[sessionID] != undefined) {
 
-  console.log(game.turn());
+    let session = Sessions[sessionID];
+    let game = session['State'];
 
-  return game.turn();
+    console.log(game.turn());
+
+    return { "Data": game.turn(), "Result": true };
+  }
+  else
+    return { "Data": null, "Result": false }; 
 }
 
 function getUsersForSession(sessionID)

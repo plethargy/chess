@@ -72,7 +72,7 @@ export class GameComponent implements OnInit {
 
 
     this.socket.on("postTurn", data => {
-      this.colourTurn = data;
+      this.colourTurn = data.Data;
     })
     
     
