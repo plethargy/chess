@@ -112,7 +112,15 @@ export class GameComponent implements OnInit {
       console.log(data);
       this.socket.emit("leaveRoom", this.socketService.sessionID);
       this.socketService.sessionID = null;
-      this.router.navigateByUrl('/lobbies');
+      let result;
+
+      if (data === JSON.parse(localStorage.getItem("userData")).email) {
+        result = "win";
+      }
+      else {
+        result = "lose";
+      }
+      this.router.navigate(["/", "game-result", result]);
     })
 
     this.socket.on("postMoves", data =>{
