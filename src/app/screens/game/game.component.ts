@@ -4,6 +4,7 @@ import { SnackbarService } from '../../services/snackbar/snackbar.service';
 import { SocketService } from 'src/app/services/socket/socket.service';
 import { PlayerlookupService } from 'src/app/services/playerlookup/playerlookup.service';
 import { Router } from '@angular/router';
+import { AlertService } from '../../_alert';
 import { SnackbarPromotionService } from 'src/app/components/snackbar-promotion/snackbar-promotion.service';
 
 
@@ -44,7 +45,14 @@ export class GameComponent implements OnInit {
 
   playerLookup : PlayerlookupService;
 
-  constructor(private snackbarService: SnackbarService, private socketService : SocketService, private promotionSelectionService: SnackbarPromotionService, private playerLookupService : PlayerlookupService, private router: Router) {
+  constructor(
+    private snackbarService: SnackbarService,
+    private socketService: SocketService,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private promotionSelectionService: SnackbarPromotionService, 
+    private playerLookupService: PlayerlookupService,
+    private router: Router,
+    private alertService: AlertService) {
 
     this.socket = socketService.socket;
     this.sessionId = socketService.sessionID;
@@ -64,7 +72,7 @@ export class GameComponent implements OnInit {
 
 
     this.socket.on("postTurn", data => {
-      this.colourTurn = data;
+      this.colourTurn = data.Data;
     })
     
     
@@ -75,17 +83,25 @@ export class GameComponent implements OnInit {
     this.socket.emit("getMoveHistory", this.sessionId);
 
     this.socket.on("postBoard", data => {
-      console.log("hi there");
-      this.chessboard = [];
-      for (let item of data) {
-        this.chessboard.push(item);
+      //console.log("hi there");
+      if (data.Result === false) {
+        this.socketService.sessionID = null;
+        console.log("postBoard call failed");
+        this.alertService.error("Invalid sessionID");
+        this.router.navigateByUrl('/lobbies');
+      }
+      else {
+        this.chessboard = [];
+        for (let item of data.Data) {
+          this.chessboard.push(item);
+        }
       }
     })
 
 
     this.socket.on("postMoveHistory", data => {
       console.log(data);
-      this.history = data;
+      this.history = data.Data;
 
     })
 
@@ -94,13 +110,14 @@ export class GameComponent implements OnInit {
     this.socket.on("gameOver", data => {
       console.log("Game Over");
       console.log(data);
+      this.socket.emit("leaveRoom", this.socketService.sessionID);
       this.socketService.sessionID = null;
       this.router.navigateByUrl('/lobbies');
     })
 
     this.socket.on("postMoves", data =>{
-      console.log('Moves' , data);
-      this.moveList = data;
+     // console.log('Moves' , data);
+      this.moveList = data.Data;
 
       for (let index = 0; index < this.moveList.length; index++) {
         // CHESS NOTATION
@@ -150,9 +167,10 @@ export class GameComponent implements OnInit {
     });
 
     this.socket.on("moveResult", response => {
-      let checkMove = response;
+      //console.log(response);
+      let checkMove = response.Data;
 
-      console.log("Move result",checkMove);
+      //console.log("Move result",checkMove);
     
       if (checkMove) { 
 
@@ -223,7 +241,7 @@ export class GameComponent implements OnInit {
     
             this.swapPieceFromChildNode(currentRookBlock, newRookBlock);
         }
-        console.log(checkMove);
+        //console.log(checkMove);
 
         if (checkMove.flags.includes('p')) {
           // captured: "r"
@@ -249,8 +267,8 @@ export class GameComponent implements OnInit {
 
 
     this.socket.on("postUsersForSession", data => {
-      this.players.white = data.playerWhite;
-      this.players.black = data.playerBlack;
+      this.players.white = data.Data.playerWhite;
+      this.players.black = data.Data.playerBlack;
     });
 
 
@@ -274,7 +292,7 @@ export class GameComponent implements OnInit {
   }
 
   counter(i: number){
-    console.log(i);
+    //console.log(i);
     return new Array(i);
   }
 
@@ -300,7 +318,7 @@ export class GameComponent implements OnInit {
   }
 
   allowDrop(ev) {
-    console.log("alowdrop");
+    //console.log("alowdrop");
     ev.preventDefault();
   }
 
@@ -311,7 +329,7 @@ export class GameComponent implements OnInit {
       return;
     if (ev.target.id[0] == "b" && colour !== "black")
       return;
-    console.log("DRAG")
+    //console.log("DRAG")
     
     this.showPromotion = false;
 
@@ -319,9 +337,9 @@ export class GameComponent implements OnInit {
 
     this.pieceLastPosition = ev.target.closest(".block").id;
 
-    console.log("drag");
-    console.log(ev);
-    console.log("drag:" + this.pieceLastPosition);
+    //console.log("drag");
+    //console.log(ev);
+    //console.log("drag:" + this.pieceLastPosition);
     ev.dataTransfer.setData("text", ev.target.id);
 
     if (this.dragging) {
@@ -337,17 +355,17 @@ export class GameComponent implements OnInit {
     //this.snackbarService.show('test','success', 3000);
     //this.showPromotion = true;
 
-    console.log("Piece dropped");
+    //console.log("Piece dropped");
 
     ev.preventDefault();
     this.data = ev.dataTransfer.getData("text");
-    console.log("ev",ev)
+    //console.log("ev",ev)
 
     this.block = ev.target.closest(".block");
-    console.log("block",this.block);
+    //console.log("block",this.block);
 
-    console.log("last")
-    console.log(document.getElementById(this.pieceLastPosition));
+    //console.log("last")
+    //console.log(document.getElementById(this.pieceLastPosition));
     this.currentPiece = this.fetchPieceFromChildNode(document.getElementById(this.pieceLastPosition));
 
     if (this.currentPiece.id.includes("pawn") && (this.block.id.includes('8') || this.block.id.includes('1')))
@@ -390,8 +408,8 @@ export class GameComponent implements OnInit {
   }
 
   fetchPieceFromChildNode(blockNode) {
-    console.log("blockNode");
-    console.log(blockNode);
+    //console.log("blockNode");
+    //console.log(blockNode);
     let piece;
     blockNode.firstChild.childNodes.forEach(element => {
 
@@ -410,6 +428,7 @@ export class GameComponent implements OnInit {
   removePieceFromChildNode(blockNode) {
    blockNode.firstChild.removeChild(this.fetchPieceFromChildNode(blockNode));
   }
+
 
   removeBlockHighlighting() {
     let highlighted = document.getElementsByClassName("avaliableMove");
