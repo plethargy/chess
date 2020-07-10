@@ -1,6 +1,8 @@
 import { Injectable, OnInit } from '@angular/core';
 import io from 'socket.io-client';
 import { AlertService } from '../../_alert';
+import { Router } from '@angular/router';
+
 
 // const url = 'https://grad-chess-api.herokuapp.com/';
 const url = 'http://localhost:4001';
@@ -12,7 +14,7 @@ export class SocketService {
   sessionID: any;
   manager: any;
 
-  constructor(public alertService: AlertService) {
+  constructor(public alertService: AlertService, private router: Router) {
     this.socket = io(url, {
       reconnectionAttempts: 10,
       reconnectionDelay: 3000,
@@ -30,7 +32,6 @@ export class SocketService {
     this.socket.on('connected', () => {});
     console.log(this.socket);
     this.socket.on('disconnect', (reason) => {
-      //maybe add custom messages for reason?
       alertService.error('Lost connection to server');
     });
     this.socket.on('reconnect', (attemptNumber) => {
@@ -42,12 +43,13 @@ export class SocketService {
     this.socket.on('reconnecting', (attemptNumber) => {
       alertService.clear();
       alertService.error(
-        "Couldn't connect to server: Reconnect attempt " + attemptNumber
+        "Couldn't connect to server: Attempting to reconnect "
       );
     });
     this.socket.on('reconnect_failed', () => {
       alertService.clear();
-      alertService.error("Couldn't connect to server: Something went wrong ");
+      alertService.error("Couldn't connect to server: Something went wrong ", { keepAfterRouteChange: true });
+      this.router.navigateByUrl('/lobbies');
     });
   }
 }
