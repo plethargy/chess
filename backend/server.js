@@ -3,6 +3,7 @@
 var express = require("express");
 const { Chess } = require('chess.js');
 const { v4: uuidv4 } = require('uuid');
+const db = require('./database');
 
 var app = express();
 
@@ -65,8 +66,8 @@ io.on("connection", socket => {
   })
 
   //move
-  socket.on("move", (sessionID, fromPosition, toPosition) => {
-    io.to(`${sessionID}`).emit("moveResult", move(sessionID, fromPosition, toPosition));
+  socket.on("move", (sessionID, fromPosition, toPosition, promotion) => {
+    io.to(`${sessionID}`).emit("moveResult", move(sessionID, fromPosition, toPosition, promotion));
   })
 
   //get moves
@@ -95,6 +96,12 @@ io.on("connection", socket => {
     socket.leave(sessionID, () => {
       console.log("users leaving room");
     })
+  })    
+  socket.on("userSignUp", email => {
+    signupUser(email);
+  })
+  socket.on("getTurn", sessionID => {
+    io.to(`${sessionID}`).emit("postTurn", getTurn(sessionID));
   })
 
 })
@@ -135,13 +142,20 @@ function joinGame(sessionID, playerName, sock) {
     return { 'SessionID': null, 'Result': false };
 }
 
-function move(sessionID, fromPosition, toPosition) {
+function move(sessionID, fromPosition, toPosition, toPromotion) {
   if (Sessions[sessionID] != undefined) {
 
     let session = Sessions[sessionID];
     let game = session['State'];
 
-    let move = game.move({ from: fromPosition, to: toPosition });
+    let move = [];
+
+    if (typeof toPromotion === 'undefined') {
+      move = game.move({ from: fromPosition, to: toPosition });
+    } else {
+      move = game.move({ from: fromPosition, to: toPosition , promotion: toPromotion});
+    }
+
 
     checkGameOver(sessionID);
 
@@ -165,6 +179,12 @@ function checkGameOver(sessionID) {
       winner = session.White;
     else
       winner = session.Black;
+
+    let dbInstance = new db();
+  
+    let query = `UPDATE Player SET [Score] = [Score] + 50, [LastPlayed] = GETDATE() WHERE Username = '${winner}'`;
+    dbInstance.connect(query);
+    
 
     io.to(`${sessionID}`).emit("gameOver", winner);
     deleteSession(sessionID);
@@ -244,6 +264,15 @@ function getMoveHistory(sessionID) {
   return { "move history": history };
 }
 
+function getTurn(sessionID) {
+  let session = Sessions[sessionID];
+  let game = session['State'];
+
+  console.log(game.turn());
+
+  return game.turn();
+}
+
 function getUsersForSession(sessionID)
 {
   if (Sessions[sessionID] != undefined) {
@@ -257,4 +286,20 @@ function getUsersForSession(sessionID)
   }
   else
     return { "Data": null, "Result": false }; 
+}
+
+function signupUser(email)
+{
+
+  let dbInstance = new db();
+  let query = 
+  `
+  DECLARE @count int;
+  SELECT @count = COUNT(PlayerId) FROM [Player] WHERE [Username] = '${email}';
+  IF @count = 0
+  BEGIN
+    INSERT INTO Player(Username, Score) VALUES ('${email}', 0)
+  END`;
+  dbInstance.connect(query);
+
 }
