@@ -8,6 +8,7 @@ import { GameComponent } from './screens/game/game.component';
 import { AuthGuard } from './services/auth/auth.guard';
 import { LeaderboardComponent } from './screens/leaderboard/leaderboard.component';
 import { LobbiesComponent } from './screens/lobbies/lobbies.component';
+import { GameResultComponent } from './screens/game-result/game-result.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -28,6 +29,18 @@ const routes: Routes = [
     path: 'lobbies',
     component: LobbiesComponent,
     data: { animation: 'lobbies' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'game-result',
+    component: GameResultComponent,
+    data: { animation: 'game-result' },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'game-result/:result',
+    component: GameResultComponent,
+    data: { animation: 'game-result' },
     canActivate: [AuthGuard],
   },
 ];
