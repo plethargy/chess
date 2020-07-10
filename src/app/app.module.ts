@@ -23,6 +23,7 @@ import { LoginComponent } from './screens/login/login.component';
 import { GameComponent } from './screens/game/game.component';
 import { SnackbarComponent } from './services/snackbar/snackbar.component';
 import { SnackbarPromotionComponent } from './components/snackbar-promotion/snackbar-promotion.component';
+import { GameResultComponent } from './screens/game-result/game-result.component';
 
 // Components - Pieces
 import { PawnComponent } from './components/pieces/pawn/pawn.component';
@@ -52,6 +53,7 @@ library.add(fas, far, fab);
     HomeComponent,
     LoginComponent,
     GameComponent,
+    GameResultComponent,
     PawnComponent,
     KnightComponent,
     RookComponent,

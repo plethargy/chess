@@ -11,12 +11,10 @@
       >
     </li>
     <li>
-      <a *ngIf="loggedIn" [routerLink]="['/lobbies']" routerLinkActive="active"
-        >Lobbies</a
-      >
-    </li>
-    <li>
-      <a [routerLink]="['/leaderboard']" routerLinkActive="active"
+      <a
+        *ngIf="!loggedIn"
+        [routerLink]="['/leaderboard']"
+        routerLinkActive="active"
         >Leaderboard</a
       >
     </li>
