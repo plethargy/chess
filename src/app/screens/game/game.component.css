@@ -141,6 +141,12 @@ text-align: left;
 width: 20%;
 }
 
+.player-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 td {
     text-align: center; 
     vertical-align: middle;
