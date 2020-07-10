@@ -59,6 +59,7 @@ app-footer {
 }
 
 app-root {
+  min-width: 600px;
   height: 100vh;
   display: grid;
   grid-gap: 1px;
@@ -69,7 +70,7 @@ app-root {
     "footer";
 }
 
-@media (min-width: 500px) {
+@media (min-width: 600px) {
   app-root {
     grid-template-columns: 1fr;
     grid-template-rows: 60px 1fr 45px;
