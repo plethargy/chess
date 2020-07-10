@@ -311,6 +311,7 @@ function recordHistory(sessionID)
     SELECT @player1 = [PlayerId] FROM Player WHERE Username = '${white}';
     SELECT @player2 = [PlayerId] FROM Player WHERE Username = '${black}';
     SELECT @game = MAX([GameID]) FROM Game WHERE Player1_ID = @player1 AND Player2_ID = @player2 AND [EndTime] IS NULL;
+    UPDATE Game SET [EndTime] = GETDATE() WHERE GameID = @game;
     INSERT INTO [Move](PlayerID, GameID, Piece, FromBlock, ToBlock) VALUES 
     `;
 
