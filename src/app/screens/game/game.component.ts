@@ -251,13 +251,13 @@ export class GameComponent implements OnInit {
     });
 
     this.socket.on('postUsersForSession', (data) => {
-      this.players.white = data.playerWhite;
+      this.players.white = data.Data.playerWhite;
 
-      this.players.black = data.playerBlack;
-      if (data.playerBlack === null) {
+      this.players.black = data.Data.playerBlack;
+      if (data.Data.playerBlack === null) {
         this.players.black = 'Waiting for player...';
       } else {
-        this.players.black = data.playerBlack;
+        this.players.black = data.Data.playerBlack;
       }
     });
 

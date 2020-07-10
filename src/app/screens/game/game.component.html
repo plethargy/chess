@@ -33,7 +33,6 @@
               <ng-template #container> </ng-template>
               <div class="name-tag">
                 <div id="player-one-turn-indicator"></div>
-                <<<<<<< Updated upstream
                 <div id="player-one-username">
                   <div>
                     <!--h6>Player 1</h6 -->
@@ -45,9 +44,6 @@
                     <div class="player-container"></div>
                   </div>
                 </div>
-                =======
-                <div id="player-one-username"></div>
-                >>>>>>> Stashed changes
               </div>
 
               <div class="player-one-move-history">
@@ -381,30 +377,7 @@
                 </div>
                 <div id="player-two-username"></div>
               </div>
-              <div class="player-two-move-history">
-                <table class="fixed_header">
-                  <thead>
-                    <tr>
-                      <th></th>
-                      <th></th>
-                      <th>Moves</th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <ng-container *ngFor="let move of history">
-                      <tr>
-                        <td>{{ move.color }}</td>
-                        <td>{{ move.from }}</td>
-                        <td>--></td>
-                        <td>{{ move.to }}</td>
-                        <td>{{ move.san }}</td>
-                      </tr>
-                    </ng-container>
-                  </tbody>
-                </table>
-              </div>
+              <div class="player-two-move-history"></div>
             </div>
           </div>
         </div>
